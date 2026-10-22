@@ -16,7 +16,7 @@ description: "Tasks for docs sites for showyourwork papers"
 
 ## Phase 2: Foundational
 
-- [ ] T004 [P] `src/syw_site/settings.py` + `tests/test_settings.py`: load `docs/syw-site.yml` per data-model.md (unknown keys fail; `publish` bool, default false; webapp names `[a-z0-9-]+`, folder exists, inputs exist)
+- [ ] T004 [P] `src/syw_site/settings.py` + `tests/test_settings.py`: load `docs/syw-site.yml` per data-model.md (unknown keys fail; `publish` bool, default false; webapp names `[a-z0-9-]+`, folder exists, inputs exist, optional `figure` label)
 - [ ] T005 [P] `src/syw_site/facts.py` + `tests/test_facts.py` + `tests/fixtures/tex/`: research R2 scanner → the facts dict of data-model.md (schema 1): `%` comments (keep `\%`), `\title`, AASTeX `\author[orcid=…,sname=…,gname=…]{}` + `\affiliation{}`, `abstract`, `figure`/`figure*` (all `\includegraphics`, `\caption`, `\label`; unlabelled → file stem + warning), `\todo{x}` → `x`, `\variable{output/p.tex}` → key `p`, value = file minus `%` lines and trailing `%`; missing variable file fails naming it
 
 **Checkpoint**: `uv run pytest` passes.

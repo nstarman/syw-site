@@ -10,10 +10,10 @@ paper:                                     # filled in when known; all optional
   doi: 10.3847/...
   bibcode: 2026ApJ...
 webapps:                                   # optional
-  globe: { inputs: [src/data/directional.npz] }
+  globe: { inputs: [src/data/directional.npz], figure: fig:quadrupole }   # figure: optional
 ```
 Validation: unknown keys fail; `publish` boolean; webapp names `[a-z0-9-]+` with `webapps/<name>/`
-present and each input a path in the repo.
+present, each input a path in the repo, and `figure` (optional) a label in the paper.
 
 ## `docs/public/generated/facts.json` (generated; schema 1)
 
