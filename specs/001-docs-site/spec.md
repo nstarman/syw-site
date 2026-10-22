@@ -143,12 +143,12 @@ and following the skill on the example paper produces the site.
   website's `<SiteLayout>` at an exact release, `site`/`base` set from the repository name),
   `docs/syw-site.yml` (`publish: false`), a one-line `include:` of syw-site's rules in the
   `Snakefile`, and `.github/workflows/docs.yml`; it MUST NOT overwrite existing files.
-- **FR-002**: syw-site MUST extract from the paper, into `docs/generated/facts.json`: title, authors
+- **FR-002**: syw-site MUST extract from the paper, into `docs/public/generated/facts.json`: title, authors
   (with affiliations and ORCID where given), abstract, each figure's label, caption and image files,
   and every `\variable` value used by the manuscript, keeping inline math as LaTeX.
 - **FR-003**: The docs data (facts, web images of the paper's figures with their PDFs, built
   webapps) MUST be produced by Snakemake rules in showyourwork's own build, writing only under
-  `docs/generated/`, and MUST NOT rerun figure scripts.
+  `docs/public/generated/`, and MUST NOT rerun figure scripts.
 - **FR-004**: The scaffold MUST provide components `<Var>`, `<Fig>`, `<Webapp>`, `<Abstract>`,
   `<Authors>` and `<PaperLinks>`, and pages: home, figure gallery, one page per figure, and cite.
 - **FR-005**: The site build MUST fail on a missing `facts.json` (telling the author to run

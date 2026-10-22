@@ -52,9 +52,9 @@
     globe: { inputs: [src/data/directional.npz] }
   ```
   Rule `syw_site_webapp_<name>`: inputs = those files + `webapps/<name>/**`; runs
-  `python webapps/<name>/export.py --out docs/generated/webapps/<name>/data` then
-  `figkit build webapps/<name> --data <each dataset dir> --out docs/generated/webapps/<name>/site
-  --single-file docs/generated/webapps/<name>/<name>.html`. figkit is pinned (`v0.2.0`).
+  `python webapps/<name>/export.py --out docs/.syw-site/webapps/<name>/data` then
+  `figkit build webapps/<name> --data <each dataset dir> --out docs/public/generated/webapps/<name>/site
+  --single-file docs/public/generated/webapps/<name>/<name>.html`. figkit is pinned (`v0.2.0`).
 
 ## R5 The site: Astro + MDX + math
 

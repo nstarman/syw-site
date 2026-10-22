@@ -28,12 +28,12 @@ Spec Kit, CI, PR previews of the example's site, skills pinned to date tags in n
 docs/
   syw-site.yml        website id; arXiv id / DOI / ADS bibcode once known; webapps; publish: false
   src/pages/*.mdx     the author's prose, citing facts by name
-  generated/          git-ignored build output: facts.json, figure images, built webapps
+  public/generated/   git-ignored build output: facts.json, figure images, built webapps
 webapps/<name>/       figkit apps (index.html, widget.js, science.js, export.py)
 Snakefile             + include: of syw-site's rules
 ```
 
-Rules (`syw_site/rules.smk`), all writing into `docs/generated/`:
+Rules (`syw_site/rules.smk`), all writing into `docs/public/generated/`:
 - `syw_site_facts`: reads `ms.tex` and the values behind every `\variable{output/…}` → `facts.json`:
   title, authors and affiliations, abstract; each figure's label, caption, source files; every
   `\variable` value. Inline math stays LaTeX.
@@ -72,7 +72,7 @@ Components: `<Var name>` (a number as the PDF prints it), `<Fig label>`, `<Webap
 `webapps/<name>/`, sized to content, links to full-page and single-file), `<Abstract />`,
 `<Authors />`, `<PaperLinks />`.
 
-Build: Astro reads `docs/generated/facts.json`; built webapps and figure images are copied into the
+Build: Astro reads `docs/public/generated/facts.json`; built webapps and figure images are copied into the
 output. Missing `facts.json` fails with "run `syw-site build`". Light/dark from the layout; figkit
 apps follow the system theme.
 
