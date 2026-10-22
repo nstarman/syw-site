@@ -10,14 +10,14 @@ description: "Tasks for docs sites for showyourwork papers"
 
 ## Phase 1: Setup
 
-- [ ] T001 Create `pyproject.toml` (name `syw-site`, version `2026.10.22`, Python ≥ 3.11, deps `figkit @ git+https://github.com/nstarman/figkit@v0.2.0`, `pyyaml`, `pypdfium2`; script `syw-site = syw_site.cli:main`; package data `template/**`, `rules.smk`; dev group pytest) and `src/syw_site/__init__.py` (`__version__`, `rules_path()`); `uv lock`
-- [ ] T002 [P] Add `CHANGELOG.md` (`## Unreleased`) and expand `README.md` (install from a tag, the four commands)
-- [ ] T003 [P] Add `.github/workflows/ci.yml` with job `unit` (uv, pytest) and the `CI Pass` gate (`re-actors/alls-green`); later phases add `site`, `e2e`, `preview`
+- [X] T001 Create `pyproject.toml` (name `syw-site`, version `2026.10.22`, Python ≥ 3.11, deps `figkit @ git+https://github.com/nstarman/figkit@v0.2.0`, `pyyaml`, `pypdfium2`; script `syw-site = syw_site.cli:main`; package data `template/**`, `rules.smk`; dev group pytest) and `src/syw_site/__init__.py` (`__version__`, `rules_path()`); `uv lock`
+- [X] T002 [P] Add `CHANGELOG.md` (`## Unreleased`) and expand `README.md` (install from a tag, the four commands)
+- [X] T003 [P] Add `.github/workflows/ci.yml` with job `unit` (uv, pytest) and the `CI Pass` gate (`re-actors/alls-green`); later phases add `site`, `e2e`, `preview`
 
 ## Phase 2: Foundational
 
-- [ ] T004 [P] `src/syw_site/settings.py` + `tests/test_settings.py`: load `docs/syw-site.yml` per data-model.md (unknown keys fail; `publish` bool, default false; webapp names `[a-z0-9-]+`, folder exists, inputs exist, optional `figure` label)
-- [ ] T005 [P] `src/syw_site/facts.py` + `tests/test_facts.py` + `tests/fixtures/tex/`: research R2 scanner → the facts dict of data-model.md (schema 1): `%` comments (keep `\%`), `\title`, AASTeX `\author[orcid=…,sname=…,gname=…]{}` + `\affiliation{}`, `abstract`, `figure`/`figure*` (all `\includegraphics`, `\caption`, `\label`; unlabelled → file stem + warning), `\todo{x}` → `x`, `\variable{output/p.tex}` → key `p`, value = file minus `%` lines and trailing `%`; missing variable file fails naming it
+- [X] T004 [P] `src/syw_site/settings.py` + `tests/test_settings.py`: load `docs/syw-site.yml` per data-model.md (unknown keys fail; `publish` bool, default false; webapp names `[a-z0-9-]+`, folder exists, inputs exist, optional `figure` label)
+- [X] T005 [P] `src/syw_site/facts.py` + `tests/test_facts.py` + `tests/fixtures/tex/`: research R2 scanner → the facts dict of data-model.md (schema 1): `%` comments (keep `\%`), `\title`, AASTeX `\author[orcid=…,sname=…,gname=…]{}` + `\affiliation{}`, `abstract`, `figure`/`figure*` (all `\includegraphics`, `\caption`, `\label`; unlabelled → file stem + warning), `\todo{x}` → `x`, `\variable{output/p.tex}` → key `p`, value = file minus `%` lines and trailing `%`; missing variable file fails naming it
 
 **Checkpoint**: `uv run pytest` passes.
 

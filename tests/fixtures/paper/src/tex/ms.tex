@@ -1,0 +1,44 @@
+% A paper in the shapes showyourwork papers use (AASTeX 7). Synthetic.
+\documentclass[twocolumn]{aastex701}
+\usepackage{showyourwork}
+\begin{document}
+\title{Curved Things II: Angles {Distinguish} Models}
+\shorttitle{Curved Things II}
+
+\author[orcid=0000-0001-2345-6789,sname=Doe,gname=Jane]{Jane Doe}
+\affiliation{Institute of Examples, Somewhere}
+\affiliation{Second Place}
+\author[sname=Roe,gname=Richard]{Richard Roe}
+\affiliation{Institute of Examples, Somewhere}
+\author[]{\todo{And Friends}}
+\correspondingauthor{Jane Doe}
+
+\begin{abstract}
+We find $\sim\variable{output/forecast/gain.tex}$ times more
+signal. % a comment that is not part of the abstract
+Fully 50\% of it.
+\end{abstract}
+
+\section{Results}
+The value is \variable{output/forecast/gain.tex} and also \variable{output/rate.tex}.
+% \variable{output/commented_out.tex}
+
+\begin{figure}[t]
+  \script{fig_a.py}
+  \includegraphics[width=\columnwidth]{figures/fig_a.pdf}
+  \caption{A caption with {nested} braces and $x^{2}$.}
+  \label{fig:a}
+\end{figure}
+
+\begin{figure*}[ht]
+  \includegraphics[width=.5\textwidth]{figures/fig_b1.pdf}
+  \includegraphics[width=.5\textwidth]{figures/fig_b2}
+  \caption{Two panels.\todo{finish}}
+  \label{fig:b}
+\end{figure*}
+
+\begin{figure}
+  \includegraphics{figures/fig_c.png}
+  \caption{No label.}
+\end{figure}
+\end{document}

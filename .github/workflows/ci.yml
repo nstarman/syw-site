@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: ${{ matrix.python }}
+      - run: uv sync
+      - run: uv run pytest
+      - name: Release tag matches syw_site.__version__
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: test "${GITHUB_REF_NAME}" = "v$(uv run python -c 'import syw_site; print(syw_site.__version__)')"
+
+  # The one check branch protection requires.
+  ci-pass:
+    name: CI Pass
+    if: always()
+    needs: [unit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}
