@@ -1,0 +1,11 @@
+__pycache__/
+*.egg-info/
+.venv/
+dist/
+build/
+node_modules/
+.pytest_cache/
+.DS_Store
+.astro/
+examples/*/docs/generated/
+examples/*/docs/dist/
