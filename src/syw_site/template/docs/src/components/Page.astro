@@ -1,0 +1,36 @@
+---
+// Every page of the docs site: the website's layout, the Research nav entry marked, "Last updated"
+// linking to the paper's repository. MDX pages use it as `layout:` in their frontmatter.
+import SiteLayout from '@nstarkman/site-layout/SiteLayout.astro';
+import 'katex/dist/katex.min.css';
+import { facts, url } from '../lib/facts.js';
+import { tex } from '../lib/tex.js';
+
+const { title, frontmatter } = Astro.props;
+const heading = title ?? frontmatter?.title;
+const paper = facts.title.replace(/\$[^$]*\$/g, '').replace(/\\[A-Za-z]+|[{}]/g, '').trim();
+---
+<SiteLayout title={heading ? `${heading} — ${paper}` : paper} section="/research/" repo={facts.repo}>
+  <main class="wrap syw">
+    <nav class="syw-nav" aria-label="This paper">
+      <a href={url("")}>Overview</a>
+      <a href={url("figures/")}>Figures</a>
+      <a href={url("cite/")}>Cite</a>
+    </nav>
+    <p class="syw-paper" set:html={tex(facts.title)} />
+    {heading && <h1>{heading}</h1>}
+    <slot />
+  </main>
+</SiteLayout>
+
+<style is:global>
+  .syw { padding-block: 2rem 4rem; }
+  .syw-nav { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; }
+  .syw-paper { font-style: italic; margin: 0 0 .5rem; }
+  .syw figure { margin: 2rem 0; }
+  .syw figure img { max-width: 100%; height: auto; background: #fff; }
+  .syw figcaption { font-size: .92em; }
+  .syw .syw-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1.5rem; }
+  .syw iframe { width: 100%; border: 0; }
+  .syw pre { overflow-x: auto; }
+</style>

@@ -1,0 +1,93 @@
+{
+  "schema": 1,
+  "title": "Curved Things II: Angles {Distinguish} Models",
+  "authors": [
+    {
+      "name": "Jane Doe",
+      "affiliations": [
+        0,
+        1
+      ],
+      "given": "Jane",
+      "surname": "Doe",
+      "orcid": "0000-0001-2345-6789"
+    },
+    {
+      "name": "Richard Roe",
+      "affiliations": [
+        0
+      ],
+      "given": "Richard",
+      "surname": "Roe"
+    },
+    {
+      "name": "And Friends",
+      "affiliations": []
+    }
+  ],
+  "affiliations": [
+    "Institute of Examples, Somewhere",
+    "Second Place"
+  ],
+  "abstract": "We find $\\sim14$ times more signal. Fully 50\\% of it.",
+  "figures": [
+    {
+      "label": "fig:a",
+      "slug": "a",
+      "caption": "A caption with {nested} braces and $x^{2}$.",
+      "images": [
+        {
+          "source": "src/tex/figures/fig_a.pdf",
+          "file": "figures/fig_a.pdf",
+          "png": "figures/fig_a.png"
+        }
+      ]
+    },
+    {
+      "label": "fig:b",
+      "slug": "b",
+      "caption": "Two panels.finish",
+      "images": [
+        {
+          "source": "src/tex/figures/fig_b1.pdf",
+          "file": "figures/fig_b1.pdf",
+          "png": "figures/fig_b1.png"
+        },
+        {
+          "source": "src/tex/figures/fig_b2.pdf",
+          "file": "figures/fig_b2.pdf",
+          "png": "figures/fig_b2.png"
+        }
+      ]
+    },
+    {
+      "label": null,
+      "slug": "fig_c",
+      "caption": "No label.",
+      "images": [
+        {
+          "source": "src/tex/figures/fig_c.png",
+          "file": "figures/fig_c.png"
+        }
+      ]
+    }
+  ],
+  "variables": {
+    "forecast/gain": "14",
+    "rate": "$3.2 \\times 10^{-4}$",
+    "shapes/range": "\\qtyrange{25}{35}{\\kpc}",
+    "shapes/a0": "\\qty{1.2e-10}{\\meter\\per\\second\\squared}",
+    "shapes/count": "1.1\\times10^{4}",
+    "shapes/ratio": "1\\!:\\!0.8\\!:\\!0.7",
+    "shapes/span": "16--24",
+    "shapes/name": "Au-1"
+  },
+  "paper": {
+    "arxiv": "2610.00001",
+    "doi": null,
+    "bibcode": null
+  },
+  "repo": "nstarman/demo",
+  "website_id": null,
+  "webapps": {}
+}

@@ -146,6 +146,10 @@ def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> 
     if not ms.exists():
         raise FileNotFoundError(f"{ms} not found; is this a showyourwork repository?")
     text = strip_comments(ms.read_text(encoding="utf-8"))
+    variables = {p: variable_value(root / TEX / p) for p in variable_paths(text)}
+    # Text shows the numbers as the PDF does: each \variable{} replaced by its value.
+    for p, value in variables.items():
+        text = text.replace(f"\\variable{{{p}}}", value)
     author_list, affiliations = authors(text)
     abstract = re.search(r"\\begin\{abstract\}(.*?)\\end\{abstract\}", text, re.S)
     return {
@@ -155,9 +159,7 @@ def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> 
         "affiliations": affiliations,
         "abstract": clean(abstract.group(1)) if abstract else "",
         "figures": figures(text, root),
-        "variables": {
-            variable_key(p): variable_value(root / TEX / p) for p in variable_paths(text)
-        },
+        "variables": {variable_key(p): value for p, value in variables.items()},
         "paper": {k: (paper or {}).get(k) for k in ("arxiv", "doi", "bibcode")},
         "repo": repo,
     }

@@ -14,6 +14,7 @@ dependencies = [
     "figkit @ git+https://github.com/nstarman/figkit@v0.2.0",
     "pyyaml>=6",
     "pypdfium2>=4.30",
+    "pillow>=10",
 ]
 
 [project.scripts]

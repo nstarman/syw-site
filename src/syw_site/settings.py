@@ -7,7 +7,7 @@ from pathlib import Path
 import yaml
 
 SETTINGS = Path("docs/syw-site.yml")
-_KEYS = {"repo", "website_id", "publish", "paper", "webapps"}
+_KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps"}
 _PAPER_KEYS = {"arxiv", "doi", "bibcode"}
 _WEBAPP_KEYS = {"inputs", "figure"}
 
@@ -29,6 +29,7 @@ class Settings:
     website_id: str | None = None
     publish: bool = False
     paper: dict = field(default_factory=dict)
+    python: str = "python"
     webapps: tuple[Webapp, ...] = ()
 
 
@@ -69,5 +70,10 @@ def parse(raw: dict, root: Path) -> Settings:
             if not (root / p).exists():
                 raise SettingsError(f"syw-site.yml: webapp {name!r} input {p} does not exist")
         webapps.append(Webapp(name, inputs, spec.get("figure")))
+    python = raw.get("python", "python")
+    if not isinstance(python, str) or not python.strip():
+        raise SettingsError("syw-site.yml: `python` must be a command, e.g. `uv run --locked python`")
     website_id = raw.get("website_id")
-    return Settings(repo, None if website_id is None else str(website_id), publish, paper, tuple(webapps))
+    return Settings(
+        repo, None if website_id is None else str(website_id), publish, paper, python, tuple(webapps)
+    )

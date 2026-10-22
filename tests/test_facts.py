@@ -16,7 +16,7 @@ def f():
 def test_title_and_abstract(f):
     assert f["schema"] == 1
     assert f["title"] == "Curved Things II: Angles {Distinguish} Models"
-    assert f["abstract"] == r"We find $\sim\variable{output/forecast/gain.tex}$ times more signal. Fully 50\% of it."
+    assert f["abstract"] == r"We find $\sim14$ times more signal. Fully 50\% of it."
 
 
 def test_authors_and_affiliations(f):

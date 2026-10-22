@@ -9,6 +9,7 @@ paper:                                     # filled in when known; all optional
   arxiv: 2610.12345
   doi: 10.3847/...
   bibcode: 2026ApJ...
+python: uv run --locked python             # optional; how the paper runs Python (default: python)
 webapps:                                   # optional
   globe: { inputs: [src/data/directional.npz], figure: fig:quadrupole }   # figure: optional
 ```
