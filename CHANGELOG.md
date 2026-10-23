@@ -5,6 +5,15 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.22.3 — 2026-10-23
+
+### Fixed
+
+- `docs.yml` checked out without submodules or history, so a paper whose LaTeX preamble is a git
+  submodule failed to build in CI; it now checks out with `submodules: recursive` and
+  `fetch-depth: 0`, as showyourwork's own workflow does. Papers already initialised: add both to
+  the checkout step of `.github/workflows/docs.yml`.
+
 ## 2026.10.22.2 — 2026-10-23
 
 ### Fixed
