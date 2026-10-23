@@ -40,3 +40,8 @@ def test_tokens_and_timeout():
     step = next(s for s in build["steps"] if s.get("name") == "Build the paper and its docs site")
     assert step["env"] == {"SANDBOX_TOKEN": "${{ secrets.SANDBOX_TOKEN }}"}
     assert "OVERLEAF_TOKEN" not in str(WORKFLOW)  # a docs build never syncs with Overleaf
+
+
+def test_checkout_brings_submodules_and_history():
+    (checkout,) = [s for s in steps() if s.get("uses", "").startswith("actions/checkout")]
+    assert checkout["with"] == {"fetch-depth": 0, "submodules": "recursive"}
