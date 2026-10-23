@@ -89,5 +89,10 @@
   },
   "repo": "nstarman/demo",
   "website_id": null,
-  "webapps": {}
+  "webapps": {},
+  "macros": {
+    "\\lbar": "\\bar{\\lambda}",
+    "\\todo": "{\\color{red} #1}",
+    "\\sgn": "\\operatorname{sgn}"
+  }
 }

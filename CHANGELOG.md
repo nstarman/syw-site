@@ -5,6 +5,27 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.23.1 — 2026-10-23
+
+### Fixed
+
+Found adding syw-site to the first real paper:
+
+- Figures labelled with a paper's own label command (`\figlabel{}`, any `\…label{}`) had no
+  label; they now get it, and labels never show in text.
+- A paper's math macros (`\newcommand`, `\renewcommand`, `\DeclareMathOperator` in `ms.tex`)
+  stopped the site build in KaTeX; they now reach it through `facts.json` (`macros`).
+- `syw-site init`'s Snakefile include broke the paper's own build in an environment without
+  syw-site; it is now guarded by `import syw_site` (the docs rules are off there, with a message).
+  Papers already initialised can replace their include line with the new block (see `init.py`).
+- `docs.yml` stalled on rules cached on Zenodo: it now passes the `SANDBOX_TOKEN` secret, never
+  `OVERLEAF_TOKEN`, and stops after 120 minutes.
+- The paper's own links (Overview, Figures, Cite) stuck over the website's header (its stylesheet
+  makes every `nav` sticky); a reference to a section or appendix showed "?"; a figure's "PDF" and
+  "More" links ran together.
+- `$math$` written in a page did not get the paper's macros and showed KaTeX's red error text; it
+  now gets them (`astro.config.mjs`), and an unknown command stops the build.
+
 ## 2026.10.23 — 2026-10-23
 
 ### Changed

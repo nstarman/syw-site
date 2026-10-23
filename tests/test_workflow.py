@@ -32,3 +32,11 @@ def test_private_repo_guard_runs_before_upload():
     assert guard < names.index("Upload the site for Pages")
     assert "github.event.repository.private" in steps()[guard]["if"]
     assert "exit 1" in steps()[guard]["run"]
+
+
+def test_tokens_and_timeout():
+    build = WORKFLOW["jobs"]["build"]
+    assert build["timeout-minutes"] <= 180
+    step = next(s for s in build["steps"] if s.get("name") == "Build the paper and its docs site")
+    assert step["env"] == {"SANDBOX_TOKEN": "${{ secrets.SANDBOX_TOKEN }}"}
+    assert "OVERLEAF_TOKEN" not in str(WORKFLOW)  # a docs build never syncs with Overleaf

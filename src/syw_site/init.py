@@ -6,7 +6,14 @@ from pathlib import Path
 
 from syw_site import __version__
 
-INCLUDE = 'include: __import__("syw_site").rules_path()'
+# Guarded, so the paper's own build keeps working where syw-site is not installed.
+INCLUDE = """try:
+    import syw_site
+except ImportError:
+    syw_site = None
+    print("syw-site is not installed in showyourwork's environment: the docs rules are off.")
+if syw_site is not None:
+    include: syw_site.rules_path()"""
 
 
 class InitError(RuntimeError):
@@ -57,7 +64,7 @@ def init(root: Path, repo: str | None = None) -> list[Path]:
             written.append(p)
     snakefile = root / "Snakefile"
     text = snakefile.read_text(encoding="utf-8") if snakefile.exists() else ""
-    if INCLUDE not in text:
+    if "syw_site.rules_path()" not in text:
         sep = "" if not text or text.endswith("\n") else "\n"
         snakefile.write_text(f"{text}{sep}\n# The paper's docs site (syw-site).\n{INCLUDE}\n", encoding="utf-8")
         written.append(Path("Snakefile"))

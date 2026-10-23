@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-__version__ = "2026.10.23"
+__version__ = "2026.10.23.1"
 
 
 def rules_path() -> str:
