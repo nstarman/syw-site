@@ -62,3 +62,8 @@ def test_not_a_paper(tmp_path):
 
 def test_escaped_percent_is_not_a_comment():
     assert facts.strip_comments("50\\% done % gone") == "50\\% done "
+
+
+def test_aastex6_bare_orcid():
+    found, _ = facts.authors(r"\author[0000-0002-1825-009X]{Josiah Carberry}\affiliation{Brown}")
+    assert found == [{"name": "Josiah Carberry", "orcid": "0000-0002-1825-009X", "affiliations": [0]}]

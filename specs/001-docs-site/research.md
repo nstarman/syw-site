@@ -1,6 +1,11 @@
 # Research: docs sites for showyourwork papers
 
-## R1 Building an extra target through showyourwork (0.4.3)
+## R1 Building an extra target through showyourwork
+
+- **Version (found during implementation)**: the author's papers use showyourwork's main branch
+  (`0.4.4.dev431+g44d15103f`, Snakemake 9, Python 3.12) from git, not 0.4.3 (Python 3.10, which
+  figkit cannot join). syw-site supports `0.4.4.dev*`; CI and the workflow template pin commit
+  `44d15103f`. Main has the same target problem; its command line drops `--reason`.
 
 - **Finding**: `showyourwork build <target>` passes `<target>` to *both* steps: preprocess
   (`workflow/prep.smk`, which does not include the paper's `Snakefile`) and build

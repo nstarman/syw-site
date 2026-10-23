@@ -65,7 +65,11 @@ def clean(text: str) -> str:
 
 
 def _options(opt: str | None) -> dict[str, str]:
-    return dict(p.split("=", 1) for p in (opt or "").split(",") if "=" in p)
+    """AASTeX 7's `orcid=…,sname=…,gname=…`, or AASTeX 6's bare ORCID."""
+    opt = (opt or "").strip()
+    if re.fullmatch(r"\d{4}-\d{4}-\d{4}-\d{3}[\dX]", opt):
+        return {"orcid": opt}
+    return dict(p.split("=", 1) for p in opt.split(",") if "=" in p)
 
 
 def authors(text: str) -> tuple[list[dict], list[str]]:

@@ -40,3 +40,5 @@ include = ["src/syw_site", "README.md", "LICENSE", "CHANGELOG.md"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+markers = ["site: builds the Astro scaffold (needs Node and npm)"]
+addopts = "-m 'not site'"

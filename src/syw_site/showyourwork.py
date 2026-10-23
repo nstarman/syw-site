@@ -1,12 +1,12 @@
 """The one place syw-site depends on how showyourwork runs.
 
 `showyourwork build <target>` hands <target> to its preprocessing step too, which does not load
-the paper's Snakefile, so a target defined there fails (showyourwork 0.4.3). So syw-site runs
+the paper's Snakefile, so a target defined there fails (showyourwork 0.4.3 and main). So syw-site runs
 `showyourwork build` (preprocess and the PDF), then showyourwork's build step once more with the
 docs target, with the command line and environment showyourwork itself uses
 (`showyourwork/cli/commands/run_snakemake.py`). showyourwork is never imported here; a subprocess
 asks its interpreter where it is installed. A new showyourwork version is supported by checking
-that file and adding it to SUPPORTED.
+that file against docs_command and widening `supported`.
 """
 
 import os
@@ -15,7 +15,9 @@ import shutil
 import subprocess
 from pathlib import Path
 
-SUPPORTED = {"0.4.3"}
+# showyourwork's main branch (0.4.4.dev, Snakemake 9), as papers install it from git; CI pins
+# commit 44d15103f. 0.4.3 runs on Python 3.10, which figkit (3.11+) cannot join.
+SUPPORTED = "0.4.4.dev"
 TARGET = "syw_site_all"
 
 
@@ -32,7 +34,7 @@ def executable() -> str:
 
 def version(exe: str) -> str:
     out = subprocess.run([exe, "--version"], capture_output=True, text=True, check=True).stdout
-    m = re.search(r"(\d+\.\d+\.\d+)", out)
+    m = re.search(r"(\d+\.\d+\.\d+\S*)", out)
     if not m:
         raise ShowyourworkError(f"cannot read the showyourwork version from {out!r}")
     return m.group(1)
@@ -59,7 +61,7 @@ def build_snakefile(python: str) -> str:
 def docs_command(snakefile: str, cores: int, conda_frontend: str, extra: list[str]) -> list[str]:
     return [
         "snakemake", "--cores", str(cores), "--use-conda", "--conda-frontend", conda_frontend,
-        "--reason", "--cache", "-s", snakefile, *extra, TARGET,
+        "--cache", "-s", snakefile, *extra, TARGET,
     ]
 
 
@@ -72,10 +74,8 @@ def build(repo: Path, cores: int = 1, conda_frontend: str = "conda", extra: list
     """Build the paper, then the docs data."""
     exe = executable()
     v = version(exe)
-    if v not in SUPPORTED:
-        raise ShowyourworkError(
-            f"showyourwork {v} is not supported by this syw-site (supported: {sorted(SUPPORTED)})"
-        )
+    if not v.startswith(SUPPORTED):
+        raise ShowyourworkError(f"showyourwork {v} is not supported by this syw-site (supported: {SUPPORTED}*)")
     common = ["--cores", str(cores), "--conda-frontend", conda_frontend]
     subprocess.run([exe, "build", *common, *extra], cwd=repo, check=True)
     command = docs_command(build_snakefile(interpreter(exe)), cores, conda_frontend, list(extra))
