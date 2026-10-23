@@ -11,6 +11,11 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
   already builds targets from the paper's Snakefile (showyourwork#690), so syw-site no longer reruns
   showyourwork's build step itself. No change for papers.
 
+### Fixed
+
+- A webapp's `inputs` may be files the paper's pipeline makes; `syw-site.yml` no longer requires
+  them to exist before the build.
+
 ## 2026.10.22 — 2026-10-22
 
 First release: `syw-site init | facts | build | serve`, the Snakemake rules, the Astro docs
