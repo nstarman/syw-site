@@ -1,5 +1,6 @@
-# syw-site's Snakemake rules. A paper's Snakefile includes them with
-#     include: __import__("syw_site").rules_path()
+# syw-site's Snakemake rules. A paper's Snakefile includes them (`syw-site init` writes it, guarded
+# by an import so the paper still builds where syw-site is not installed) with
+#     include: syw_site.rules_path()
 # showyourwork runs them in its build step; `syw-site build` asks for `syw_site_all`.
 #
 # Nothing here reads the paper or the settings at include time: that happens in input functions,

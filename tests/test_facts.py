@@ -93,3 +93,22 @@ def test_aastex_figure_macros(tmp_path):
 def test_comment_after_a_line_break():
     assert facts.strip_comments(r"a \\% gone") == r"a \\"
     assert facts.strip_comments(r"5\% kept % gone") == r"5\% kept "
+
+
+def test_a_papers_own_label_command(tmp_path):
+    text = r"\begin{figure}\includegraphics{figures/r.pdf}\caption{Rate.}\figlabel{fig:rate}\end{figure}"
+    (f,) = facts.figures(text, tmp_path)
+    assert (f["label"], f["slug"], f["caption"]) == ("fig:rate", "rate", "Rate.")
+    assert facts.clean(r"See \seclabel{sec:x}this.") == "See this."
+
+
+def test_macros():
+    text = r"""
+\newcommand{\qbarpot}{\bar{q}_\Phi}
+\renewcommand{\todo}[1]{{\color{red} #1}}
+\DeclareMathOperator{\sgn}{sgn}
+\newcommand{\figlabel}[1]{\@bsphack x}
+"""
+    assert facts.macros(text) == {
+        r"\qbarpot": r"\bar{q}_\Phi", r"\todo": r"{\color{red} #1}", r"\sgn": r"\operatorname{sgn}",
+    }

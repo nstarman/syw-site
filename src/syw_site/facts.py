@@ -58,14 +58,29 @@ def _first(text: str, name: str) -> str | None:
     return found[0][1] if found else None
 
 
+# \label, or a paper's own label command (\figlabel, \seclabel, ...).
+LABEL = re.compile(r"\\[A-Za-z]*label\s*\{([^}]*)\}")
+
+
 def clean(text: str) -> str:
-    """`\\todo{x}` becomes x; whitespace runs become one space."""
+    """`\\todo{x}` becomes x; labels and footnotes go; whitespace runs become one space."""
     for _, arg in commands(text, "todo"):
         text = text.replace(f"\\todo{{{arg}}}", arg)
-    for name in ("label", "footnote"):
-        for _, arg in commands(text, name):
-            text = text.replace(f"\\{name}{{{arg}}}", "")
-    return re.sub(r"\s+", " ", text).strip()
+    for _, arg in commands(text, "footnote"):
+        text = text.replace(f"\\footnote{{{arg}}}", "")
+    return re.sub(r"\s+", " ", LABEL.sub("", text)).strip()
+
+
+def macros(text: str) -> dict[str, str]:
+    """The paper's math macros, for KaTeX: `\\newcommand`/`\\renewcommand{\\name}[n]{body}` and
+    `\\DeclareMathOperator{\\name}{text}`. Definitions that use `@` (TeX internals) are skipped."""
+    found = {}
+    for m in re.finditer(r"\\(newcommand|renewcommand|DeclareMathOperator)\*?\s*\{(\\[A-Za-z]+)\}\s*(?:\[\d\])?\s*\{", text):
+        body, _ = _group(text, m.end() - 1, "{", "}")
+        if "@" in body:
+            continue
+        found[m.group(2)] = f"\\operatorname{{{body}}}" if m.group(1) == "DeclareMathOperator" else body.strip()
+    return found
 
 
 def _options(opt: str | None) -> dict[str, str]:
@@ -128,7 +143,7 @@ def figures(text: str, root: Path) -> list[dict]:
                           "\\plottwo or \\fig) was skipped", stacklevel=2)
             continue
         images = [_image(f, root) for f in files]
-        label = _first(body, "label")
+        label = (m2.group(1) if (m2 := LABEL.search(body)) else None)
         if label:
             slug = re.sub(r"^fig:", "", label)
         else:
@@ -172,6 +187,7 @@ def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> 
         "affiliations": affiliations,
         "abstract": clean(abstract.group(1)) if abstract else "",
         "figures": figures(text, root),
+        "macros": macros(text),
         "variables": {variable_key(p): value for p, value in variables.items()},
         "paper": {k: (paper or {}).get(k) for k in ("arxiv", "doi", "bibcode")},
         "repo": repo,
