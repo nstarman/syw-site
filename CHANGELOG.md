@@ -16,6 +16,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 - `syw-site init` writes the Snakefile include guarded by `import syw_site`, so the paper's own
   build keeps working in an environment without syw-site (the docs rules are off there, with a
   message). Papers already initialised can replace their include line with the new block.
+- `docs.yml` passes the `SANDBOX_TOKEN` secret to the build (rules cached on Zenodo stall without
+  it), never `OVERLEAF_TOKEN`, and stops after 120 minutes.
 
 ## 2026.10.23 — 2026-10-23
 
