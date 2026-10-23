@@ -5,6 +5,12 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Changed
+
+- `syw-site build` is a single `showyourwork build syw__main syw_site_all`: showyourwork main
+  already builds targets from the paper's Snakefile (showyourwork#690), so syw-site no longer reruns
+  showyourwork's build step itself. No change for papers.
+
 ## 2026.10.22 — 2026-10-22
 
 First release: `syw-site init | facts | build | serve`, the Snakemake rules, the Astro docs

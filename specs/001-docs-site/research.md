@@ -1,34 +1,18 @@
 # Research: docs sites for showyourwork papers
 
-## R1 Building an extra target through showyourwork
+## R1 Building the docs target through showyourwork
 
-- **Version (found during implementation)**: the author's papers use showyourwork's main branch
-  (`0.4.4.dev431+g44d15103f`, Snakemake 9, Python 3.12) from git, not 0.4.3 (Python 3.10, which
-  figkit cannot join). syw-site supports `0.4.4.dev*`; CI and the workflow template pin commit
-  `44d15103f`. Main has the same target problem; its command line drops `--reason`.
-
-- **Finding**: `showyourwork build <target>` passes `<target>` to *both* steps: preprocess
-  (`workflow/prep.smk`, which does not include the paper's `Snakefile`) and build
-  (`workflow/build.smk`, which does). Preprocess therefore fails with no rule for `syw_site_all`.
-  `showyourwork tarball` avoids this by giving its target only to the build step — an internal
-  Python call, not a CLI option.
-- **Decision**: `syw-site build` runs, in the paper's environment:
-  1. `showyourwork build` — preprocess and the PDF (needed anyway: web figures come from its PDFs);
-  2. the build step again with the target, exactly as showyourwork runs it:
-     `snakemake --cores N --use-conda --conda-frontend <f> --reason --cache -s <build.smk> syw_site_all`
-     with `SNAKEMAKE_RUN_TYPE=build` and `SNAKEMAKE_OUTPUT_CACHE=<repo>/.showyourwork/cache`, where
-     `<build.smk>` is found by asking the showyourwork CLI's Python for its install path in a
-     subprocess.
-  All of this lives in one adapter, `syw_site/showyourwork.py`, which checks the showyourwork
-  version against the ones it supports (0.4.3) and fails with a clear message otherwise; the CI
-  end-to-end job runs it on the example paper.
-- **Rationale**: Principle I forbids importing showyourwork into syw-site; a subprocess against
-  the documented command line it already runs keeps syw-site out of showyourwork's Python and
-  contains the one coupling to its internals in one tested file. Step 2 is cheap: everything the
-  PDF needed is cached.
-- **Alternatives**: `showyourwork build syw_site_all` (fails, above); making the docs data a
-  dependency of the PDF (would rebuild docs on every PDF build and changes the paper's DAG);
-  patching showyourwork upstream (worth proposing — an issue — but not something to wait for).
+- **Decision**: `syw-site build` runs `showyourwork build --cores N --conda-frontend F [extra]
+  syw__main syw_site_all` — the PDF (showyourwork's default target, needed anyway: web figures come
+  from its PDFs) and the docs data in one run, with showyourwork's cache and config.
+- **Version**: this needs showyourwork's main branch (`0.4.4.dev*`, the author's papers pin commit
+  44d15103f), whose `showyourwork build <targets>` strips targets before preprocessing
+  (showyourwork#690, merged 2026-03-28). The 0.4.3 release passes them to preprocessing too, where a
+  target from the paper's Snakefile is unknown; 0.4.3 also runs on Python 3.10, which figkit cannot
+  join. syw-site refuses other versions.
+- **History**: the first implementation read only `cli/main.py`, concluded main had the 0.4.3
+  behavior, reran showyourwork's build step by hand, and filed showyourwork#769; a follow-up found
+  #690 and removed the workaround.
 
 ## R2 Facts extraction
 

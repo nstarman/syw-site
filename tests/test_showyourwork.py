@@ -6,31 +6,18 @@ import pytest
 from syw_site import showyourwork
 
 
-def test_docs_command_matches_showyourwork_run_snakemake():
-    cmd = showyourwork.docs_command("/env/bin/python", "/x/build.smk", 2, "mamba", ["--conda-not-block-search-path-envvars"])
+def test_one_showyourwork_build_for_the_paper_and_the_docs():
+    cmd = showyourwork.command("/env/bin/showyourwork", 2, "mamba", ["--scheduler", "greedy"])
     assert cmd == [
-        "/env/bin/python", "-m", "snakemake", "--cores", "2", "--use-conda", "--conda-frontend", "mamba", "--cache",
-        "-s", "/x/build.smk", "--conda-not-block-search-path-envvars", "syw_site_all",
+        "/env/bin/showyourwork", "build", "--cores", "2", "--conda-frontend", "mamba",
+        "--scheduler", "greedy", "syw__main", "syw_site_all",
     ]
-
-
-def test_docs_env(tmp_path):
-    env = showyourwork.docs_env(tmp_path)
-    assert env["SNAKEMAKE_RUN_TYPE"] == "build"
-    assert env["SNAKEMAKE_OUTPUT_CACHE"] == str(tmp_path / ".showyourwork" / "cache")
-
-
-def test_interpreter_beside_the_script(tmp_path):
-    (tmp_path / "env/bin").mkdir(parents=True)
-    (tmp_path / "env/bin/showyourwork").touch()
-    (tmp_path / "tool").symlink_to(tmp_path / "env/bin/showyourwork")  # as pipx / uv tool link it
-    assert showyourwork.interpreter(str(tmp_path / "tool")) == str((tmp_path / "env/bin/python").resolve())
 
 
 def test_unsupported_version_is_refused(monkeypatch, tmp_path):
     monkeypatch.setattr(showyourwork, "executable", lambda: "showyourwork")
-    monkeypatch.setattr(showyourwork, "version", lambda exe: "0.5.0")
-    with pytest.raises(showyourwork.ShowyourworkError, match="0.5.0 is not supported"):
+    monkeypatch.setattr(showyourwork, "version", lambda exe: "0.4.3")
+    with pytest.raises(showyourwork.ShowyourworkError, match="0.4.3 is not supported"):
         showyourwork.build(tmp_path)
 
 
