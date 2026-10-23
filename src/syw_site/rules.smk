@@ -1,6 +1,6 @@
 # syw-site's Snakemake rules. A paper's Snakefile includes them with
 #     include: __import__("syw_site").rules_path()
-# showyourwork runs them in its build step; `syw-site build` asks for `syw_site_all`.
+# `syw-site build` asks showyourwork for `syw__main syw_site_all`: the paper and its docs data.
 #
 # Nothing here reads the paper or the settings at include time: that happens in input functions,
 # which Snakemake calls only when a docs target is requested, so a problem in docs/ can never

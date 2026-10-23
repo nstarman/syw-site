@@ -14,7 +14,7 @@ webapps:                                   # optional
   globe: { inputs: [src/data/directional.npz], figure: fig:quadrupole }   # figure: optional
 ```
 Validation: unknown keys fail; `publish` boolean; webapp names `[a-z0-9-]+` with `webapps/<name>/`
-present, each input a path in the repo, and `figure` (optional) a label in the paper.
+present, each input a path in the repo (existing or made by the pipeline), and `figure` (optional) a label in the paper.
 
 ## `docs/public/generated/facts.json` (generated; schema 1)
 

@@ -78,4 +78,4 @@ CHANGELOG.md
 
 | Deviation | Why | Simpler alternative rejected |
 |---|---|---|
-| The adapter reruns showyourwork's build step itself (R1) | `showyourwork build <target>` breaks in preprocess | waiting for upstream; a docs-in-PDF-DAG dependency |
+| — | none (the R1 workaround was removed: showyourwork main builds user targets, #690) | — |

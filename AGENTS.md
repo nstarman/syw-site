@@ -33,11 +33,9 @@ tests/               pytest; fixtures/paper (TeX shapes), fixtures/facts.json, e
 - showyourwork owns the paper's pipeline; syw-site reads its files and adds Snakemake rules, never
   imports it. figkit owns webapps (`figkit build`). The website owns the look
   (`@nstarkman/site-layout`, pinned exactly in `template/docs/package.json`).
-- `showyourwork build <target>` cannot build a target defined in the paper's Snakefile (its
-  preprocessing step gets the target too). `showyourwork.py` therefore reruns showyourwork's
-  build step with `syw_site_all`, copying its `run_snakemake` command line. It supports
-  showyourwork main (`0.4.4.dev*`; CI pins commit 44d15103f). To support another version, compare
-  that version's `cli/commands/run_snakemake.py` with `docs_command`, then widen `SUPPORTED`.
+- `syw-site build` is one `showyourwork build … syw__main syw_site_all` (`showyourwork.py`): the
+  PDF and the docs data. Building a target from the paper's Snakefile needs showyourwork main
+  (`0.4.4.dev*`; showyourwork#690 — 0.4.3 fails in preprocessing). CI pins commit 44d15103f.
 - showyourwork forbids `run:` in user rules and runs each in the paper's conda env, so the rules
   call syw-site through the absolute interpreter that included them, and do all their reading in
   input functions — a broken docs/ never breaks the paper's PDF build.
