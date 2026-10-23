@@ -67,3 +67,29 @@ def test_escaped_percent_is_not_a_comment():
 def test_aastex6_bare_orcid():
     found, _ = facts.authors(r"\author[0000-0002-1825-009X]{Josiah Carberry}\affiliation{Brown}")
     assert found == [{"name": "Josiah Carberry", "orcid": "0000-0002-1825-009X", "affiliations": [0]}]
+
+
+def test_label_and_footnote_never_show(tmp_path):
+    assert facts.clean(r"A plot\footnote{aside} of $x$.\label{fig:p}") == "A plot of $x$."
+
+
+def test_aastex_figure_macros(tmp_path):
+    text = r"""
+\begin{figure}\plotone{figures/one.pdf}\caption{One.\label{fig:one}}\end{figure}
+\begin{figure}\plottwo{figures/a.pdf}{figures/b.pdf}\caption{Two.}\label{fig:two}\end{figure}
+\begin{figure*}\gridline{\fig{figures/g1.pdf}{0.3\textwidth}{(a)}\fig{figures/g2.pdf}{0.3\textwidth}{(b)}}
+\caption{Grid.}\label{fig:grid}\end{figure*}
+\begin{figure}\caption{Nothing.}\end{figure}
+"""
+    with pytest.warns(UserWarning, match="no image"):
+        found = facts.figures(text, tmp_path)
+    assert [(f["label"], f["caption"], [i["file"] for i in f["images"]]) for f in found] == [
+        ("fig:one", "One.", ["figures/one.pdf"]),
+        ("fig:two", "Two.", ["figures/a.pdf", "figures/b.pdf"]),
+        ("fig:grid", "Grid.", ["figures/g1.pdf", "figures/g2.pdf"]),
+    ]
+
+
+def test_comment_after_a_line_break():
+    assert facts.strip_comments(r"a \\% gone") == r"a \\"
+    assert facts.strip_comments(r"5\% kept % gone") == r"5\% kept "

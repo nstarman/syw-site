@@ -39,7 +39,7 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
       - run: uv sync
       - run: uv run pytest -m site
 
@@ -58,7 +58,7 @@ jobs:
           python-version: "3.12"
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
       - name: Install showyourwork and this syw-site
         run: pip install "showyourwork @ git+https://github.com/showyourwork/showyourwork@44d15103f64c3162e4a1a961f49f77d8e3634e49" .
       - name: The example as a fresh repository

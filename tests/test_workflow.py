@@ -16,8 +16,10 @@ def test_only_the_publish_path_uploads_and_deploys():
     uploads = [s for s in steps() if "upload" in s.get("uses", "")]
     assert len(uploads) == 1
     assert "steps.settings.outputs.publish == 'true'" in uploads[0]["if"] and MAIN_PUSH in uploads[0]["if"]
+    assert "!github.event.repository.private" in uploads[0]["if"]
     deploy = WORKFLOW["jobs"]["deploy"]
     assert "needs.build.outputs.publish == 'true'" in deploy["if"] and MAIN_PUSH in deploy["if"]
+    assert "!github.event.repository.private" in deploy["if"]
     for name, job in WORKFLOW["jobs"].items():
         for s in job.get("steps", []):
             if s.get("uses", "").startswith(("actions/upload", "actions/deploy")):

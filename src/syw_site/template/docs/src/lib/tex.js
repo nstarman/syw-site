@@ -38,7 +38,7 @@ function text(s) {
     .replace(/\\(?:cite[pt]?|citealp|citeauthor)\*?(?:\[[^\]]*\])*\{[^}]*\}/g, '')
     .replace(/\\(?:emph|textit)\{([^}]*)\}/g, '<em>$1</em>')
     .replace(/\\textbf\{([^}]*)\}/g, '<strong>$1</strong>')
-    .replace(/\\url\{([^}]*)\}/g, '<a href="$1">$1</a>')
+    .replace(/\\url\{([^}]*)\}/g, (_, u) => { u = u.replace(/"/g, '&quot;').replace(/-/g, '&#45;'); return `<a href="${u}">${u}</a>`; })
     .replace(/\\([%&_#$])/g, '$1')
     .replace(/---/g, '—').replace(/--/g, '–').replace(/~/g, '&nbsp;')
     .replace(/``/g, '“').replace(/''/g, '”')
@@ -59,7 +59,9 @@ function prose(s) {
 /** Text with inline $math$; with refs, \ref{label} becomes that figure's number. */
 export function tex(s, refs = {}) {
   s = s.replace(/\\(?:c|C)?ref\{([^}]*)\}/g, (_, l) => refs[l] ?? '?');
-  return s.split(/(?<!\\)\$/).map((part, i) => (i % 2 ? math(part) : prose(part))).join('');
+  return s.split(/(\$\$[^$]*\$\$)/).map((chunk) => (chunk.startsWith('$$') && chunk.endsWith('$$') && chunk.length > 3
+    ? katex.renderToString(siunitx(chunk.slice(2, -2)), { throwOnError: true, displayMode: true })
+    : chunk.split(/(?<!\\)\$/).map((part, i) => (i % 2 ? math(part) : prose(part))).join(''))).join('');
 }
 
 /** A \variable value: math when it has TeX in it, text otherwise. */

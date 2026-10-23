@@ -7,9 +7,9 @@ from syw_site import showyourwork
 
 
 def test_docs_command_matches_showyourwork_run_snakemake():
-    cmd = showyourwork.docs_command("/x/build.smk", 2, "mamba", ["--conda-not-block-search-path-envvars"])
+    cmd = showyourwork.docs_command("/env/bin/python", "/x/build.smk", 2, "mamba", ["--conda-not-block-search-path-envvars"])
     assert cmd == [
-        "snakemake", "--cores", "2", "--use-conda", "--conda-frontend", "mamba", "--cache",
+        "/env/bin/python", "-m", "snakemake", "--cores", "2", "--use-conda", "--conda-frontend", "mamba", "--cache",
         "-s", "/x/build.smk", "--conda-not-block-search-path-envvars", "syw_site_all",
     ]
 

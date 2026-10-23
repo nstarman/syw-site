@@ -13,4 +13,4 @@ rule numbers:
         "src/tex/output/radius.tex",
         "src/tex/output/pitch.tex",
     script:
-        "src/scripts/numbers.py"
+        "src/scripts/make_variables.py"

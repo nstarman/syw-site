@@ -14,8 +14,9 @@ SCHEMA = 1
 
 
 def strip_comments(text: str) -> str:
-    """Drop everything from an unescaped `%` to the end of its line."""
-    return "\n".join(re.sub(r"(?<!\\)%.*", "", line) for line in text.splitlines())
+    r"""Drop everything from an unescaped `%` to the end of its line (`\\%` is a line break, then a
+    comment; `\%` is a percent sign)."""
+    return "\n".join(re.sub(r"(?<!\\)((?:\\\\)*)%.*", r"\1", line) for line in text.splitlines())
 
 
 def _group(text: str, i: int, open_: str, close: str) -> tuple[str, int]:
@@ -61,6 +62,9 @@ def clean(text: str) -> str:
     """`\\todo{x}` becomes x; whitespace runs become one space."""
     for _, arg in commands(text, "todo"):
         text = text.replace(f"\\todo{{{arg}}}", arg)
+    for name in ("label", "footnote"):
+        for _, arg in commands(text, name):
+            text = text.replace(f"\\{name}{{{arg}}}", "")
     return re.sub(r"\s+", " ", text).strip()
 
 
@@ -116,9 +120,19 @@ def figures(text: str, root: Path) -> list[dict]:
     result = []
     for m in re.finditer(r"\\begin\{(figure\*?)\}(.*?)\\end\{\1\}", text, re.S):
         body = m.group(2)
-        images = [_image(arg, root) for _, arg in commands(body, "includegraphics")]
-        if not images:
+        files = [arg for _, arg in commands(body, "includegraphics")]
+        files += [arg for _, arg in commands(body, "plotone")]
+        for m2 in re.finditer(r"\\plottwo\s*\{", body):  # \plottwo{a}{b}
+            a, i = _group(body, m2.end() - 1, "{", "}")
+            b, _ = _group(body, body.index("{", i), "{", "}")
+            files += [a, b]
+        for m2 in re.finditer(r"\\fig\s*\{", body):  # \gridline{\fig{file}{width}{caption}}
+            files.append(_group(body, m2.end() - 1, "{", "}")[0])
+        if not files:
+            warnings.warn("a figure environment with no image (\\includegraphics, \\plotone, "
+                          "\\plottwo or \\fig) was skipped", stacklevel=2)
             continue
+        images = [_image(f, root) for f in files]
         label = _first(body, "label")
         if label:
             slug = re.sub(r"^fig:", "", label)

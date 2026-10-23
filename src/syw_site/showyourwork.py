@@ -58,9 +58,11 @@ def build_snakefile(python: str) -> str:
     return subprocess.run([python, "-c", code], capture_output=True, text=True, check=True).stdout.strip()
 
 
-def docs_command(snakefile: str, cores: int, conda_frontend: str, extra: list[str]) -> list[str]:
+def docs_command(python: str, snakefile: str, cores: int, conda_frontend: str, extra: list[str]) -> list[str]:
+    # showyourwork runs `snakemake` from PATH; running it with showyourwork's own interpreter is the
+    # same program when showyourwork's environment is active, and still right when it is not.
     return [
-        "snakemake", "--cores", str(cores), "--use-conda", "--conda-frontend", conda_frontend,
+        python, "-m", "snakemake", "--cores", str(cores), "--use-conda", "--conda-frontend", conda_frontend,
         "--cache", "-s", snakefile, *extra, TARGET,
     ]
 
@@ -78,5 +80,6 @@ def build(repo: Path, cores: int = 1, conda_frontend: str = "conda", extra: list
         raise ShowyourworkError(f"showyourwork {v} is not supported by this syw-site (supported: {SUPPORTED}*)")
     common = ["--cores", str(cores), "--conda-frontend", conda_frontend]
     subprocess.run([exe, "build", *common, *extra], cwd=repo, check=True)
-    command = docs_command(build_snakefile(interpreter(exe)), cores, conda_frontend, list(extra))
+    python = interpreter(exe)
+    command = docs_command(python, build_snakefile(python), cores, conda_frontend, list(extra))
     subprocess.run(command, cwd=repo, env=docs_env(repo), check=True)

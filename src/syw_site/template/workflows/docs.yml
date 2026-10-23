@@ -36,7 +36,7 @@ jobs:
           python-version: "3.12"
       - uses: actions/setup-node@v4
         with:
-          node-version: "22"
+          node-version: "24"
       - name: Install showyourwork and syw-site
         run: pip install "showyourwork @ git+https://github.com/showyourwork/showyourwork@44d15103f64c3162e4a1a961f49f77d8e3634e49" "syw-site @ git+https://github.com/nstarman/syw-site@v{{VERSION}}"
       - name: Build the paper and its docs site
@@ -51,14 +51,14 @@ jobs:
           echo "::error::docs/syw-site.yml says publish: true, but this repository is private. Make it public at arXiv submission, or set publish: false."
           exit 1
       - name: Upload the site for Pages
-        if: steps.settings.outputs.publish == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: steps.settings.outputs.publish == 'true' && !github.event.repository.private && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/dist
 
   deploy:
     needs: build
-    if: needs.build.outputs.publish == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: needs.build.outputs.publish == 'true' && !github.event.repository.private && github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       pages: write

@@ -42,7 +42,9 @@ def cmd_webapp(args) -> int:
     from figkit.cli import main as figkit
 
     cfg = settings.load()
-    app = {w.name: w for w in cfg.webapps}[args.name]
+    app = {w.name: w for w in cfg.webapps}.get(args.name)
+    if app is None:
+        raise settings.SettingsError(f"no webapp {args.name!r} under webapps: in docs/syw-site.yml")
     data = Path("docs/.syw-site/webapps") / app.name / "data"
     out = OUT / "webapps" / app.name
     subprocess.run(
