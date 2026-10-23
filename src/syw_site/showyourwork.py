@@ -1,7 +1,8 @@
 """The one place syw-site depends on how showyourwork runs.
 
 `showyourwork build <target>` hands <target> to its preprocessing step too, which does not load
-the paper's Snakefile, so a target defined there fails (showyourwork 0.4.3 and main). So syw-site runs
+the paper's Snakefile, so a target defined there fails (showyourwork 0.4.3 and main;
+https://github.com/showyourwork/showyourwork/issues/769). So syw-site runs
 `showyourwork build` (preprocess and the PDF), then showyourwork's build step once more with the
 docs target, with the command line and environment showyourwork itself uses
 (`showyourwork/cli/commands/run_snakemake.py`). showyourwork is never imported here; a subprocess
