@@ -5,19 +5,21 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
-### Added
+## 2026.10.23.1 — 2026-10-23
 
-- Figure labels may be written with a paper's own label command (`\figlabel{}`, any `\…label{}`),
-  and the paper's math macros (`\newcommand`, `\renewcommand`, `\DeclareMathOperator` in
-  `ms.tex`) reach KaTeX through `facts.json` (`macros`). Found on the first real paper.
+### Fixed
 
-### Changed
+Found adding syw-site to the first real paper:
 
-- `syw-site init` writes the Snakefile include guarded by `import syw_site`, so the paper's own
-  build keeps working in an environment without syw-site (the docs rules are off there, with a
-  message). Papers already initialised can replace their include line with the new block.
-- `docs.yml` passes the `SANDBOX_TOKEN` secret to the build (rules cached on Zenodo stall without
-  it), never `OVERLEAF_TOKEN`, and stops after 120 minutes.
+- Figures labelled with a paper's own label command (`\figlabel{}`, any `\…label{}`) had no
+  label; they now get it, and labels never show in text.
+- A paper's math macros (`\newcommand`, `\renewcommand`, `\DeclareMathOperator` in `ms.tex`)
+  stopped the site build in KaTeX; they now reach it through `facts.json` (`macros`).
+- `syw-site init`'s Snakefile include broke the paper's own build in an environment without
+  syw-site; it is now guarded by `import syw_site` (the docs rules are off there, with a message).
+  Papers already initialised can replace their include line with the new block (see `init.py`).
+- `docs.yml` stalled on rules cached on Zenodo: it now passes the `SANDBOX_TOKEN` secret, never
+  `OVERLEAF_TOKEN`, and stops after 120 minutes.
 
 ## 2026.10.23 — 2026-10-23
 
