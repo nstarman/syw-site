@@ -1,0 +1,48 @@
+{
+  "schema": 1,
+  "root": "demo-paper",
+  "source": { "repo": "nstarman/nstarman.github.io", "ref": "main", "sha": "0000000" },
+  "items": [
+    {
+      "id": "demo-paper", "type": "publication", "status": "submitted", "entryType": "article",
+      "date": { "start": "2026-10" },
+      "title": "Curved Things II: Angles Distinguish Models",
+      "authors": [
+        { "family": "Starkman", "given": "Nathaniel", "me": true },
+        { "family": "Doe", "given": "Jane", "orcid": "0000-0001-2345-6789" }
+      ],
+      "venue": { "journal": "The Astrophysical Journal" },
+      "abstract": "We find many curved things.",
+      "highlight": { "image": "highlights/demo.png", "topic": "galactic", "alt": "A curve", "description": "Curves tell models apart. A second sentence." },
+      "refs": ["demo-package", "demo-grant"]
+    },
+    {
+      "id": "demo-package", "type": "software", "tier": "minor", "group": "utilities",
+      "date": { "start": "2024" }, "title": "demopkg", "summary": "Draws curves.",
+      "repo": "nstarman/demopkg", "links": [{ "rel": "code", "url": "https://github.com/nstarman/demopkg" }],
+      "refs": ["demo-package-paper"]
+    },
+    {
+      "id": "demo-package-paper", "type": "publication", "status": "published", "entryType": "article",
+      "date": { "start": "2025-03" }, "title": "demopkg: drawing curves", "doi": "10.21105/joss.00001",
+      "authors": [{ "family": "Starkman", "given": "Nathaniel", "me": true }],
+      "venue": { "journal": "Journal of Open Source Software", "volume": "10", "pages": "1" }
+    },
+    {
+      "id": "demo-grant", "type": "grant", "tier": "major", "date": { "start": "2025", "end": "2028" },
+      "title": "Example Fellowship", "funder": "Example Foundation"
+    }
+  ],
+  "config": {
+    "collaborators": { "people": [
+      { "orcid": "0000-0001-2345-6789", "name": "Jane Doe", "affiliations": [
+        { "organization": "Example University", "start": "2020", "role": "Professor", "city": "Example", "country": "Nowhere" }
+      ] }
+    ] },
+    "journals": { "The Astrophysical Journal": "ApJ", "Journal of Open Source Software": "JOSS" },
+    "stars": { "stars": {} },
+    "places": { "places": { "Example University": { "lat": 42.36, "lon": -71.09 } } },
+    "acknowledgements": { "papers": [] }
+  },
+  "card": { "preset": "paperSite" }
+}

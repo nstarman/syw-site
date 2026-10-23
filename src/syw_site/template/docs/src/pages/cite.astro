@@ -2,6 +2,8 @@
 import Page from '../components/Page.astro';
 import PaperLinks from '../components/PaperLinks.astro';
 import { facts } from '../lib/facts.js';
+import { tex } from '../lib/tex.js';
+import { resolve, root, softwarePapers, softwareUsed, links } from '../lib/store.js';
 
 const { arxiv, doi } = facts.paper;
 const first = facts.authors[0];
@@ -14,8 +16,32 @@ const fields = [
   doi && ['doi', doi],
 ].filter(Boolean);
 const bibtex = `@article{${key},\n${fields.map(([k, v]) => `  ${k} = {${v}}`).join(',\n')}\n}`;
+
+// The packages the paper used (its refs on nstarkman.space), each with how to cite it:
+// its own papers (DOI where published), else its repository.
+const software = root ? softwareUsed([resolve(root)]).map((s) => ({
+  s,
+  papers: softwarePapers(s).map((p) => ({ ...p, item: resolve(p.id) })),
+  repo: links(s).find((l) => l.rel === 'code' || l.rel === 'repo'),
+})) : [];
 ---
-<Page title="Cite">
+<Page title="Cite" tab="cite">
   <PaperLinks />
   {arxiv || doi ? <pre><code>{bibtex}</code></pre> : <p>The citation appears here once the paper is on arXiv.</p>}
+  {software.length > 0 && (
+    <section class="syw-software">
+      <h3>Software</h3>
+      <p>This paper used these packages. Please cite them too.</p>
+      <ul>
+        {software.map(({ s, papers, repo }) => (
+          <li>
+            <strong><a href={`https://nstarkman.space/software/#sw-${s.id}`}>{s.title}</a></strong>{s.summary && <> — <span set:html={tex(s.summary)} /></>}
+            <br />Cite: {papers.length
+              ? papers.map((p, i) => <>{i > 0 && '; '}<a href={p.url}>{p.item?.title ?? p.label}</a>{p.item?.doi && <> (doi:<a href={`https://doi.org/${p.item.doi}`}>{p.item.doi}</a>)</>}</>)
+              : repo ? <a href={repo.url}>its repository</a> : 'its website'}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </Page>

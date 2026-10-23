@@ -3,8 +3,8 @@ import Page from '../../components/Page.astro';
 import Fig from '../../components/Fig.astro';
 import { facts } from '../../lib/facts.js';
 ---
-<Page title="Figures">
-  <div class="syw-gallery">
+<Page tab="figures">
+  <div class="syw-figures">
     {facts.figures.map((f) => <Fig label={f.slug} />)}
   </div>
 </Page>

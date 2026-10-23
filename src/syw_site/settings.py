@@ -7,9 +7,11 @@ from pathlib import Path
 import yaml
 
 SETTINGS = Path("docs/syw-site.yml")
-_KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps"}
+_KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps", "figures"}
 _PAPER_KEYS = {"arxiv", "doi", "bibcode"}
-_WEBAPP_KEYS = {"inputs", "figure"}
+_WEBAPP_KEYS = {"inputs", "figure", "explore", "title", "text"}
+_FIGURE_KEYS = {"icon", "image"}
+CORNERS = ("top-right", "top-left", "bottom-right", "bottom-left")
 
 
 class SettingsError(ValueError):
@@ -21,6 +23,18 @@ class Webapp:
     name: str
     inputs: tuple[str, ...]
     figure: str | None = None
+    explore: bool = False
+    title: str | None = None
+    text: str | None = None
+
+
+@dataclass(frozen=True)
+class FigureIcon:
+    """Where the author's portrait goes on a figure: a corner, a centre as fractions of the
+    image's width and height, or nowhere; on its `image`-th image (1-based)."""
+
+    where: str | tuple[float, float] | None = "top-right"
+    image: int = 1
 
 
 @dataclass(frozen=True)
@@ -31,6 +45,10 @@ class Settings:
     paper: dict = field(default_factory=dict)
     python: str = "python"
     webapps: tuple[Webapp, ...] = ()
+    figures: dict = field(default_factory=dict)  # label -> FigureIcon
+
+    def icon(self, label: str | None, slug: str) -> FigureIcon:
+        return self.figures.get(label) or self.figures.get(slug) or FigureIcon()
 
 
 def load(root: Path = Path(".")) -> Settings:
@@ -67,11 +85,32 @@ def parse(raw: dict, root: Path) -> Settings:
             raise SettingsError(f"syw-site.yml: webapp {name!r} has no webapps/{name}/")
         # Inputs may be outputs of the paper's pipeline; Snakemake reports one nothing makes.
         inputs = tuple(str(p) for p in spec.get("inputs") or ())
-        webapps.append(Webapp(name, inputs, spec.get("figure")))
+        explore = spec.get("explore", False)
+        if not isinstance(explore, bool):
+            raise SettingsError(f"syw-site.yml: webapp {name!r} explore must be true or false")
+        webapps.append(Webapp(name, inputs, spec.get("figure"), explore, spec.get("title"), spec.get("text")))
+    figures = {}
+    for label, spec in (raw.get("figures") or {}).items():
+        spec = spec or {}
+        if not isinstance(spec, dict) or set(spec) - _FIGURE_KEYS:
+            raise SettingsError(f"syw-site.yml: figure {label!r} takes only {sorted(_FIGURE_KEYS)}")
+        icon = spec.get("icon", "top-right")
+        if icon == "none" or icon is None:
+            where = None
+        elif icon in CORNERS:
+            where = icon
+        elif (isinstance(icon, list) and len(icon) == 2 and all(isinstance(v, (int, float)) and 0 <= v <= 1 for v in icon)):
+            where = (float(icon[0]), float(icon[1]))
+        else:
+            raise SettingsError(f"syw-site.yml: figure {label!r} icon must be one of {list(CORNERS)}, none, or [x, y] in 0–1")
+        image = spec.get("image", 1)
+        if not isinstance(image, int) or image < 1:
+            raise SettingsError(f"syw-site.yml: figure {label!r} image must be 1, 2, …")
+        figures[str(label)] = FigureIcon(where, image)
     python = raw.get("python", "python")
     if not isinstance(python, str) or not python.strip():
         raise SettingsError("syw-site.yml: `python` must be a command, e.g. `uv run --locked python`")
     website_id = raw.get("website_id")
     return Settings(
-        repo, None if website_id is None else str(website_id), publish, paper, python, tuple(webapps)
+        repo, None if website_id is None else str(website_id), publish, paper, python, tuple(webapps), figures
     )

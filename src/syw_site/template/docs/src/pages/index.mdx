@@ -1,17 +1,11 @@
 ---
 layout: ../components/Page.astro
+tab: overview
 ---
 import Abstract from '../components/Abstract.astro';
-import Authors from '../components/Authors.astro';
-import PaperLinks from '../components/PaperLinks.astro';
-import Card from '../components/Card.astro';
 
-<Authors />
-<PaperLinks />
-<Abstract />
-
-{/* Write the overview here. Cite numbers and figures from the paper by name — never type them:
+{/* The overview: write it here. Cite numbers and figures from the paper by name — never type them:
     import Var from '../components/Var.astro'; import Fig from '../components/Fig.astro';
-    then <Var name="path/of/variable" /> and <Fig label="fig:label" />. */}
+    then <Var name="path/of/variable" /> and <Fig label="fig:label" />. Until then, the abstract. */}
 
-<Card />
+<Abstract />

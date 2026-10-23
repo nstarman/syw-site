@@ -5,6 +5,30 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Added
+
+- The paper's site opens with its entry as nstarkman.space draws it — the website's own
+  `Publication` and card (`@nstarkman/research-kit`), without the context link — from
+  `docs/card.json`, which **`syw-site card`** fetches from the website's data on GitHub with the
+  card's images and the author's portrait; a `Card` workflow refreshes it weekly or by hand.
+- **Tabs**: Overview, Explore (webapps with `explore: true`, with `title` and `text`), Figures,
+  Cite, Info; one page each, empty ones hidden.
+- **Figures** in one column, each with the author's portrait stamped (top-right by default;
+  `figures: {<label>: {icon, image}}` in `syw-site.yml`), shown as lossless WebP, offered as PNG.
+- **Cite** lists the software the paper used and how to cite each package; **Info** shows the
+  co-authors' collaborator map, the grants that funded the paper (its `refs` on the website) and the
+  author's pages in `src/pages/info/`.
+
+### Changed — migration
+
+- **What changed**: the scaffold's header, `Page.astro`, the pages and `astro.config.mjs` (the
+  research-kit alias); `Card.astro` (the website card iframe) is gone; `docs/package.json` gains
+  `@nstarkman/research-kit`. **Find**: `docs/src/components/Page.astro`, `docs/astro.config.mjs`,
+  `docs/package.json`, `docs/src/pages/`. **Edit**: take those files from the new scaffold
+  (`src/syw_site/template/docs/`), keeping your own pages; move extra pages to
+  `docs/src/pages/info/`; add `docs/scripts/card.mjs`, `docs/src/lib/{store,tabs}.js` and
+  `.github/workflows/card.yml`; then `npm install` in `docs/` and `syw-site card`.
+
 ## 2026.10.23.2 — 2026-10-23
 
 ### Fixed

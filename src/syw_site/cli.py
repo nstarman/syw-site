@@ -23,19 +23,32 @@ def cmd_facts(args) -> int:
     cfg = settings.load()
     data = facts.extract(Path("."), repo=cfg.repo, paper=cfg.paper)
     data["website_id"] = cfg.website_id
-    data["webapps"] = {w.name: {"figure": w.figure} for w in cfg.webapps}
+    data["webapps"] = {
+        w.name: {"figure": w.figure, "explore": w.explore, "title": w.title, "text": w.text} for w in cfg.webapps
+    }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     return 0
 
 
 def cmd_figures(args) -> int:
+    cfg = settings.load()
     text = facts.strip_comments(Path("src/tex/ms.tex").read_text(encoding="utf-8"))
+    portrait = Path("docs/portrait.jpg")
+    if not portrait.exists():
+        print("syw-site: no docs/portrait.jpg (run `syw-site card`): figures without the icon", file=sys.stderr)
     args.output.mkdir(parents=True, exist_ok=True)
     for figure in facts.figures(text, Path(".")):
-        for image in figure["images"]:
-            figures.web_image(Path(image["source"]), args.output, image)
+        icon = cfg.icon(figure["label"], figure["slug"])
+        for n, image in enumerate(figure["images"], start=1):
+            figures.web_image(Path(image["source"]), args.output, image, portrait, icon.where if n == icon.image else None)
     return 0
+
+
+def cmd_card(args) -> int:
+    from syw_site import card
+
+    return card.run(Path("."), settings.load())
 
 
 def cmd_webapp(args) -> int:
@@ -91,6 +104,8 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("figures", help="write web images of the paper's figures")
     s.add_argument("-o", "--output", type=Path, default=OUT / "figures")
     s.set_defaults(func=cmd_figures)
+    s = sub.add_parser("card", help="fetch the paper's card and the author's portrait from nstarkman.space's data")
+    s.set_defaults(func=cmd_card)
     s = sub.add_parser("webapp", help="export and build one webapp listed in syw-site.yml")
     s.add_argument("name")
     s.set_defaults(func=cmd_webapp)

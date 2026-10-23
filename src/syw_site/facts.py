@@ -122,9 +122,10 @@ def _image(path: str, root: Path) -> dict:
                 src = src.with_suffix(ext)
                 break
     rel = src.relative_to(TEX)
-    image = {"source": src.as_posix(), "file": rel.as_posix()}
-    if src.suffix == ".pdf":
-        image["png"] = rel.with_suffix(".png").as_posix()
+    # The page shows a lossless WebP and offers a PNG, each with the author's portrait
+    # (figures.py); a PDF stays the paper's own.
+    image = {"source": src.as_posix(), "file": rel.as_posix(), "webp": rel.with_suffix(".webp").as_posix()}
+    image["png"] = rel.with_suffix(".png").as_posix()
     return image
 
 

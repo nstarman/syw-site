@@ -26,6 +26,17 @@ into a page.** A name that does not exist stops the build.
 3. Fill in `docs/syw-site.yml` ([references/settings.md](references/settings.md)): `website_id`
    (the paper's record id on nstarkman.space), and `python:` if the paper runs scripts with e.g.
    `uv run --locked python`.
+4. `syw-site card` (needs the network): fetches the paper's entry as nstarkman.space has it —
+   `docs/card.json`, the card's images, the author's portrait — and commit them. Every page then
+   opens with the website's own entry for the paper (the research card, without "Context"), and the
+   `Card` workflow refreshes it weekly or by hand. Without a `website_id`, pages open with the
+   paper's title and authors instead.
+
+The site's tabs: **Overview** (`index.mdx`, your prose), **Explore** (webapps with `explore: true`),
+**Figures** (every figure, one column, the author's portrait stamped top-right — place it per figure
+with `figures:` in `syw-site.yml`), **Cite** (BibTeX, and the software the paper used with how to cite
+it), **Info** (the co-authors' map, the grants that funded it — the paper's `refs` on the website —
+and your own pages in `src/pages/info/`). A tab with nothing in it is hidden.
 
 ## 2. Write pages
 

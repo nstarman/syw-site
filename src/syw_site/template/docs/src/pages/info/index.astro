@@ -1,0 +1,21 @@
+---
+// Who wrote the paper and where (the website's collaborator map, for this paper's co-authors),
+// what funded it (its grants on nstarkman.space), and the author's own pages in info/.
+import Page from '../../components/Page.astro';
+import CollabMap from '@nstarkman/research-kit/CollabMap.astro';
+import { url } from '../../lib/facts.js';
+import { dateLabel } from '../../lib/store.js';
+import { grants, hasMap, infoLinks } from '../../lib/tabs.js';
+---
+<Page tab="info">
+  {hasMap() && <section class="syw-collaborators"><h3>Collaborators</h3><CollabMap /></section>}
+  {grants().length > 0 && (
+    <section class="syw-funding">
+      <h3>Funding</h3>
+      <ul>{grants().map((g) => <li>{g.title}{g.funder && <>, {g.funder}</>} <span class="syw-dates">({dateLabel(g)})</span></li>)}</ul>
+    </section>
+  )}
+  {infoLinks().length > 0 && (
+    <section class="syw-more"><h3>More</h3><ul>{infoLinks().map((p) => <li><a href={url(p)}>{p.replace(/^info\/|\/$/g, '').replace(/-/g, ' ')}</a></li>)}</ul></section>
+  )}
+</Page>
