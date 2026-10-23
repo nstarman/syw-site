@@ -1,0 +1,23 @@
+---
+// A figure of the paper with its caption: <Fig label="fig:quadrupole" />. `link` adds a link to
+// its own page; `interactive` names a webapp to show instead of the image.
+import { facts, figure, url } from '../lib/facts.js';
+import { tex } from '../lib/tex.js';
+
+const { label, link = true } = Astro.props;
+const fig = figure(label);
+const number = facts.figures.indexOf(fig) + 1;
+const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
+const alt = `Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
+---
+<figure id={fig.slug}>
+  {fig.images.map((im) => (
+    <img src={url(`generated/figures/${im.png ?? im.file}`)} alt={alt} loading="lazy" />
+  ))}
+  <figcaption>
+    <strong>Figure {number}.</strong> <span set:html={tex(fig.caption, refs)} />
+    {' '}
+    {fig.images.filter((im) => im.file.endsWith('.pdf')).map((im) => <a href={url(`generated/figures/${im.file}`)}>PDF</a>)}
+    {link && <a href={url(`figures/${fig.slug}/`)}>More</a>}
+  </figcaption>
+</figure>

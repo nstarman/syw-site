@@ -7,5 +7,6 @@ node_modules/
 .pytest_cache/
 .DS_Store
 .astro/
-examples/*/docs/generated/
+examples/*/docs/public/generated/
+examples/*/docs/.syw-site/
 examples/*/docs/dist/

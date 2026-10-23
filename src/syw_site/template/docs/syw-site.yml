@@ -1,0 +1,16 @@
+# The docs site's settings (syw-site). See the syw-site skill's references/settings.md.
+repo: {{REPO}}
+# The paper's record id on nstarkman.space, for its card (/embed/<id>/).
+website_id:
+# Nothing is deployed until this is true — set it at arXiv submission, with the repo public.
+publish: false
+# Filled in when known.
+paper:
+  arxiv:
+  doi:
+  bibcode:
+# How this paper runs Python, if not plain `python` (e.g. `uv run --locked python`).
+# python: python
+# Interactive figures (figkit apps in webapps/<name>/), each with the data files it reads.
+# webapps:
+#   globe: { inputs: [src/data/example.npz], figure: fig:example }

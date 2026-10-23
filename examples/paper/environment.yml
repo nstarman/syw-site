@@ -1,0 +1,7 @@
+dependencies:
+  - conda-forge::python=3.12
+  - conda-forge::numpy=2.1
+  - conda-forge::matplotlib=3.9
+  - conda-forge::pip
+  - pip:
+      - figkit @ git+https://github.com/nstarman/figkit@v0.2.0

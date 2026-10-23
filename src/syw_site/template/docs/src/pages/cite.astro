@@ -1,0 +1,21 @@
+---
+import Page from '../components/Page.astro';
+import PaperLinks from '../components/PaperLinks.astro';
+import { facts } from '../lib/facts.js';
+
+const { arxiv, doi } = facts.paper;
+const first = facts.authors[0];
+const key = `${first?.surname ?? 'paper'}:${arxiv ?? doi ?? 'preprint'}`.replace(/[^\w:.-]/g, '');
+const fields = [
+  ['author', facts.authors.map((a) => (a.surname ? `${a.surname}, ${a.given ?? ''}`.trim() : a.name)).join(' and ')],
+  ['title', `{${facts.title}}`],
+  arxiv && ['eprint', arxiv],
+  arxiv && ['archivePrefix', 'arXiv'],
+  doi && ['doi', doi],
+].filter(Boolean);
+const bibtex = `@article{${key},\n${fields.map(([k, v]) => `  ${k} = {${v}}`).join(',\n')}\n}`;
+---
+<Page title="Cite">
+  <PaperLinks />
+  {arxiv || doi ? <pre><code>{bibtex}</code></pre> : <p>The citation appears here once the paper is on arXiv.</p>}
+</Page>

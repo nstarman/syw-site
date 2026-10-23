@@ -1,0 +1,15 @@
+---
+// An interactive figure (a figkit app listed in docs/syw-site.yml): <Webapp name="globe" />.
+import { url, webapp } from '../lib/facts.js';
+
+const { name, height = 640 } = Astro.props;
+webapp(name);
+const site = url(`generated/webapps/${name}/site/`);
+---
+<figure class="syw-webapp">
+  {/* ponytail: a fixed height; size to the app's content if an app needs it */}
+  <iframe src={site} title={`Interactive figure: ${name}`} height={height} loading="lazy"></iframe>
+  <figcaption>
+    <a href={site}>Open full page</a> · <a href={url(`generated/webapps/${name}/${name}.html`)} download>Download (one HTML file)</a>
+  </figcaption>
+</figure>

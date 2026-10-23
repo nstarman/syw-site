@@ -1,0 +1,16 @@
+rule helix_data:
+    output:
+        "src/data/helix.npz",
+    script:
+        "src/scripts/helix_data.py"
+
+
+rule numbers:
+    input:
+        "src/data/helix.npz",
+    output:
+        "src/tex/output/turns.tex",
+        "src/tex/output/radius.tex",
+        "src/tex/output/pitch.tex",
+    script:
+        "src/scripts/make_variables.py"

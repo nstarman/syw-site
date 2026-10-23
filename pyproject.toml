@@ -1,0 +1,44 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "syw-site"
+dynamic = ["version"]
+description = "Docs sites for showyourwork papers, published at nstarkman.space/<repo>/"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Nathaniel Starkman" }]
+requires-python = ">=3.11"
+dependencies = [
+    "figkit @ git+https://github.com/nstarman/figkit@v0.2.0",
+    "pyyaml>=6",
+    "pypdfium2>=4.30",
+    "pillow>=10",
+]
+
+[project.scripts]
+syw-site = "syw_site.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.hatch.version]
+path = "src/syw_site/__init__.py"
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/syw_site"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"CHANGELOG.md" = "syw_site/CHANGELOG.md"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/syw_site", "README.md", "LICENSE", "CHANGELOG.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["site: builds the Astro scaffold (needs Node and npm)"]
+addopts = "-m 'not site'"
