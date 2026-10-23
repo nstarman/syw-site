@@ -5,6 +5,18 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Added
+
+- Figure labels may be written with a paper's own label command (`\figlabel{}`, any `\…label{}`),
+  and the paper's math macros (`\newcommand`, `\renewcommand`, `\DeclareMathOperator` in
+  `ms.tex`) reach KaTeX through `facts.json` (`macros`). Found on the first real paper.
+
+### Changed
+
+- `syw-site init` writes the Snakefile include guarded by `import syw_site`, so the paper's own
+  build keeps working in an environment without syw-site (the docs rules are off there, with a
+  message). Papers already initialised can replace their include line with the new block.
+
 ## 2026.10.23 — 2026-10-23
 
 ### Changed

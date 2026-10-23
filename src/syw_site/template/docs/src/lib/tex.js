@@ -1,6 +1,10 @@
 // The paper's LaTeX as HTML: math through KaTeX (an error stops the build), siunitx's \qty and
 // \qtyrange, and the text commands papers use. Not a TeX engine: extend it when a paper needs more.
 import katex from 'katex';
+import { facts } from './facts.js';
+
+// The paper's own \newcommand / \DeclareMathOperator definitions (facts.json, from ms.tex).
+const macros = { ...(facts.macros ?? {}) };
 
 const UNITS = {
   kpc: 'kpc', pc: 'pc', Mpc: 'Mpc', km: 'km', meter: 'm', metre: 'm', second: 's', kilo: 'k',
@@ -31,7 +35,7 @@ const siunitx = (s) => s
   .replace(/\\num\{([^}]*)\}/g, (_, v) => num(v));
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-export const math = (s) => katex.renderToString(siunitx(s), { throwOnError: true, output: 'html' });
+export const math = (s) => katex.renderToString(siunitx(s), { throwOnError: true, output: 'html', macros });
 
 function text(s) {
   return esc(s)
@@ -60,7 +64,7 @@ function prose(s) {
 export function tex(s, refs = {}) {
   s = s.replace(/\\(?:c|C)?ref\{([^}]*)\}/g, (_, l) => refs[l] ?? '?');
   return s.split(/(\$\$[^$]*\$\$)/).map((chunk) => (chunk.startsWith('$$') && chunk.endsWith('$$') && chunk.length > 3
-    ? katex.renderToString(siunitx(chunk.slice(2, -2)), { throwOnError: true, displayMode: true })
+    ? katex.renderToString(siunitx(chunk.slice(2, -2)), { throwOnError: true, displayMode: true, macros })
     : chunk.split(/(?<!\\)\$/).map((part, i) => (i % 2 ? math(part) : prose(part))).join(''))).join('');
 }
 
