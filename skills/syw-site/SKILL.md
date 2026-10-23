@@ -18,8 +18,10 @@ into a page.** A name that does not exist stops the build.
    `pip install "syw-site @ git+https://github.com/nstarman/syw-site@vYYYY.MM.DD"` (latest:
    `gh release list -R nstarman/syw-site --limit 1`).
 2. In the repository root: `syw-site init` (or `--repo owner/name` if `origin` is not GitHub). It
-   writes `docs/`, `docs/syw-site.yml` with `publish: false`, one `include:` line at the end of the
-   `Snakefile`, and `.github/workflows/docs.yml`. It refuses to overwrite an existing file and says
+   writes `docs/`, `docs/syw-site.yml` with `publish: false`, a guarded `include:` of syw-site's
+   rules at the end of the `Snakefile` (the paper still builds where syw-site is not installed), and
+   `.github/workflows/docs.yml`. Install syw-site in the same environment as showyourwork, or the docs
+   rules stay off. It refuses to overwrite an existing file and says
    which: move that file aside (an old `docs/` becomes the content of the new pages) and rerun.
 3. Fill in `docs/syw-site.yml` ([references/settings.md](references/settings.md)): `website_id`
    (the paper's record id on nstarkman.space), and `python:` if the paper runs scripts with e.g.
