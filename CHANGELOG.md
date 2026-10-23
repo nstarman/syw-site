@@ -20,6 +20,9 @@ Found adding syw-site to the first real paper:
   Papers already initialised can replace their include line with the new block (see `init.py`).
 - `docs.yml` stalled on rules cached on Zenodo: it now passes the `SANDBOX_TOKEN` secret, never
   `OVERLEAF_TOKEN`, and stops after 120 minutes.
+- The paper's own links (Overview, Figures, Cite) stuck over the website's header (its stylesheet
+  makes every `nav` sticky); a reference to a section or appendix showed "?"; a figure's "PDF" and
+  "More" links ran together.
 
 ## 2026.10.23 — 2026-10-23
 
