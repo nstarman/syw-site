@@ -12,11 +12,12 @@ const paper = facts.title.replace(/\$[^$]*\$/g, '').replace(/\\[A-Za-z]+|[{}]/g,
 ---
 <SiteLayout title={heading ? `${heading} — ${paper}` : paper} section="/research/" repo={facts.repo}>
   <main class="wrap syw">
-    <nav class="syw-nav" aria-label="This paper">
+    {/* Not <nav>: the website's stylesheet makes every nav its sticky header. */}
+    <div class="syw-nav" role="navigation" aria-label="This paper">
       <a href={url("")}>Overview</a>
       <a href={url("figures/")}>Figures</a>
       <a href={url("cite/")}>Cite</a>
-    </nav>
+    </div>
     <p class="syw-paper" set:html={tex(facts.title)} />
     {heading && <h1>{heading}</h1>}
     <slot />

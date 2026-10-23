@@ -17,7 +17,7 @@ const alt = `Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]
   <figcaption>
     <strong>Figure {number}.</strong> <span set:html={tex(fig.caption, refs)} />
     {' '}
-    {fig.images.filter((im) => im.file.endsWith('.pdf')).map((im) => <a href={url(`generated/figures/${im.file}`)}>PDF</a>)}
-    {link && <a href={url(`figures/${fig.slug}/`)}>More</a>}
+    {fig.images.filter((im) => im.file.endsWith('.pdf')).map((im) => <> <a href={url(`generated/figures/${im.file}`)}>PDF</a></>)}
+    {link && <> · <a href={url(`figures/${fig.slug}/`)}>More</a></>}
   </figcaption>
 </figure>

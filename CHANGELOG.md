@@ -19,6 +19,9 @@ Backported from 2026.10.23.1 (found adding syw-site to the first real paper):
   syw-site; it is now guarded by `import syw_site` (the docs rules are off there, with a message).
 - `docs.yml` stalled on rules cached on Zenodo: it now passes the `SANDBOX_TOKEN` secret, never
   `OVERLEAF_TOKEN`, and stops after 120 minutes.
+- The paper's own links (Overview, Figures, Cite) stuck over the website's header (its stylesheet
+  makes every `nav` sticky); a reference to a section or appendix showed "?"; a figure's "PDF" and
+  "More" links ran together.
 
 ## 2026.10.22.1 — 2026-10-22
 

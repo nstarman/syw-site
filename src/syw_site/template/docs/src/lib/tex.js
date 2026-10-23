@@ -60,9 +60,10 @@ function prose(s) {
   return text(s).replace(/\u0000(\d+)\u0000/g, (_, i) => rendered[i]);
 }
 
-/** Text with inline $math$; with refs, \ref{label} becomes that figure's number. */
+/** Text with inline $math$; with refs, \ref{label} becomes that figure's number. Other references
+ * (sections, appendices) go, with the ~ before them: "(Appendix~\ref{app:x})" reads "(Appendix)". */
 export function tex(s, refs = {}) {
-  s = s.replace(/\\(?:c|C)?ref\{([^}]*)\}/g, (_, l) => refs[l] ?? '?');
+  s = s.replace(/(~?)\\(?:c|C)?ref\{([^}]*)\}/g, (_, tie, l) => (l in refs ? tie + refs[l] : ''));
   return s.split(/(\$\$[^$]*\$\$)/).map((chunk) => (chunk.startsWith('$$') && chunk.endsWith('$$') && chunk.length > 3
     ? katex.renderToString(siunitx(chunk.slice(2, -2)), { throwOnError: true, displayMode: true, macros })
     : chunk.split(/(?<!\\)\$/).map((part, i) => (i % 2 ? math(part) : prose(part))).join(''))).join('');
