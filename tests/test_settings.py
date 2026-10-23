@@ -37,7 +37,7 @@ def test_rejects(tmp_path, raw, match):
         parse(raw, tmp_path)
 
 
-def test_missing_input(tmp_path):
+def test_inputs_may_not_exist_yet(tmp_path):
     (tmp_path / "webapps" / "globe").mkdir(parents=True)
-    with pytest.raises(SettingsError, match="input missing.npz"):
-        parse({"repo": "a/b", "webapps": {"globe": {"inputs": ["missing.npz"]}}}, tmp_path)
+    s = parse({"repo": "a/b", "webapps": {"globe": {"inputs": ["src/data/made_by_a_rule.npz"]}}}, tmp_path)
+    assert s.webapps[0].inputs == ("src/data/made_by_a_rule.npz",)

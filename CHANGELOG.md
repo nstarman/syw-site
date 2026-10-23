@@ -5,6 +5,13 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.22.1 — 2026-10-22
+
+### Fixed
+
+- A webapp's `inputs` may be files the paper's pipeline makes; `syw-site.yml` no longer requires
+  them to exist before the build.
+
 ## 2026.10.22 — 2026-10-22
 
 First release: `syw-site init | facts | build | serve`, the Snakemake rules, the Astro docs
