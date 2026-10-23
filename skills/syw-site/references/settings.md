@@ -13,5 +13,5 @@ webapps:                         # optional; figkit apps in webapps/<name>/
   globe: { inputs: [src/data/directional.npz], figure: "fig:quadrupole" }
 ```
 
-Unknown keys are errors. Webapp names are `[a-z0-9-]+`; `webapps/<name>/` and every input must
-exist; `figure` (optional) is a `\label` — quote it, since `fig:x` contains a colon.
+Unknown keys are errors. Webapp names are `[a-z0-9-]+` and `webapps/<name>/` must exist; inputs may
+be files the pipeline makes; `figure` (optional) is a `\label` — quote it, since `fig:x` contains a colon.

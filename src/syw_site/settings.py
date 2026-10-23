@@ -65,10 +65,8 @@ def parse(raw: dict, root: Path) -> Settings:
             raise SettingsError(f"syw-site.yml: webapp {name!r} takes only {sorted(_WEBAPP_KEYS)}")
         if not (root / "webapps" / name).is_dir():
             raise SettingsError(f"syw-site.yml: webapp {name!r} has no webapps/{name}/")
+        # Inputs may be outputs of the paper's pipeline; Snakemake reports one nothing makes.
         inputs = tuple(str(p) for p in spec.get("inputs") or ())
-        for p in inputs:
-            if not (root / p).exists():
-                raise SettingsError(f"syw-site.yml: webapp {name!r} input {p} does not exist")
         webapps.append(Webapp(name, inputs, spec.get("figure")))
     python = raw.get("python", "python")
     if not isinstance(python, str) or not python.strip():
