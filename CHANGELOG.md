@@ -23,6 +23,8 @@ Found adding syw-site to the first real paper:
 - The paper's own links (Overview, Figures, Cite) stuck over the website's header (its stylesheet
   makes every `nav` sticky); a reference to a section or appendix showed "?"; a figure's "PDF" and
   "More" links ran together.
+- `$math$` written in a page did not get the paper's macros and showed KaTeX's red error text; it
+  now gets them (`astro.config.mjs`), and an unknown command stops the build.
 
 ## 2026.10.23 — 2026-10-23
 

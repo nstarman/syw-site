@@ -48,6 +48,7 @@ def test_builds_every_page(docs):
     assert facts["variables"]["forecast/gain"] == "14" and ">14<" in html
     assert "16–24" in html and "Au-1" in html  # text values; math ones go through KaTeX
     assert 'aria-current="page"' in html  # Research marked in the website's nav
+    assert "λ" in html and "sgn" in html  # the paper's own macros, one with an argument, via KaTeX
 
 
 def test_unknown_name_stops_the_build(docs):
