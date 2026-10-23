@@ -7,7 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from syw_site import __version__, facts, figures, init, serve, settings, showyourwork
+from syw_site import __version__, facts, figures, init, settings, showyourwork
 
 OUT = Path("docs/public/generated")
 
@@ -68,18 +68,14 @@ def cmd_build(args) -> int:
 
 
 def cmd_serve(args) -> int:
-    dist = Path("docs/dist")
-    if not dist.is_dir():
+    # Astro serves only under the site's base path, as nstarkman.space will.
+    if not Path("docs/dist").is_dir():
         print("docs/dist/ not found; run `syw-site build` first", file=sys.stderr)
         return 1
-    name = settings.load().repo.split("/")[1]
-    server = serve.make_server(dist, name, args.port)
-    print(f"Serving http://127.0.0.1:{args.port}/{name}/  (Ctrl-C to stop)")
     try:
-        server.serve_forever()
+        return subprocess.run(["npx", "astro", "preview", "--port", str(args.port)], cwd="docs").returncode
     except KeyboardInterrupt:
-        pass
-    return 0
+        return 0
 
 
 def main(argv: list[str] | None = None) -> int:

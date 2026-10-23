@@ -72,10 +72,11 @@
 
 ## R6 Serving under the base path
 
-- **Decision**: `syw-site serve` = stdlib `http.server` with a handler mapping `/<repo>/…` to
-  `docs/dist/…` and 404 elsewhere (so a link that forgot the base fails locally as it would live).
-- **Alternatives**: `astro preview` (needs Node at serve time; fine, but the stdlib server also
-  catches base mistakes the same way and needs nothing).
+- **Decision**: `syw-site serve` = `astro preview` in `docs/`: it serves `docs/dist/` under the
+  base path only (checked: `/<repo>/…` 200, `/`, `/research/` 404), so a link that forgot the base
+  fails locally as it would live. Node is already required to build.
+- **Alternatives**: a stdlib `http.server` with a base-path handler (first implementation; removed in
+  review: ~60 lines with its test for what Astro already does).
 
 ## R7 Workflow in the paper repo (`docs.yml`)
 

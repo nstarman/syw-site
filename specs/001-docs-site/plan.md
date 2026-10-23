@@ -61,7 +61,6 @@ src/syw_site/
   figures.py           PDF → PNG (R3)
   showyourwork.py      the adapter (R1)
   init.py              scaffold copy, Snakefile include, workflow
-  serve.py             base-path server (R6)
   cli.py               init | facts | build | serve
   rules.smk            syw_site_facts | _figures | _webapp_<name> | _all
   template/            docs/ scaffold (package.json, lockfile, astro.config.mjs, src/, .gitignore)

@@ -41,16 +41,8 @@ def version(exe: str) -> str:
 
 
 def interpreter(exe: str) -> str:
-    """The Python that runs the showyourwork script, from its shebang — or, when that path has
-    spaces, from the `#!/bin/sh` launcher pip writes instead (`'''exec' "<python>" "$0" "$@"`)."""
-    head = Path(exe).read_text(encoding="utf-8", errors="replace").splitlines()[:3]
-    if head and head[0].startswith("#!/bin/sh"):
-        m = re.search(r"""exec' ("[^"]+"|\S+)""", "\n".join(head))
-        if m:
-            return m.group(1).strip('"')
-    if not head or not head[0].startswith("#!"):
-        raise ShowyourworkError(f"{exe} is not a Python script")
-    return head[0][2:].strip().split()[0]
+    """The Python of showyourwork's environment: console scripts sit beside it."""
+    return str(Path(exe).resolve().parent / "python")
 
 
 def build_snakefile(python: str) -> str:

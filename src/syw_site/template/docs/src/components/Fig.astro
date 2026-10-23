@@ -7,7 +7,7 @@ import { tex } from '../lib/tex.js';
 const { label, link = true } = Astro.props;
 const fig = figure(label);
 const number = facts.figures.indexOf(fig) + 1;
-const refs = Object.fromEntries(facts.figures.filter((f) => f.label).map((f, i) => [f.label, String(facts.figures.indexOf(f) + 1)]));
+const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
 const alt = `Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
 ---
 <figure id={fig.slug}>

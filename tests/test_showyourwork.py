@@ -20,16 +20,11 @@ def test_docs_env(tmp_path):
     assert env["SNAKEMAKE_OUTPUT_CACHE"] == str(tmp_path / ".showyourwork" / "cache")
 
 
-def test_interpreter_from_shebang(tmp_path):
-    exe = tmp_path / "showyourwork"
-    exe.write_text("#!/opt/conda/bin/python3.12\nimport sys\n")
-    assert showyourwork.interpreter(str(exe)) == "/opt/conda/bin/python3.12"
-
-
-def test_interpreter_from_pip_sh_launcher(tmp_path):
-    exe = tmp_path / "showyourwork"
-    exe.write_text('#!/bin/sh\n\'\'\'exec\' "/Users/me/My Envs/bin/python" "$0" "$@"\n\' \'\'\'\n')
-    assert showyourwork.interpreter(str(exe)) == "/Users/me/My Envs/bin/python"
+def test_interpreter_beside_the_script(tmp_path):
+    (tmp_path / "env/bin").mkdir(parents=True)
+    (tmp_path / "env/bin/showyourwork").touch()
+    (tmp_path / "tool").symlink_to(tmp_path / "env/bin/showyourwork")  # as pipx / uv tool link it
+    assert showyourwork.interpreter(str(tmp_path / "tool")) == str((tmp_path / "env/bin/python").resolve())
 
 
 def test_unsupported_version_is_refused(monkeypatch, tmp_path):

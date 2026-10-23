@@ -79,12 +79,9 @@ def _options(opt: str | None) -> dict[str, str]:
 def authors(text: str) -> tuple[list[dict], list[str]]:
     """Authors in order, each with the indices of its affiliations (AASTeX: they follow it)."""
     affiliations: list[str] = []
-    found = []
-    for m in re.finditer(r"\\author(?![A-Za-z])", text):
-        found.append(m.start())
+    starts = [m.start() for m in re.finditer(r"\\author(?![A-Za-z])", text)]
     result = []
-    for k, start in enumerate(found):
-        end = found[k + 1] if k + 1 < len(found) else len(text)
+    for start, end in zip(starts, starts[1:] + [len(text)]):
         chunk = text[start:end]
         (opt, name), *_ = commands(chunk, "author")
         opts = _options(opt)
@@ -120,14 +117,12 @@ def figures(text: str, root: Path) -> list[dict]:
     result = []
     for m in re.finditer(r"\\begin\{(figure\*?)\}(.*?)\\end\{\1\}", text, re.S):
         body = m.group(2)
-        files = [arg for _, arg in commands(body, "includegraphics")]
-        files += [arg for _, arg in commands(body, "plotone")]
+        # \fig is AASTeX's \gridline{\fig{file}{width}{caption}}: its first argument is the file.
+        files = [a for n in ("includegraphics", "plotone", "fig") for _, a in commands(body, n)]
         for m2 in re.finditer(r"\\plottwo\s*\{", body):  # \plottwo{a}{b}
             a, i = _group(body, m2.end() - 1, "{", "}")
             b, _ = _group(body, body.index("{", i), "{", "}")
             files += [a, b]
-        for m2 in re.finditer(r"\\fig\s*\{", body):  # \gridline{\fig{file}{width}{caption}}
-            files.append(_group(body, m2.end() - 1, "{", "}")[0])
         if not files:
             warnings.warn("a figure environment with no image (\\includegraphics, \\plotone, "
                           "\\plottwo or \\fig) was skipped", stacklevel=2)
@@ -156,7 +151,7 @@ def variable_value(path: Path) -> str:
 
 
 def variable_key(path: str) -> str:
-    return re.sub(r"\.tex$", "", re.sub(r"^output/", "", path))
+    return path.removeprefix("output/").removesuffix(".tex")
 
 
 def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> dict:

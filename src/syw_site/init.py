@@ -2,7 +2,6 @@
 
 import re
 import subprocess
-from importlib import resources
 from pathlib import Path
 
 from syw_site import __version__
@@ -27,28 +26,18 @@ def repo_from_git(root: Path) -> str:
 def planned(repo: str) -> dict[Path, bytes]:
     """Every file init writes, by path relative to the paper repo."""
     name = repo.split("/")[1]
-    template = resources.files("syw_site") / "template"
+    template = Path(__file__).with_name("template")
     files: dict[Path, bytes] = {}
-
-    def walk(node, rel: Path):
-        for child in node.iterdir():
-            if child.is_dir():
-                walk(child, rel / child.name)
-            else:
-                data = child.read_bytes()
-                if child.name.endswith((".mjs", ".yml", ".json", ".mdx", ".astro", ".md", ".js")):
-                    data = (
-                        data.replace(b"{{REPO}}", repo.encode())
-                        .replace(b"{{NAME}}", name.encode())
-                        .replace(b"{{VERSION}}", __version__.encode())
-                    )
-                files[rel / child.name] = data
-
-    walk(template / "docs", Path("docs"))
-    walk(template / "workflows", Path(".github/workflows"))
-    gitignore = template / "docs" / "gitignore"
-    if gitignore.is_file():  # stored without its dot so packaging keeps it
-        files[Path("docs/.gitignore")] = files.pop(Path("docs/gitignore"))
+    for src in sorted(p for p in template.rglob("*") if p.is_file()):
+        rel = src.relative_to(template)
+        rel = Path(".github", *rel.parts) if rel.parts[0] == "workflows" else rel
+        # gitignore is stored without its dot so packaging keeps it
+        rel = rel.with_name(".gitignore") if rel.name == "gitignore" else rel
+        data = src.read_bytes()
+        if src.suffix in {".mjs", ".yml", ".json", ".mdx", ".astro", ".md", ".js"}:
+            for key, value in (("{{REPO}}", repo), ("{{NAME}}", name), ("{{VERSION}}", __version__)):
+                data = data.replace(key.encode(), value.encode())
+        files[rel] = data
     return files
 
 

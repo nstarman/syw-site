@@ -19,7 +19,7 @@ src/syw_site/
   settings.py        docs/syw-site.yml
   figures.py         figure PDFs → PNG (pypdfium2)
   showyourwork.py    the only code that knows how showyourwork runs (see below)
-  init.py, serve.py, cli.py
+  init.py, cli.py     (`serve` is `astro preview`, which serves only under the base path)
   rules.smk          the Snakemake rules a paper includes
   template/docs/     the Astro scaffold `init` copies ({{REPO}}, {{NAME}}, {{VERSION}} filled in;
                      `gitignore` becomes `.gitignore`); template/workflows/docs.yml
