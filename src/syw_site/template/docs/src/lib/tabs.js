@@ -20,7 +20,7 @@ export function tabs() {
   return [
     { key: 'overview', label: 'Overview', href: '' },
     exploreApps().length && { key: 'explore', label: 'Explore', href: 'explore/' },
-    { key: 'figures', label: 'Figures', href: 'figures/' },
+    { key: 'figures', label: 'Paper Figures', href: 'figures/' },
     { key: 'cite', label: 'Cite', href: 'cite/' },
     (hasMap() || grants().length || infoLinks().length) && { key: 'info', label: 'Info', href: 'info/' },
   ].filter(Boolean);

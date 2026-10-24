@@ -65,9 +65,9 @@ def test_the_card_header_and_tabs(docs):
     assert "data-context" not in card
     assert 'src="/demo/card/demo.png"' in html  # the card's image, the site's own copy
     tabs = re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', html, re.S).group(1)
-    assert re.findall(r">(\w+)</a>", tabs) == ["Overview", "Explore", "Figures", "Cite", "Info"]
+    assert re.findall(r">([\w ]+)</a>", tabs) == ["Overview", "Explore", "Paper Figures", "Cite", "Info"]
     assert 'aria-current="page"' in re.search(r'<a[^>]*>Overview</a>', tabs).group(0)
-    assert 'aria-current="page"' in re.search(r'<a[^>]*>Figures</a>', re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', page(docs, "figures/a"), re.S).group(1)).group(0)
+    assert 'aria-current="page"' in re.search(r'<a[^>]*>Paper Figures</a>', re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', page(docs, "figures/a"), re.S).group(1)).group(0)
 
 
 def test_figures_one_column_with_web_images(docs):
