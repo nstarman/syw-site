@@ -41,7 +41,8 @@ def cmd_figures(args) -> int:
     for figure in facts.figures(text, Path(".")):
         icon = cfg.icon(figure["label"], figure["slug"])
         for n, image in enumerate(figure["images"], start=1):
-            figures.web_image(Path(image["source"]), args.output, image, portrait, icon.where if n == icon.image else None)
+            places = icon.places if n == icon.image else ()
+            figures.web_image(Path(image["source"]), args.output, image, portrait, places, icon.alpha)
     return 0
 
 

@@ -13,8 +13,9 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
   card's images and the author's portrait; a `Card` workflow refreshes it weekly or by hand.
 - **Tabs**: Overview, Explore (webapps with `explore: true`, with `title` and `text`), Figures,
   Cite, Info; one page each, empty ones hidden.
-- **Figures** in one column, each with the author's portrait stamped (top-right by default;
-  `figures: {<label>: {icon, image}}` in `syw-site.yml`), shown as lossless WebP, offered as PNG.
+- **Figures** in one column, each with the author's portrait stamped, semi-transparent (top-right
+  by default; `figures: {<label>: {icon, image, alpha}}` in `syw-site.yml`, `icon` a list for one per
+  panel), shown as lossless WebP, offered as PNG.
 - **Cite** lists the software the paper used and how to cite each package; **Info** shows the
   co-authors' collaborator map, the grants that funded the paper (its `refs` on the website) and the
   author's pages in `src/pages/info/`.

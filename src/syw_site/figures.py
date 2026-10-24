@@ -56,25 +56,29 @@ def place(size: tuple[int, int], d: int, where) -> tuple[int, int]:
     return min(max(x, 0), max(w - d, 0)), min(max(y, 0), max(h - d, 0))
 
 
-def stamp(im: Image.Image, portrait: Path, where) -> Image.Image:
-    """The figure with the portrait stamped at `where` (a corner, [x, y], or None for none)."""
-    if where is None:
+def stamp(im: Image.Image, portrait: Path, places, alpha: float = 1.0) -> Image.Image:
+    """The figure with the portrait stamped at each place (a corner or [x, y]), at opacity
+    `alpha`; no places, no portrait."""
+    if not places:
         return im
     d = max(MIN_ICON, round(0.07 * im.width))
-    out = im.copy()
     b = badge(portrait, d)
-    out.alpha_composite(b, place(im.size, d, where))
+    if alpha < 1:
+        b.putalpha(b.getchannel("A").point(lambda a: round(a * alpha)))
+    out = im.copy()
+    for where in places:
+        out.alpha_composite(b, place(im.size, d, where))
     return out
 
 
-def web_image(source: Path, out_dir: Path, image: dict, portrait: Path | None = None, where="top-right") -> None:
+def web_image(source: Path, out_dir: Path, image: dict, portrait: Path | None = None, places=("top-right",), alpha: float = 1.0) -> None:
     """Copy the figure file into out_dir, and write its web images — lossless WebP for the
-    page, PNG to download — with the portrait stamped where asked (none without a portrait)."""
+    page, PNG to download — with the portrait stamped at each place (none without a portrait)."""
     target = out_dir / image["file"]
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
     im = raster(source)
     if portrait is not None and portrait.exists():
-        im = stamp(im, portrait, where)
+        im = stamp(im, portrait, places, alpha)
     im.save(out_dir / image["png"], optimize=True)
     im.save(out_dir / image["webp"], lossless=True, method=6)

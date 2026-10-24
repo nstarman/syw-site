@@ -54,7 +54,7 @@ def test_place(where, expect):
 def test_small_figures_keep_the_minimum(tmp_path, portrait):
     src = tmp_path / "small.png"
     Image.new("RGB", (300, 200), "white").save(src)
-    web_image(src, tmp_path / "out", {"file": "f/small.png", "png": "f/small.png", "webp": "f/small.webp"}, portrait, "top-left")
+    web_image(src, tmp_path / "out", {"file": "f/small.png", "png": "f/small.png", "webp": "f/small.webp"}, portrait, ("top-left",))
     with Image.open(tmp_path / "out/f/small.png") as im:
         assert im.convert("RGB").getpixel((6 + MIN_ICON // 2, 6 + MIN_ICON // 2)) == (200, 30, 30)
 
@@ -62,8 +62,19 @@ def test_small_figures_keep_the_minimum(tmp_path, portrait):
 def test_none_and_no_portrait_leave_it_clean(tmp_path, portrait):
     src = tmp_path / "f.png"
     Image.new("RGB", (400, 300), "white").save(src)
-    for p, where in ((portrait, None), (None, "top-right")):
-        out = tmp_path / f"out-{where}"
-        web_image(src, out, {"file": "f.png", "png": "f.png", "webp": "f.webp"}, p, where)
+    for p, places in ((portrait, ()), (None, ("top-right",))):
+        out = tmp_path / f"out-{len(places)}"
+        web_image(src, out, {"file": "f.png", "png": "f.png", "webp": "f.webp"}, p, places)
         with Image.open(out / "f.webp") as im:
             assert im.convert("RGB").getextrema() == ((255, 255),) * 3  # all white
+
+
+def test_one_portrait_per_panel_at_lower_opacity(tmp_path, portrait):
+    src = tmp_path / "two.png"
+    Image.new("RGB", (1000, 400), "white").save(src)
+    web_image(src, tmp_path / "out", {"file": "two.png", "png": "two.png", "webp": "two.webp"}, portrait, ("top-right", (0.25, 0.5)), 0.5)
+    with Image.open(tmp_path / "out/two.png") as im:
+        rgb = im.convert("RGB")
+        right, centre = rgb.getpixel((1000 - 20 - 35, 20 + 35)), rgb.getpixel((250, 200))
+        for px in (right, centre):  # half portrait red (200, 30, 30), half white
+            assert abs(px[0] - 228) <= 2 and abs(px[1] - 142) <= 2, px

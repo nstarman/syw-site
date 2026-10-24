@@ -44,13 +44,20 @@ def test_inputs_may_not_exist_yet(tmp_path):
 
 def test_figure_icons(tmp_path):
     s = parse({"repo": "a/b", "figures": {"fig:a": {"icon": "top-left"}, "fig:b": {"icon": [0.8, 0.1], "image": 2}, "fig:c": {"icon": "none"}}}, tmp_path)
-    assert s.icon("fig:a", "a").where == "top-left"
-    assert (s.icon("fig:b", "b").where, s.icon("fig:b", "b").image) == ((0.8, 0.1), 2)
-    assert s.icon("fig:c", "c").where is None
-    assert s.icon("fig:zz", "zz").where == "top-right"  # the default
+    assert s.icon("fig:a", "a").places == ("top-left",)
+    assert (s.icon("fig:b", "b").places, s.icon("fig:b", "b").image) == (((0.8, 0.1),), 2)
+    assert s.icon("fig:c", "c").places == ()
+    assert s.icon("fig:zz", "zz").places == ("top-right",)  # the default
+    assert s.icon("fig:zz", "zz").alpha == 0.6  # quiet by default
 
 
-@pytest.mark.parametrize("spec", [{"icon": "middle"}, {"icon": [1.2, 0]}, {"icon": [0.5]}, {"image": 0}, {"where": "x"}])
+def test_one_portrait_per_panel(tmp_path):
+    s = parse({"repo": "a/b", "figures": {"fig:rate": {"icon": ["top-right", [0.55, 0.18]], "alpha": 0.4}}}, tmp_path)
+    assert s.icon("fig:rate", "rate").places == ("top-right", (0.55, 0.18))
+    assert s.icon("fig:rate", "rate").alpha == 0.4
+
+
+@pytest.mark.parametrize("spec", [{"icon": "middle"}, {"icon": [1.2, 0]}, {"icon": [0.5]}, {"image": 0}, {"where": "x"}, {"icon": ["top-right", "middle"]}, {"alpha": 0}, {"alpha": 2}])
 def test_figure_icons_rejected(tmp_path, spec):
     with pytest.raises(SettingsError):
         parse({"repo": "a/b", "figures": {"fig:a": spec}}, tmp_path)

@@ -10,7 +10,8 @@ SETTINGS = Path("docs/syw-site.yml")
 _KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps", "figures"}
 _PAPER_KEYS = {"arxiv", "doi", "bibcode"}
 _WEBAPP_KEYS = {"inputs", "figure", "explore", "title", "text"}
-_FIGURE_KEYS = {"icon", "image"}
+_FIGURE_KEYS = {"icon", "image", "alpha"}
+ALPHA = 0.6  # the portrait is a quiet mark, not a feature of the figure
 CORNERS = ("top-right", "top-left", "bottom-right", "bottom-left")
 
 
@@ -30,11 +31,13 @@ class Webapp:
 
 @dataclass(frozen=True)
 class FigureIcon:
-    """Where the author's portrait goes on a figure: a corner, a centre as fractions of the
-    image's width and height, or nowhere; on its `image`-th image (1-based)."""
+    """Where the author's portrait goes on a figure — one place per panel: each a corner, or a
+    centre as fractions of the image's width and height; none for no portrait — on its
+    `image`-th image (1-based), at opacity `alpha`."""
 
-    where: str | tuple[float, float] | None = "top-right"
+    places: tuple = ("top-right",)
     image: int = 1
+    alpha: float = ALPHA
 
 
 @dataclass(frozen=True)
@@ -49,6 +52,14 @@ class Settings:
 
     def icon(self, label: str | None, slug: str) -> FigureIcon:
         return self.figures.get(label) or self.figures.get(slug) or FigureIcon()
+
+
+def _place(label, p):
+    if p in CORNERS:
+        return p
+    if isinstance(p, list) and len(p) == 2 and all(isinstance(v, (int, float)) and 0 <= v <= 1 for v in p):
+        return (float(p[0]), float(p[1]))
+    raise SettingsError(f"syw-site.yml: figure {label!r} icon: each place is one of {list(CORNERS)} or [x, y] in 0–1")
 
 
 def load(root: Path = Path(".")) -> Settings:
@@ -96,17 +107,18 @@ def parse(raw: dict, root: Path) -> Settings:
             raise SettingsError(f"syw-site.yml: figure {label!r} takes only {sorted(_FIGURE_KEYS)}")
         icon = spec.get("icon", "top-right")
         if icon == "none" or icon is None:
-            where = None
-        elif icon in CORNERS:
-            where = icon
-        elif (isinstance(icon, list) and len(icon) == 2 and all(isinstance(v, (int, float)) and 0 <= v <= 1 for v in icon)):
-            where = (float(icon[0]), float(icon[1]))
+            places = ()
         else:
-            raise SettingsError(f"syw-site.yml: figure {label!r} icon must be one of {list(CORNERS)}, none, or [x, y] in 0–1")
+            # One place, or a list of them (one per panel); a place is a corner or [x, y].
+            single = icon in CORNERS or (isinstance(icon, list) and len(icon) == 2 and all(isinstance(v, (int, float)) for v in icon))
+            places = tuple(_place(label, p) for p in ([icon] if single else icon if isinstance(icon, list) else [icon]))
         image = spec.get("image", 1)
         if not isinstance(image, int) or image < 1:
             raise SettingsError(f"syw-site.yml: figure {label!r} image must be 1, 2, …")
-        figures[str(label)] = FigureIcon(where, image)
+        alpha = spec.get("alpha", ALPHA)
+        if not isinstance(alpha, (int, float)) or not 0 < alpha <= 1:
+            raise SettingsError(f"syw-site.yml: figure {label!r} alpha must be in (0, 1]")
+        figures[str(label)] = FigureIcon(places, image, float(alpha))
     python = raw.get("python", "python")
     if not isinstance(python, str) or not python.strip():
         raise SettingsError("syw-site.yml: `python` must be a command, e.g. `uv run --locked python`")
