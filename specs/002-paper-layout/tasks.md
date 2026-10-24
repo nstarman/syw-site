@@ -34,4 +34,4 @@ description: "Tasks for the paper layout"
 ## Phase 6: Polish
 - [X] T015 Site test (`-m site`) with the fixture card: header, tabs (hidden empties), one-column figures, cite software, info map + funding
 - [X] T016 Example paper and e2e unchanged in spirit (no `website_id`: plain header); skills + references + README + CHANGELOG (upgrade note); version for a dated release
-- [ ] T017 PR, review, merge on the author's go, release; then apply to the spatial-correlations paper (its PR #3)
+- [X] T017 PR, review, merge on the author's go, release; then apply to the spatial-correlations paper (its PR #3)

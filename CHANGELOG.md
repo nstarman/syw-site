@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.24 — 2026-10-24
+
 ### Added
 
 - The paper's site opens with its entry as nstarkman.space draws it — the website's own
