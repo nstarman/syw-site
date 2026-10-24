@@ -48,7 +48,7 @@ def test_figure_icons(tmp_path):
     assert (s.icon("fig:b", "b").places, s.icon("fig:b", "b").image) == (((0.8, 0.1),), 2)
     assert s.icon("fig:c", "c").places == ()
     assert s.icon("fig:zz", "zz").places == ("top-right",)  # the default
-    assert s.icon("fig:zz", "zz").alpha == 0.6  # quiet by default
+    assert s.icon("fig:zz", "zz").alpha == 0.8  # quiet by default
 
 
 def test_one_portrait_per_panel(tmp_path):
