@@ -39,6 +39,7 @@
         {
           "source": "src/tex/figures/fig_a.pdf",
           "file": "figures/fig_a.pdf",
+          "webp": "figures/fig_a.webp",
           "png": "figures/fig_a.png"
         }
       ]
@@ -51,11 +52,13 @@
         {
           "source": "src/tex/figures/fig_b1.pdf",
           "file": "figures/fig_b1.pdf",
+          "webp": "figures/fig_b1.webp",
           "png": "figures/fig_b1.png"
         },
         {
           "source": "src/tex/figures/fig_b2.pdf",
           "file": "figures/fig_b2.pdf",
+          "webp": "figures/fig_b2.webp",
           "png": "figures/fig_b2.png"
         }
       ]
@@ -67,11 +70,18 @@
       "images": [
         {
           "source": "src/tex/figures/fig_c.png",
-          "file": "figures/fig_c.png"
+          "file": "figures/fig_c.png",
+          "webp": "figures/fig_c.webp",
+          "png": "figures/fig_c.png"
         }
       ]
     }
   ],
+  "macros": {
+    "\\lbar": "\\bar{\\lambda}",
+    "\\todo": "{\\color{red} #1}",
+    "\\sgn": "\\operatorname{sgn}"
+  },
   "variables": {
     "forecast/gain": "14",
     "rate": "$3.2 \\times 10^{-4}$",
@@ -88,11 +98,13 @@
     "bibcode": null
   },
   "repo": "nstarman/demo",
-  "website_id": null,
-  "webapps": {},
-  "macros": {
-    "\\lbar": "\\bar{\\lambda}",
-    "\\todo": "{\\color{red} #1}",
-    "\\sgn": "\\operatorname{sgn}"
+  "website_id": "demo-paper",
+  "webapps": {
+    "helix": {
+      "figure": null,
+      "explore": true,
+      "title": "The helix",
+      "text": "Drag it around."
+    }
   }
 }

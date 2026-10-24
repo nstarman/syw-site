@@ -1,37 +1,54 @@
 ---
-// Every page of the docs site: the website's layout, the Research nav entry marked, "Last updated"
-// linking to the paper's repository. MDX pages use it as `layout:` in their frontmatter.
+// Every page of the docs site: the website's layout; the paper's entry as nstarkman.space
+// draws it (the website's own Publication, from card.json), or its title before it has a
+// record there (with its authors, from the paper); then the tabs. MDX pages use it as `layout:` in their frontmatter.
 import SiteLayout from '@nstarkman/site-layout/SiteLayout.astro';
+import Publication from '@nstarkman/research-kit/Publication.astro';
+import Authors from './Authors.astro';
 import 'katex/dist/katex.min.css';
 import { facts, url } from '../lib/facts.js';
 import { tex } from '../lib/tex.js';
+import { card, resolve, root } from '../lib/store.js';
+import { tabs } from '../lib/tabs.js';
 
-const { title, frontmatter } = Astro.props;
+const { title, frontmatter, tab = frontmatter?.tab ?? 'overview' } = Astro.props;
 const heading = title ?? frontmatter?.title;
 const paper = facts.title.replace(/\$[^$]*\$/g, '').replace(/\\[A-Za-z]+|[{}]/g, '').trim();
+const item = root && resolve(root);
 ---
 <SiteLayout title={heading ? `${heading} — ${paper}` : paper} section="/research/" repo={facts.repo}>
   <main class="wrap syw">
-    {/* Not <nav>: the website's stylesheet makes every nav its sticky header. */}
-    <div class="syw-nav" role="navigation" aria-label="This paper">
-      <a href={url("")}>Overview</a>
-      <a href={url("figures/")}>Figures</a>
-      <a href={url("cite/")}>Cite</a>
+    {item ? <Publication item={item} abstract card={card.preset} /> : <><h1 class="syw-title" set:html={tex(facts.title)} /><Authors /></>}
+    {/* Not <nav>: the website's stylesheet makes every nav its sticky header. A ruled strip that
+        sticks under it as the page scrolls, like the CV page's contents strip. */}
+    <div class="syw-tabs" role="navigation" aria-label="This paper">
+      {tabs().map((t) => <a class:list={[t.key === tab && 'on']} href={url(t.href)} aria-current={t.key === tab ? 'page' : undefined}>{t.label}</a>)}
     </div>
-    <p class="syw-paper" set:html={tex(facts.title)} />
-    {heading && <h1>{heading}</h1>}
+    {heading && <h2 class="syw-heading">{heading}</h2>}
     <slot />
   </main>
 </SiteLayout>
 
 <style is:global>
   .syw { padding-block: 2rem 4rem; }
-  .syw-nav { display: flex; gap: 1.25rem; margin-bottom: 1.5rem; }
-  .syw-paper { font-style: italic; margin: 0 0 .5rem; }
+  .syw-tabs {
+    position: sticky; top: calc(var(--nav-h) - 1px); z-index: 8;
+    display: flex; align-items: stretch; gap: 1.4rem; height: 2.5rem; margin: 1.5rem 0 1.25rem;
+    overflow-x: auto; scrollbar-width: none; border-block: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--ground) 92%, transparent); backdrop-filter: blur(8px);
+  }
+  .syw-tabs::-webkit-scrollbar { display: none; }
+  .syw-tabs a {
+    flex: none; display: flex; align-items: center; text-decoration: none; white-space: nowrap;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-mute); box-shadow: inset 0 -2px 0 transparent;
+  }
+  .syw-tabs a:hover { color: var(--ink); }
+  .syw-tabs a.on { color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); }
   .syw figure { margin: 2rem 0; }
   .syw figure img { max-width: 100%; height: auto; background: #fff; }
   .syw figcaption { font-size: .92em; }
-  .syw .syw-gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: 1.5rem; }
+  .syw .syw-figures { display: flex; flex-direction: column; gap: 1rem; }
   .syw iframe { width: 100%; border: 0; }
   .syw pre { overflow-x: auto; }
 </style>

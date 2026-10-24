@@ -45,3 +45,14 @@ def test_tokens_and_timeout():
 def test_checkout_brings_submodules_and_history():
     (checkout,) = [s for s in steps() if s.get("uses", "").startswith("actions/checkout")]
     assert checkout["with"] == {"fetch-depth": 0, "submodules": "recursive"}
+
+
+CARD = yaml.safe_load((resources.files("syw_site") / "template" / "workflows" / "card.yml").read_text())
+
+
+def test_card_refresh_is_weekly_and_by_hand_and_never_deploys():
+    on = CARD.get("on") or CARD.get(True)
+    assert "schedule" in on and "workflow_dispatch" in on
+    text = (resources.files("syw_site") / "template" / "workflows" / "card.yml").read_text()
+    assert "deploy" not in text.replace("never builds or deploys", "")
+    assert "scripts/card.mjs" in text

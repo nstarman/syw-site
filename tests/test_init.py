@@ -19,6 +19,7 @@ def paper(tmp_path):
 def test_init_writes_the_scaffold(paper):
     written = init(paper, "nstarman/demo")
     assert Path("docs/astro.config.mjs") in written and Path(".github/workflows/docs.yml") in written
+    assert Path(".github/workflows/card.yml") in written and Path("docs/scripts/card.mjs") in written
     assert "base: '/demo'" in (paper / "docs/astro.config.mjs").read_text()
     assert "repo: nstarman/demo" in (paper / "docs/syw-site.yml").read_text()
     assert "publish: false" in (paper / "docs/syw-site.yml").read_text()

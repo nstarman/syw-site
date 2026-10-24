@@ -32,10 +32,10 @@ def test_figures(f):
     a, b, c = f["figures"]
     assert (a["label"], a["slug"]) == ("fig:a", "a")
     assert a["caption"] == "A caption with {nested} braces and $x^{2}$."
-    assert a["images"] == [{"source": "src/tex/figures/fig_a.pdf", "file": "figures/fig_a.pdf", "png": "figures/fig_a.png"}]
+    assert a["images"] == [{"source": "src/tex/figures/fig_a.pdf", "file": "figures/fig_a.pdf", "webp": "figures/fig_a.webp", "png": "figures/fig_a.png"}]
     assert b["caption"] == "Two panels.finish"
     assert [i["file"] for i in b["images"]] == ["figures/fig_b1.pdf", "figures/fig_b2.pdf"]
-    assert (c["label"], c["slug"], c["images"][0]) == (None, "fig_c", {"source": "src/tex/figures/fig_c.png", "file": "figures/fig_c.png"})
+    assert (c["label"], c["slug"], c["images"][0]) == (None, "fig_c", {"source": "src/tex/figures/fig_c.png", "file": "figures/fig_c.png", "webp": "figures/fig_c.webp", "png": "figures/fig_c.png"})
 
 
 def test_variables(f):

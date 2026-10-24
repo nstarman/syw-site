@@ -59,10 +59,17 @@ rule syw_site_facts:
         f"{_SYW_SITE} facts -o {{output}}"
 
 
+def _syw_site_portrait(wildcards):
+    # Stamped on the figures; `syw-site card` fetches it (no portrait: no icon).
+    return ["docs/portrait.jpg"] if _SywSitePath("docs/portrait.jpg").exists() else []
+
+
 rule syw_site_figures:
     input:
         "src/tex/ms.tex",
+        "docs/syw-site.yml",
         _syw_site_figure_files,
+        _syw_site_portrait,
     output:
         directory(f"{_SYW_SITE_OUT}/figures"),
     shell:
