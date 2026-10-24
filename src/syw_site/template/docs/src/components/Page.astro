@@ -19,9 +19,10 @@ const item = root && resolve(root);
 <SiteLayout title={heading ? `${heading} — ${paper}` : paper} section="/research/" repo={facts.repo}>
   <main class="wrap syw">
     {item ? <Publication item={item} abstract card={card.preset} /> : <><h1 class="syw-title" set:html={tex(facts.title)} /><Authors /></>}
-    {/* Not <nav>: the website's stylesheet makes every nav its sticky header. */}
+    {/* Not <nav>: the website's stylesheet makes every nav its sticky header. A ruled strip that
+        sticks under it as the page scrolls, like the CV page's contents strip. */}
     <div class="syw-tabs" role="navigation" aria-label="This paper">
-      {tabs().map((t) => <a class:list={['toolsbtn', t.key === tab && 'on']} href={url(t.href)} aria-current={t.key === tab ? 'page' : undefined}>{t.label}</a>)}
+      {tabs().map((t) => <a class:list={[t.key === tab && 'on']} href={url(t.href)} aria-current={t.key === tab ? 'page' : undefined}>{t.label}</a>)}
     </div>
     {heading && <h2 class="syw-heading">{heading}</h2>}
     <slot />
@@ -30,7 +31,20 @@ const item = root && resolve(root);
 
 <style is:global>
   .syw { padding-block: 2rem 4rem; }
-  .syw-tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin: 1.5rem 0 1.25rem; }
+  .syw-tabs {
+    position: sticky; top: calc(var(--nav-h) - 1px); z-index: 8;
+    display: flex; align-items: stretch; gap: 1.4rem; height: 2.5rem; margin: 1.5rem 0 1.25rem;
+    overflow-x: auto; scrollbar-width: none; border-block: 1px solid var(--rule);
+    background: color-mix(in srgb, var(--ground) 92%, transparent); backdrop-filter: blur(8px);
+  }
+  .syw-tabs::-webkit-scrollbar { display: none; }
+  .syw-tabs a {
+    flex: none; display: flex; align-items: center; text-decoration: none; white-space: nowrap;
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--ink-mute); box-shadow: inset 0 -2px 0 transparent;
+  }
+  .syw-tabs a:hover { color: var(--ink); }
+  .syw-tabs a.on { color: var(--ink); box-shadow: inset 0 -2px 0 var(--accent); }
   .syw figure { margin: 2rem 0; }
   .syw figure img { max-width: 100%; height: auto; background: #fff; }
   .syw figcaption { font-size: .92em; }
