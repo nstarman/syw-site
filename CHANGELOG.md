@@ -5,6 +5,42 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Fixed
+
+Found adding syw-site to the first real paper (AASTeX with siunitx, cleveref, natbib and a local
+preamble package):
+
+- A paper's macros defined in its own packages (`.sty` files under `src/tex/` that `ms.tex` loads,
+  and the ones they load by bare name through `\input@path`) were missing from `facts.json`, so
+  math using them (`\mrm{}`, `\mcal{}`) stopped the site build; `syw-site facts` now reads them
+  (`ms.tex`'s own definitions win), and a change to a `.sty` re-runs the facts rule.
+- Figure slugs kept other characters than letters, digits, `.`, `_` and `-` from the label:
+  `fig:cosmology:zlr` was `/figures/cosmology:zlr/`, which some file systems and artifact uploads
+  refuse. Such characters are now `-`: `/figures/cosmology-zlr/`.
+- `tex.js` (the scaffold's LaTeX-to-HTML conversion):
+  - `\ensuremath` and `\textsl` (LaTeX, not KaTeX) stopped the build in math.
+  - siunitx: prefixes (`\giga`, `\mega`, `\kilo`, `\centi`, `\milli`, `\micro`; `\kilo\parsec`
+    read "k pc"), `\square`/`\cubic`, `\parsec`, `\gram`, `\percent`, `\arcminute`, `\arcsecond`,
+    `\unit{}`, `\numrange{}` and numbers without a mantissa (`e12` → 10¹²); siunitx inside the
+    paper's macros (`\newcommand{\kpc}{\unit{\kilo\parsec}}`).
+  - `\autoref`/`\cref` to a figure read "Figure N" (`\autoref` was not handled); to anything else
+    they read "the paper" (capitalised at a sentence start), not "()" or a sentence without subject.
+  - `\citet`/`\citetalias` with `Surname+:YYYY` keys read "Surname et al. (YYYY)" (`Surname:YYYY`:
+    "Surname (YYYY)") instead of vanishing; a dropped `\citep` takes the space before it.
+  - In text, the paper's macros without arguments are expanded (`\euclid` → *Euclid*) and
+    `\ensuremath{}` is math, instead of vanishing.
+
+### Changed — migration
+
+- **What changed**: the slugs of figures whose label has a `:` (after `fig:`) or other characters
+  than letters, digits, `.`, `_`, `-`, so those figures' pages move (`/figures/cosmology:zlr/` →
+  `/figures/cosmology-zlr/`); and the scaffold's `docs/src/lib/tex.js`. **Find**: slugs with `:` in
+  `docs/syw-site.yml` (`figures:` keys, a webapp's `figure:`) and in `<Fig label="…">` in
+  `docs/src/pages/`; links to the old figure pages; `docs/src/lib/tex.js`. **Edit**: use the
+  label (`fig:cosmology:zlr`, which always works) or the new slug; take `tex.js` from the new
+  scaffold (`src/syw_site/template/docs/src/lib/tex.js`), re-adding any extensions of your own
+  (most papers' workarounds are now upstream — drop them); then `syw-site build`.
+
 ## 2026.10.24 — 2026-10-24
 
 ### Added

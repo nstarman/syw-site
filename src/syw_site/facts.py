@@ -1,4 +1,5 @@
-"""Read a showyourwork paper's facts from its files: `src/tex/ms.tex` and the `\\variable` files.
+"""Read a showyourwork paper's facts from its files: `src/tex/ms.tex`, the `\\variable` files and
+the paper's own packages (`.sty` files under `src/tex/`, for its macros).
 
 A small scanner, not a TeX parser: it knows the commands showyourwork papers use (AASTeX's
 `\\author[...]{}` and `\\affiliation{}`, `figure`/`figure*`, `\\variable{}`). Text stays LaTeX; the
@@ -83,6 +84,28 @@ def macros(text: str) -> dict[str, str]:
     return found
 
 
+def packages(text: str, root: Path) -> str:
+    """The text of the paper's own packages: each `\\usepackage`/`\\RequirePackage{name}` that is a
+    `.sty` under src/tex/ (`name.sty` from there, else any `.sty` of that name, as an `\\input@path`
+    finds it), and the ones they load in turn."""
+    local = {p.stem: p for p in sorted((root / TEX).rglob("*.sty"))}
+    seen: set[Path] = set()
+
+    def load(text: str) -> list[str]:
+        found = []
+        for m in re.finditer(r"\\(?:usepackage|RequirePackage)\s*(?:\[[^\]]*\])?\s*\{([^}]*)\}", text):
+            for name in (n.strip() for n in m.group(1).split(",")):
+                path = root / TEX / f"{name}.sty"
+                path = path if path.is_file() else local.get(Path(name).name)
+                if path and path not in seen:
+                    seen.add(path)
+                    sty = strip_comments(path.read_text(encoding="utf-8"))
+                    found += [*load(sty), sty]  # what it loads first, then its own definitions
+        return found
+
+    return "\n".join(load(text))
+
+
 def _options(opt: str | None) -> dict[str, str]:
     """AASTeX 7's `orcid=…,sname=…,gname=…`, or AASTeX 6's bare ORCID."""
     opt = (opt or "").strip()
@@ -146,7 +169,8 @@ def figures(text: str, root: Path) -> list[dict]:
         images = [_image(f, root) for f in files]
         label = (m2.group(1) if (m2 := LABEL.search(body)) else None)
         if label:
-            slug = re.sub(r"^fig:", "", label)
+            # A URL path segment: fig:cosmology:zlr → cosmology-zlr.
+            slug = re.sub(r"[^A-Za-z0-9._-]+", "-", re.sub(r"^fig:", "", label))
         else:
             slug = Path(images[0]["file"]).stem
             warnings.warn(f"figure with {images[0]['file']} has no \\label; using {slug!r}", stacklevel=2)
@@ -188,7 +212,8 @@ def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> 
         "affiliations": affiliations,
         "abstract": clean(abstract.group(1)) if abstract else "",
         "figures": figures(text, root),
-        "macros": macros(text),
+        # Its own packages' first, so ms.tex's definitions win.
+        "macros": macros(packages(text, root) + "\n" + text),
         "variables": {variable_key(p): value for p, value in variables.items()},
         "paper": {k: (paper or {}).get(k) for k in ("arxiv", "doi", "bibcode")},
         "repo": repo,

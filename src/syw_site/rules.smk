@@ -33,6 +33,11 @@ def _syw_site_figure_files(wildcards):
     return [i["source"] for f in facts.figures(_syw_site_ms(), _SywSitePath(".")) for i in f["images"]]
 
 
+def _syw_site_packages(wildcards):
+    # The paper's own packages, whose macros facts.json carries (facts.packages).
+    return [str(p) for p in _SywSitePath("src/tex").rglob("*.sty")]
+
+
 def _syw_site_webapp_inputs(wildcards):
     from syw_site import settings
 
@@ -53,6 +58,7 @@ rule syw_site_facts:
         "src/tex/ms.tex",
         "docs/syw-site.yml",
         _syw_site_variable_files,
+        _syw_site_packages,
     output:
         f"{_SYW_SITE_OUT}/facts.json",
     shell:

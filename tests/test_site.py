@@ -112,6 +112,52 @@ def test_without_a_website_record(docs):
         shutil.copy(HERE / "fixtures/facts.json", docs / "public/generated/facts.json")
 
 
+def js(docs, calls):
+    """Each (function, *args) called in src/lib/tex.js, as Node runs it in the scaffold."""
+    script = ("import * as t from './src/lib/tex.js';"
+              f"console.log(JSON.stringify({json.dumps(calls)}.map(([f, ...a]) => t[f](...a))));")
+    r = subprocess.run(["node", "--input-type=module", "-e", script], cwd=docs, env=ENV, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    return json.loads(r.stdout)
+
+
+SIUNITX = {  # siunitx → the LaTeX KaTeX renders
+    r"\qty{3}{\kilo\parsec}": r"3\,\mathrm{kpc}",
+    r"\qty{1.2e-10}{\meter\per\second\squared}": r"1.2\times10^{-10}\,\mathrm{m}\,{\mathrm{s}}^{-2}",
+    r"\qty{2}{\per\square\centi\meter}": r"2\,{\mathrm{cm}}^{-2}",
+    r"\qty{5}{\cubic\kilo\parsec}": r"5\,{\mathrm{kpc}}^{3}",
+    r"\qty{4}{\giga\year}": r"4\,\mathrm{Gyr}",
+    r"\qty{1}{\mega\parsec}": r"1\,\mathrm{Mpc}",
+    r"\qty{7}{\milli\gram}": r"7\,\mathrm{mg}",
+    r"\qty{9}{\micro\meter}": r"9\,\mu\mathrm{m}",
+    r"\qty{50}{\percent}": r"50\,\%",
+    r"\unit{\kilo\meter\per\second}": r"\mathrm{km}\,{\mathrm{s}}^{-1}",
+    r"\num{e12}": r"10^{12}",
+    r"\num{3e5}": r"3\times10^{5}",
+    r"\numrange{1}{2e3}": r"1\text{--}2\times10^{3}",
+    r"\qtyrange{25}{35}{\kpc}": r"25\text{--}35\,\mathrm{kpc}",
+}
+
+TEXT = [  # (tex, refs) → HTML
+    (r"In \autoref{fig:a} and~\cref{fig:a}, \ref{fig:a}.", {"fig:a": "1"}, "In Figure&nbsp;1 and&nbsp;Figure&nbsp;1, 1."),
+    (r"As in \cref{sec:x}. \Cref{app:y} too; (Appendix~\ref{app:y})", {}, "As in the paper. The paper too; (Appendix)"),
+    (r"\autoref{sec:x} shows it.", {}, "The paper shows it."),
+    (r"As \citet{Doe+:2023} and \citetalias{Roe:2020a,2019ApJ...1R} show.", {}, "As Doe et al. (2023) and Roe (2020) show."),
+    (r"Known \citep[e.g.][]{Doe+:2023}, and~\citep{Roe:2020}.", {}, "Known, and."),
+    (r"With \survey{} and \survey, in \kpcunit.", {}, None),  # checked below
+]
+
+
+def test_tex_conversion(docs):
+    assert js(docs, [["siunitx", k] for k in SIUNITX]) == list(SIUNITX.values())
+    *out, macro = js(docs, [["tex", s, refs] for s, refs, _ in TEXT])
+    assert out == [html for _, _, html in TEXT[:-1]]
+    assert macro.startswith("With <em>Survey</em> and <em>Survey</em>, in <span class=\"katex\">") and "kpc" in macro
+    # In math: \ensuremath, paper macros with siunitx, an argument or \textsl in them, and siunitx.
+    (html,) = js(docs, [["math", r"\ensuremath{x} + 1\,\kpcunit + \upr{d} + \qty{2}{\micro\meter} + \survey"]])
+    assert 'class="katex"' in html and "kpc" in html and "Survey" in html
+
+
 # Last: a failed build leaves no dist/ for the tests above.
 def test_unknown_name_stops_the_build(docs):
     bad = docs / "src/pages/bad.mdx"
