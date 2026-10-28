@@ -80,7 +80,10 @@
   "macros": {
     "\\lbar": "\\bar{\\lambda}",
     "\\todo": "{\\color{red} #1}",
-    "\\sgn": "\\operatorname{sgn}"
+    "\\sgn": "\\operatorname{sgn}",
+    "\\upr": "\\mathrm{#1}",
+    "\\survey": "\\textsl{Survey}",
+    "\\kpcunit": "\\unit{\\kilo\\parsec}"
   },
   "variables": {
     "forecast/gain": "14",

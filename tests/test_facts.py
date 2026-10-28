@@ -112,3 +112,23 @@ def test_macros():
     assert facts.macros(text) == {
         r"\qbarpot": r"\bar{q}_\Phi", r"\todo": r"{\color{red} #1}", r"\sgn": r"\operatorname{sgn}",
     }
+
+
+def test_macros_from_the_papers_own_packages(tmp_path):
+    """`\\usepackage{dir/name}` from src/tex/, and the modules it loads by bare name (as an
+    `\\input@path` finds them); ms.tex's own definitions win."""
+    tex = tmp_path / "src" / "tex"
+    (tex / "preamble").mkdir(parents=True)
+    (tex / "preamble" / "mine.sty").write_text("\\RequirePackage{amsmath,mine-math}\n\\newcommand{\\survey}{\\textsl{Survey}}\n")
+    (tex / "preamble" / "mine-math.sty").write_text("\\RequirePackage{mine}\n\\newcommand{\\mrm}[1]{\\mathrm{#1}} % upright\n\\newcommand{\\kept}{a}\n")
+    (tex / "unused.sty").write_text("\\newcommand{\\unused}{x}\n")
+    (tex / "ms.tex").write_text("\\usepackage{xcolor}\n\\usepackage[opt]{preamble/mine}\n\\newcommand{\\kept}{b}\n\\title{T}\n")
+    assert facts.extract(tmp_path, repo="a/b")["macros"] == {
+        r"\mrm": r"\mathrm{#1}", r"\kept": "b", r"\survey": r"\textsl{Survey}",
+    }
+
+
+def test_slug_is_a_path_segment(tmp_path):
+    text = r"\begin{figure}\includegraphics{figures/z.pdf}\caption{Z.}\label{fig:cosmology:zlr}\end{figure}"
+    (f,) = facts.figures(text, tmp_path)
+    assert (f["label"], f["slug"]) == ("fig:cosmology:zlr", "cosmology-zlr")

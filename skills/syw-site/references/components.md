@@ -15,6 +15,9 @@ Pages: `index.mdx` (overview), `figures/` (gallery), `figures/<slug>/` (one figu
 `layout: ../components/Page.astro` (and an optional `title:`); `.astro` pages wrap themselves in
 `<Page title="…">`. `Page` puts every page in the website's `<SiteLayout section="/research/">`.
 
-LaTeX outside math is converted by `src/lib/tex.js`: `\emph`, `\textbf`, `\url`, `\ref` (to figure
-numbers), dashes, `~`; citations are dropped; other commands keep their argument. Extend it there
-when a paper needs more.
+LaTeX outside math is converted by `src/lib/tex.js`: `\emph`, `\textit`, `\textsl`, `\textbf`,
+`\url`, dashes, `~`; `\ref` to a figure is its number and `\autoref`/`\cref` "Figure N" (to anything
+else: `\ref` goes, `\autoref`/`\cref` read "the paper"); `\citet{Surname+:2023}` reads "Surname et
+al. (2023)", other citations are dropped; siunitx (`\qty`, `\unit`, `\num`, their ranges) and
+`\ensuremath` render as math; the paper's macros without arguments are expanded; other commands keep
+their argument. Extend it there when a paper needs more.
