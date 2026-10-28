@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.28 — 2026-10-28
+
 ### Fixed
 
 Found adding syw-site to the first real paper (AASTeX with siunitx, cleveref, natbib and a local
