@@ -53,7 +53,7 @@ def cmd_card(args) -> int:
 
 
 def cmd_webapp(args) -> int:
-    from figkit.cli import main as figkit
+    from figpress_apps.cli import main as figpress_apps
 
     cfg = settings.load()
     app = {w.name: w for w in cfg.webapps}.get(args.name)
@@ -65,7 +65,7 @@ def cmd_webapp(args) -> int:
         [*shlex.split(cfg.python), f"webapps/{app.name}/export.py", "--out", str(data)], check=True
     )
     datasets = [a for d in sorted(p for p in data.iterdir() if p.is_dir()) for a in ("--data", str(d))]
-    return figkit(
+    return figpress_apps(
         ["build", f"webapps/{app.name}", *datasets, "--out", str(out / "site"),
          "--single-file", str(out / f"{app.name}.html")]
     )

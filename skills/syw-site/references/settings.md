@@ -9,7 +9,7 @@ paper:                           # optional, filled in when known
   doi: 10.3847/...
   bibcode: 2026ApJ...
 python: uv run --locked python   # optional; how the paper runs Python (default: python)
-webapps:                         # optional; figkit apps in webapps/<name>/
+webapps:                         # optional; figpress-apps apps in webapps/<name>/
   globe: { inputs: [src/data/directional.npz], figure: "fig:quadrupole" }   # a figure's counterpart
   explorer: { inputs: [...], explore: true, title: "…", text: "…" }          # on the Explore tab
 figures:                         # optional; where the portrait goes on each figure

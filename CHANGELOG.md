@@ -5,6 +5,20 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.28.1 — 2026-10-28
+
+### Changed — migration
+
+- **What changed**: webapps are built with [figpress-apps](https://github.com/nstarman/figpress-apps)
+  2026.10.28 (installed from PyPI), the renamed figkit, instead of figkit 0.2.0; `syw-site webapp`
+  no longer builds an app that imports `figkit/…`. **Find**:
+  `grep -rn "figkit" webapps/ docs/syw-site.yml environment.yml`. **Edit**: move each app as
+  figpress-apps' [2026.10.28 migration notes](https://github.com/nstarman/figpress-apps/blob/main/CHANGELOG.md)
+  say (`figkit/<m>.js` → `figpress-apps/<m>.js`, `figkit/figkit.js|css` →
+  `figpress-apps/index.js|css`, `import figkit` → `import figpress_apps`, …); in `syw-site.yml`'s
+  `python:` and in `environment.yml`, replace `figkit @ git+https://github.com/nstarman/figkit@v0.2.0`
+  with `figpress-apps==2026.10.28`. Data exported by figkit still loads; it need not be re-exported.
+
 ## 2026.10.28 — 2026-10-28
 
 ### Fixed

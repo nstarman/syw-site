@@ -1,7 +1,7 @@
-// The app. An anywidget module: the same file runs on the web page (figkit's `run`) and in
-// Jupyter/marimo (figkit.anywidget.Widget). Compose figkit components here; keep science in science.js.
-import { loadData } from "figkit/data.js";
-import { mount as mountPanel } from "figkit/skypanel.js";
+// The app. An anywidget module: the same file runs on the web page (figpress-apps' `run`) and in
+// Jupyter/marimo (figpress_apps.anywidget.Widget). Compose figpress-apps components here; keep science in science.js.
+import { loadData } from "figpress-apps/data.js";
+import { mount as mountPanel } from "figpress-apps/skypanel.js";
 import { project } from "app/science.js";
 
 export default {
