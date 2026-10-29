@@ -18,4 +18,6 @@ constitution; relock; add the migration note.
 
 ## Complexity Tracking
 
-None.
+| Deviation | Why |
+|---|---|
+| Released as `v2026.10.28.1`, though `.N` is for bug fixes | The maintainer chose a release the same day so the first paper (CP1) can move to figpress-apps now; the migration note is in the changelog as for any breaking release. |

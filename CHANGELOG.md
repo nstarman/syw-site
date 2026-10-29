@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.28.1 — 2026-10-28
+
 ### Changed — migration
 
 - **What changed**: webapps are built with [figpress-apps](https://github.com/nstarman/figpress-apps)
