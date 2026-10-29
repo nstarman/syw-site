@@ -34,9 +34,10 @@ into a page.** A name that does not exist stops the build.
 
 The site's tabs: **Overview** (`index.mdx`, your prose), **Explore** (webapps with `explore: true`),
 **Figures** (every figure, one column, the author's portrait stamped top-right — place it per figure
-with `figures:` in `syw-site.yml`), **Cite** (BibTeX, and the software the paper used with how to cite
-it), **Info** (the co-authors' map, the grants that funded it — the paper's `refs` on the website —
-and your own pages in `src/pages/info/`). A tab with nothing in it is hidden.
+with `figures:` in `syw-site.yml`; each is "Paper Figure N", to tell it from the site's interactive
+figures), **Info** (the co-authors' map, the grants that funded it — the paper's `refs` on the website —
+and your own pages in `src/pages/info/`), **Cite** (BibTeX, and the software the paper used with how to
+cite it). A tab with nothing in it is hidden.
 
 ## 2. Write pages
 
@@ -64,7 +65,15 @@ webapps:
   globe: { inputs: [src/data/directional.npz], figure: "fig:quadrupole" }
 ```
 
-It is embedded on that figure's page; elsewhere use `<Webapp name="globe" />`.
+It is embedded on that figure's page; elsewhere use `<Webapp name="globe">Caption.</Webapp>` (the
+caption is optional; the frame takes the app's height). In the overview, set a figure or an app apart
+from the prose in a card:
+
+```mdx
+<div class="syw-card">
+  <Webapp name="globe" height={650}>What to do with it, and what it shows.</Webapp>
+</div>
+```
 
 ## 4. Build and check
 

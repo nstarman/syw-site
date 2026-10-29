@@ -11,7 +11,7 @@ const { fig } = Astro.props;
 const number = facts.figures.indexOf(fig) + 1;
 const apps = Object.entries(facts.webapps ?? {}).filter(([, w]) => w.figure && w.figure === fig.label).map(([name]) => name);
 ---
-<Page title={`Figure ${number}`} tab="figures">
+<Page title={`Paper Figure ${number}`} tab="figures">
   {apps.map((name) => <Webapp name={name} />)}
   <Fig label={fig.slug} link={false} />
 </Page>

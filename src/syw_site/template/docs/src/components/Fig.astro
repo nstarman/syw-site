@@ -10,18 +10,28 @@ const number = facts.figures.indexOf(fig) + 1;
 const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
 // It has an interactive counterpart: a webapp in syw-site.yml names it (its page shows it).
 const interactive = link && Object.values(facts.webapps ?? {}).some((w) => w.figure && (w.figure === fig.label || w.figure === fig.slug));
-const alt = `Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
+const alt = `Paper Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
 ---
 <figure id={fig.slug}>
   {fig.images.map((im) => (
     <img src={url(`generated/figures/${im.webp ?? im.png ?? im.file}`)} alt={alt} loading="lazy" />
   ))}
   <figcaption>
-    <strong>Figure {number}.</strong> <span set:html={tex(fig.caption, refs)} />
-    {' '}
-    {fig.images.filter((im) => im.file.endsWith('.pdf')).map((im) => <> <a href={url(`generated/figures/${im.file}`)}>PDF</a></>)}
-    {fig.images.filter((im) => im.png).map((im) => <> · <a href={url(`generated/figures/${im.png}`)} download>PNG</a></>)}
-    {interactive && <> · <a href={url(`figures/${fig.slug}/`)}>Interactive</a></>}
-    {link && <> · <a href={url(`figures/${fig.slug}/`)}>More</a></>}
+    <strong>Paper Figure {number}.</strong> <span set:html={tex(fig.caption, refs)} />
+    {/* The links on a line of their own, under the caption: pages on the left, downloads on the right. */}
+    <div class="fig-links">
+      <span>
+        {[
+          ...(interactive ? [<a href={url(`figures/${fig.slug}/`)}>Interactive</a>] : []),
+          ...(link ? [<a href={url(`figures/${fig.slug}/`)}>More</a>] : []),
+        ].map((a, i) => <>{i > 0 && ' · '}{a}</>)}
+      </span>
+      <span>
+        {[
+          ...fig.images.filter((im) => im.file.endsWith('.pdf')).map((im) => <a href={url(`generated/figures/${im.file}`)}>PDF</a>),
+          ...fig.images.filter((im) => im.png).map((im) => <a href={url(`generated/figures/${im.png}`)} download>PNG</a>),
+        ].map((a, i) => <>{i > 0 && ' · '}{a}</>)}
+      </span>
+    </div>
   </figcaption>
 </figure>
