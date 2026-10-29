@@ -52,15 +52,24 @@ def cmd_card(args) -> int:
     return card.run(Path("."), settings.load())
 
 
-def cmd_webapp(args) -> int:
-    from figpress_apps.cli import main as figpress_apps
+# A figpress-plotly figure: `figure` in webapps/<name>/figure.py, written as the page and its single file.
+_FIGURE = "import sys; from figpress_plotly.cli import load; load(sys.argv[1]).write_web(sys.argv[2], single_file=sys.argv[3])"
 
+
+def cmd_webapp(args) -> int:
     cfg = settings.load()
     app = {w.name: w for w in cfg.webapps}.get(args.name)
     if app is None:
         raise settings.SettingsError(f"no webapp {args.name!r} under webapps: in docs/syw-site.yml")
-    data = Path("docs/.syw-site/webapps") / app.name / "data"
     out = OUT / "webapps" / app.name
+    if Path("webapps", app.name, "figure.py").is_file():
+        subprocess.run([*shlex.split(cfg.python), "-c", _FIGURE, f"webapps/{app.name}/figure.py:figure",
+                        str(out / "site"), str(out / f"{app.name}.html")], check=True)
+        return 0
+
+    from figpress_apps.cli import main as figpress_apps
+
+    data = Path("docs/.syw-site/webapps") / app.name / "data"
     subprocess.run(
         [*shlex.split(cfg.python), f"webapps/{app.name}/export.py", "--out", str(data)], check=True
     )
