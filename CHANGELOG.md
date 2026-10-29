@@ -7,8 +7,6 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## 2026.10.29 — 2026-10-29
 
-## 2026.10.28.2 — 2026-10-28
-
 ### Changed — migration
 
 Learned on the first real paper's site:

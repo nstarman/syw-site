@@ -19,6 +19,4 @@ template and in a site-test page; pin research-kit 20261028.0.0 and relock; upda
 
 ## Complexity Tracking
 
-| Deviation | Why |
-|---|---|
-| Released as `v2026.10.28.2`, though `.N` is for bug fixes | The maintainer chose to release the same day; the migration note is in the changelog as for any scaffold change. |
+None.
