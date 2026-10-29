@@ -4,4 +4,4 @@ dependencies:
   - conda-forge::matplotlib=3.9
   - conda-forge::pip
   - pip:
-      - figkit @ git+https://github.com/nstarman/figkit@v0.2.0
+      - figpress-apps==2026.10.28

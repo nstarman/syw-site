@@ -83,7 +83,7 @@ jobs:
 
   # A live preview of the example's site for every pull request (the example is synthetic, so
   # this publishes nothing of a real paper). Needs the repository secrets CLOUDFLARE_API_TOKEN and
-  # CLOUDFLARE_ACCOUNT_ID (as figkit's tests.yml explains); passes without deploying until then.
+  # CLOUDFLARE_ACCOUNT_ID (as figpress-apps' tests.yml explains); passes without deploying until then.
   preview:
     if: github.event_name == 'pull_request'
     needs: [e2e]

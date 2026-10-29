@@ -1,14 +1,14 @@
 # syw-site Constitution
 
 syw-site turns a [showyourwork](https://github.com/showyourwork/showyourwork) paper repository into
-a documentation site for the paper — its prose, numbers, figures and interactive figkit webapps —
+a documentation site for the paper — its prose, numbers, figures and interactive figpress-apps webapps —
 published at `nstarkman.space/<repo>/` and looking like that website.
 
 ## Core Principles
 
 ### I. A bridge, never a reimplementation
 
-- syw-site connects three things it does not own: showyourwork (the paper's pipeline), figkit (its
+- syw-site connects three things it does not own: showyourwork (the paper's pipeline), figpress-apps (its
   webapps) and the website's layout (the npm package `@nstarkman/site-layout`). It MUST NOT copy or
   reimplement any of them.
 - It reads a showyourwork repository's files (`showyourwork.yml`, `src/tex/ms.tex`, the generated
@@ -61,7 +61,7 @@ published at `nstarkman.space/<repo>/` and looking like that website.
 ## Technology Constraints
 
 - Python package `syw-site`, installed from git tags of `nstarman/syw-site` (not PyPI); Python ≥ 3.11;
-  depends on figkit at a pinned tag. The docs scaffold it installs is an Astro project with its own
+  depends on figpress-apps at a pinned version (PyPI). The docs scaffold it installs is an Astro project with its own
   pinned `package.json` and lockfile.
 - Licence: MIT.
 - Agent guidance lives in `AGENTS.md` (with `CLAUDE.md` pointing to it); the skills that teach
@@ -87,4 +87,4 @@ published at `nstarkman.space/<repo>/` and looking like that website.
 - Amendments are made by pull request with a version bump: MAJOR for removing or redefining a
   principle, MINOR for adding or materially expanding one, PATCH for wording.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-22 | **Last Amended**: 2026-10-22
+**Version**: 1.0.1 | **Ratified**: 2026-10-22 | **Last Amended**: 2026-10-28

@@ -8,14 +8,14 @@ from pathlib import Path
 
 import numpy as np
 
-import figkit
+import figpress_apps
 
 DATASET = "points"  # the name the app loads (widget.js)
 
 
 def main(out: Path) -> Path:
     xyz = np.load(Path(__file__).parents[2] / "src/data/helix.npz")["xyz"]
-    return figkit.export(
+    return figpress_apps.export(
         out, DATASET,
         {"xyz": xyz},                          # float64 stays float64 unless you pass narrow=[...]
         meta={"title": "The helix", "view": [0.0, 0.0, 1.0]},

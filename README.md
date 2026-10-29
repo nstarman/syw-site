@@ -1,7 +1,7 @@
 # syw-site
 
 Docs sites for [showyourwork](https://github.com/showyourwork/showyourwork) papers: the paper's
-numbers, figures and interactive [figkit](https://github.com/nstarman/figkit) webapps, built by the
+numbers, figures and interactive [figpress-apps](https://github.com/nstarman/figpress-apps) webapps, built by the
 paper's own pipeline and published at `nstarkman.space/<repo>/` with the website's layout — and
 nothing published until the author says so.
 

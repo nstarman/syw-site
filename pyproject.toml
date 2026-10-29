@@ -11,7 +11,7 @@ license = "MIT"
 authors = [{ name = "Nathaniel Starkman" }]
 requires-python = ">=3.11"
 dependencies = [
-    "figkit @ git+https://github.com/nstarman/figkit@v0.2.0",
+    "figpress-apps==2026.10.28",
     "pyyaml>=6",
     "pypdfium2>=4.30",
     "pillow>=10",
@@ -25,9 +25,6 @@ dev = ["pytest>=8"]
 
 [tool.hatch.version]
 path = "src/syw_site/__init__.py"
-
-[tool.hatch.metadata]
-allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/syw_site"]

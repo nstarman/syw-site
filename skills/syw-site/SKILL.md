@@ -1,13 +1,13 @@
 ---
 name: syw-site
-description: Add and maintain a docs site (project page) for a showyourwork paper with syw-site — the paper's numbers, figures and interactive figkit webapps, built by the paper's own pipeline and published at nstarkman.space/<repo>/ with the website's layout, local-only until arXiv. Use when asked for a docs site, project page or website for a paper, when working in a showyourwork repository's docs/ folder, or when a repository uses syw-site.
+description: Add and maintain a docs site (project page) for a showyourwork paper with syw-site — the paper's numbers, figures and interactive figpress-apps webapps, built by the paper's own pipeline and published at nstarkman.space/<repo>/ with the website's layout, local-only until arXiv. Use when asked for a docs site, project page or website for a paper, when working in a showyourwork repository's docs/ folder, or when a repository uses syw-site.
 ---
 
 # A docs site for a showyourwork paper
 
 syw-site adds `docs/` (an Astro site) to a showyourwork paper. The paper's own pipeline writes
 `docs/public/generated/facts.json` (title, authors, abstract, figures with captions, every
-`\variable` value), web images of its figures and its figkit webapps; the site renders them inside
+`\variable` value), web images of its figures and its figpress-apps webapps; the site renders them inside
 the nstarkman.space layout. **Facts come from the paper: never type a number, caption or author
 into a page.** A name that does not exist stops the build.
 
@@ -56,7 +56,7 @@ Inline math is `$…$`. Check names against `docs/public/generated/facts.json`
 
 ## 3. Interactive figures
 
-Build the app with the figkit skill in `webapps/<name>/` (its `export.py` takes `--out DIR`). List
+Build the app with the figpress-apps skill in `webapps/<name>/` (its `export.py` takes `--out DIR`). List
 it with the data files it reads and the figure it belongs to:
 
 ```yaml

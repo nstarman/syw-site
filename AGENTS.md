@@ -31,7 +31,7 @@ tests/               pytest; fixtures/paper (TeX shapes), fixtures/facts.json, e
 ## Boundaries
 
 - showyourwork owns the paper's pipeline; syw-site reads its files and adds Snakemake rules, never
-  imports it. figkit owns webapps (`figkit build`). The website owns the look
+  imports it. figpress-apps owns webapps (`figpress-apps build`). The website owns the look
   (`@nstarkman/site-layout`, pinned exactly in `template/docs/package.json`).
 - `syw-site build` is one `showyourwork build … syw__main syw_site_all` (`showyourwork.py`): the
   PDF and the docs data. Building a target from the paper's Snakefile needs showyourwork main
@@ -62,7 +62,7 @@ scheduler may fail to start its x86 solver: add `-- --scheduler greedy`.
 
 Versions are dates: `vYYYY.MM.DD` (`__version__ = "YYYY.MM.DD"`), fixes `vYYYY.MM.DD.N`. Every bug
 fix is backported to every released version that has it, on `versions/<tag>.x` branches created
-from the tag when first needed (the procedure is figkit's AGENTS.md "Releasing"). A release: set
+from the tag when first needed (the procedure is figpress-apps' AGENTS.md "Releasing"). A release: set
 `__version__`, turn `## Unreleased` in `CHANGELOG.md` into `## YYYY.MM.DD — YYYY-MM-DD` (migration
 notes for breaking changes), squash-merge, tag the merge commit, `gh release create`. CI checks the
 tag against `__version__`. Public-interface changes update both skills in the same pull request.

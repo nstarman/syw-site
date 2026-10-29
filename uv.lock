@@ -16,12 +16,16 @@ wheels = [
 ]
 
 [[package]]
-name = "figkit"
-version = "0.2.0"
-source = { git = "https://github.com/nstarman/figkit?rev=v0.2.0#9bf1ba173adcd2b9306aeb41e8e3cc7569fcc980" }
+name = "figpress-apps"
+version = "2026.10.28"
+source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/4a/39/bfae523f70f34eb8b6cf7dcc5a09701d26a0fab5e894c95e5de3e2d8c837/figpress_apps-2026.10.28.tar.gz", hash = "sha256:058b13731aa9c5731196f8350b2e5809b55cbc195b3baaf5cade925c7dc98ddf", size = 25443, upload-time = "2026-10-29T04:11:38.614Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/0f/63/616f81b3af315180c1d77a0bdf4e6376413bab5296a9a88768bfe105ab86/figpress_apps-2026.10.28-py3-none-any.whl", hash = "sha256:b1a9b380c012d6017fc6488e5187a85a3ea96dde17eb04bde4a85cf6c89da327", size = 32531, upload-time = "2026-10-29T04:11:37.403Z" },
 ]
 
 [[package]]
@@ -413,7 +417,7 @@ wheels = [
 name = "syw-site"
 source = { editable = "." }
 dependencies = [
-    { name = "figkit" },
+    { name = "figpress-apps" },
     { name = "pillow" },
     { name = "pypdfium2" },
     { name = "pyyaml" },
@@ -426,7 +430,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "figkit", git = "https://github.com/nstarman/figkit?rev=v0.2.0" },
+    { name = "figpress-apps", specifier = "==2026.10.28" },
     { name = "pillow", specifier = ">=10" },
     { name = "pypdfium2", specifier = ">=4.30" },
     { name = "pyyaml", specifier = ">=6" },

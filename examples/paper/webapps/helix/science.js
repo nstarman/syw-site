@@ -1,5 +1,5 @@
-// The science step: pure functions, no DOM, so `figkit test` can check them against Python.
-import { rotationToZ, mat3 } from "figkit/geom.js";
+// The science step: pure functions, no DOM, so `figpress-apps test` can check them against Python.
+import { rotationToZ, mat3 } from "figpress-apps/geom.js";
 
 /** Project n×3 points onto the sky for a unit viewing direction → {xy (flat n×2), readout}. */
 export function project(xyz, view) {

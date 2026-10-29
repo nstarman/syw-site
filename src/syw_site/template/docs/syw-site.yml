@@ -11,6 +11,6 @@ paper:
   bibcode:
 # How this paper runs Python, if not plain `python` (e.g. `uv run --locked python`).
 # python: python
-# Interactive figures (figkit apps in webapps/<name>/), each with the data files it reads.
+# Interactive figures (figpress-apps apps in webapps/<name>/), each with the data files it reads.
 # webapps:
 #   globe: { inputs: [src/data/example.npz], figure: fig:example }
