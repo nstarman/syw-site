@@ -57,8 +57,10 @@ Inline math is `$…$`. Check names against `docs/public/generated/facts.json`
 
 ## 3. Interactive figures
 
-Build the app with the figpress-apps skill in `webapps/<name>/` (its `export.py` takes `--out DIR`). List
-it with the data files it reads and the figure it belongs to:
+Build the app with the figpress-apps skill in `webapps/<name>/` (its `export.py` takes `--out DIR`), or
+put a figpress-plotly figure there: `webapps/<name>/figure.py` defining `figure` (the decorated
+`build`), written as its web page; `python:` must then provide figpress-plotly (e.g.
+`--with "figpress-plotly==…"`). List it with the data files it reads and the figure it belongs to:
 
 ```yaml
 webapps:

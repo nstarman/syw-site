@@ -5,6 +5,10 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+- A webapp may be a figpress-plotly figure: `webapps/<name>/figure.py` defining `figure` is written
+  as the figure's web page and single file, where a figpress-apps app's would be. Nothing to change
+  for existing apps.
+
 ## 2026.10.29 — 2026-10-29
 
 ### Changed — migration
