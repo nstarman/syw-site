@@ -5,6 +5,30 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.29 — 2026-10-29
+
+### Changed — migration
+
+Learned on the first real paper's site:
+
+- Figures and tabs: the paper's figures are "Paper Figure N" (caption, alt text, figure page), the
+  tab is "Figures", and the tabs end with Info, then Cite.
+- Under a caption, the links are a row of their own: pages (Interactive, More) left, downloads
+  (PDF · PNG) right. An interactive figure has the same row — More, Download HTML — under its
+  caption, which `<Webapp name="…">Caption.</Webapp>` now takes as content.
+- `<Webapp>`'s frame takes the app's own height once it loads and follows it (`height` is only the
+  height until then).
+- `<div class="syw-card">…</div>` sets a figure or an app apart in the overview.
+- The scaffold pins `@nstarkman/research-kit` 20261028.0.0, whose map pins list the author's papers.
+
+- **What changed**: the scaffold's `src/components/Fig.astro`, `Webapp.astro`, `Page.astro`,
+  `src/lib/tabs.js`, `src/pages/figures/[slug].astro` and `package.json`. **Find**: a paper
+  initialised before this release (`ls docs/src/components/Webapp.astro`); unless you changed them,
+  `diff` them against syw-site's `src/syw_site/template/docs/`. **Edit**: copy those five files from
+  the template; in `docs/package.json` set `"@nstarkman/research-kit": "20261028.0.0"` and run
+  `npm install` in `docs/`. A `<Webapp>` caption you wrote after it (`<Webapp …/> <p>…</p>`) can
+  move inside it.
+
 ## 2026.10.28.1 — 2026-10-28
 
 ### Changed — migration

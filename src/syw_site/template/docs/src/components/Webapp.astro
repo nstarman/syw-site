@@ -1,5 +1,6 @@
 ---
-// An interactive figure (a figpress-apps app listed in docs/syw-site.yml): <Webapp name="globe" />.
+// An interactive figure (a figpress-apps app listed in docs/syw-site.yml): <Webapp name="globe" />, with its
+// caption, if any, as the content: <Webapp name="globe">Caption.</Webapp>.
 import { url, webapp } from '../lib/facts.js';
 
 const { name, height = 640 } = Astro.props;
@@ -7,9 +8,28 @@ webapp(name);
 const site = url(`generated/webapps/${name}/site/`);
 ---
 <figure class="syw-webapp">
-  {/* ponytail: a fixed height; size to the app's content if an app needs it */}
-  <iframe src={site} title={`Interactive figure: ${name}`} height={height} loading="lazy"></iframe>
+  {/* `height` until the app loads; then the frame follows the app's own height (same origin). */}
+  <iframe src={site} title={`Interactive figure: ${name}`} height={height} loading="lazy" data-fit></iframe>
   <figcaption>
-    <a href={site}>Open full page</a> · <a href={url(`generated/webapps/${name}/${name}.html`)} download>Download (one HTML file)</a>
+    <slot />
+    {/* As under a paper figure: the page on the left, the download on the right. */}
+    <div class="fig-links">
+      <span><a href={site}>More</a></span>
+      <span><a href={url(`generated/webapps/${name}/${name}.html`)} download>Download HTML</a></span>
+    </div>
   </figcaption>
 </figure>
+
+<script>
+  // Size each app's frame to its content, and again whenever its layout changes (a narrower page
+  // stacks the panels under the globe).
+  for (const frame of document.querySelectorAll<HTMLIFrameElement>('iframe[data-fit]')) {
+    frame.addEventListener('load', () => {
+      const body = frame.contentDocument?.body;
+      if (!body) return;
+      const fit = () => { frame.style.height = `${Math.ceil(body.getBoundingClientRect().height)}px`; };
+      new ResizeObserver(fit).observe(body);
+      fit();
+    });
+  }
+</script>

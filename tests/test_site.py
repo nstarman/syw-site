@@ -27,6 +27,7 @@ def docs(tmp_path_factory):
     (docs / "public/generated").mkdir(parents=True)
     shutil.copy(HERE / "fixtures/facts.json", docs / "public/generated/facts.json")
     shutil.copy(HERE / "site/numbers.mdx", docs / "src/pages/numbers.mdx")
+    shutil.copy(HERE / "site/cards.mdx", docs / "src/pages/cards.mdx")
     shutil.copy(HERE / "fixtures/card.json", docs / "card.json")  # a synthetic snapshot of the website's data
     subprocess.run(["npm", "ci", "--no-audit", "--no-fund"], cwd=docs, check=True, env=ENV)
     return docs
@@ -41,7 +42,7 @@ def test_builds_every_page(docs):
     assert r.returncode == 0, r.stdout + r.stderr
     pages = sorted(str(p.relative_to(docs / "dist")) for p in (docs / "dist").rglob("index.html"))
     assert pages == [
-        "cite/index.html", "explore/index.html", "figures/a/index.html", "figures/b/index.html",
+        "cards/index.html", "cite/index.html", "explore/index.html", "figures/a/index.html", "figures/b/index.html",
         "figures/fig_c/index.html", "figures/index.html", "index.html", "info/index.html", "numbers/index.html",
     ]
     html = (docs / "dist/numbers/index.html").read_text()
@@ -65,9 +66,9 @@ def test_the_card_header_and_tabs(docs):
     assert "data-context" not in card
     assert 'src="/demo/card/demo.png"' in html  # the card's image, the site's own copy
     tabs = re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', html, re.S).group(1)
-    assert re.findall(r">([\w ]+)</a>", tabs) == ["Overview", "Explore", "Paper Figures", "Cite", "Info"]
+    assert re.findall(r">([\w ]+)</a>", tabs) == ["Overview", "Explore", "Figures", "Info", "Cite"]
     assert 'aria-current="page"' in re.search(r'<a[^>]*>Overview</a>', tabs).group(0)
-    assert 'aria-current="page"' in re.search(r'<a[^>]*>Paper Figures</a>', re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', page(docs, "figures/a"), re.S).group(1)).group(0)
+    assert 'aria-current="page"' in re.search(r'<a[^>]*>Figures</a>', re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', page(docs, "figures/a"), re.S).group(1)).group(0)
 
 
 def test_figures_one_column_with_web_images(docs):
@@ -75,6 +76,26 @@ def test_figures_one_column_with_web_images(docs):
     assert 'class="syw-figures"' in html and "syw-gallery" not in html
     assert "/demo/generated/figures/figures/fig_a.webp" in html  # shown: lossless WebP, stamped
     assert 'href="/demo/generated/figures/figures/fig_a.png" download' in html  # offered: PNG
+
+
+def links(html):
+    """Each `fig-links` row: (left links, right links), by their text."""
+    rows = re.findall(r'<div class="fig-links"[^>]*>\s*<span[^>]*>(.*?)</span>\s*<span[^>]*>(.*?)</span>', html, re.S)
+    return [tuple(re.findall(r">([\w ]+)</a>", side) for side in row) for row in rows]
+
+
+def test_paper_figures_and_their_links(docs):
+    html = page(docs, "figures/a")
+    assert "<title>Paper Figure 1" in html and "<strong>Paper Figure 1.</strong>" in html
+    assert 'alt="Paper Figure 1:' in html
+    assert links(page(docs, "numbers")) == [(["More"], ["PDF", "PNG"])]
+
+
+def test_captioned_webapp_in_a_card(docs):
+    html = page(docs, "cards")
+    assert html.count('class="syw-card"') == 2
+    assert "A helix to turn." in html and "data-fit" in html
+    assert links(html) == [(["More"], ["Download HTML"]), (["More"], ["PDF", "PNG"])]
 
 
 def test_cite_lists_the_software_and_how_to_cite_it(docs):
