@@ -17,15 +17,15 @@ wheels = [
 
 [[package]]
 name = "figpress-apps"
-version = "2026.10.28"
+version = "2026.10.29"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
     { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4a/39/bfae523f70f34eb8b6cf7dcc5a09701d26a0fab5e894c95e5de3e2d8c837/figpress_apps-2026.10.28.tar.gz", hash = "sha256:058b13731aa9c5731196f8350b2e5809b55cbc195b3baaf5cade925c7dc98ddf", size = 25443, upload-time = "2026-10-29T04:11:38.614Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e5/c2/9598a97e77cc621e02a8f7036b9fb4431cc7133918082ecdbcc20e0ba160/figpress_apps-2026.10.29.tar.gz", hash = "sha256:1a54647a95c2bd8c3723953365002488ff80408e2ef4fe173922b43622870e98", size = 25732, upload-time = "2026-10-30T04:37:02.857Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0f/63/616f81b3af315180c1d77a0bdf4e6376413bab5296a9a88768bfe105ab86/figpress_apps-2026.10.28-py3-none-any.whl", hash = "sha256:b1a9b380c012d6017fc6488e5187a85a3ea96dde17eb04bde4a85cf6c89da327", size = 32531, upload-time = "2026-10-29T04:11:37.403Z" },
+    { url = "https://files.pythonhosted.org/packages/b2/4b/d003e001de65cd5a61790e4ff3a0942f4394eee436651c1079105c29e6ee/figpress_apps-2026.10.29-py3-none-any.whl", hash = "sha256:17dda7af4058969187ef61652e3690a16df3886ee220d29a14b94f4532c8c11e", size = 32844, upload-time = "2026-10-30T04:37:01.489Z" },
 ]
 
 [[package]]
@@ -430,7 +430,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "figpress-apps", specifier = "==2026.10.28" },
+    { name = "figpress-apps", specifier = "==2026.10.29" },
     { name = "pillow", specifier = ">=10" },
     { name = "pypdfium2", specifier = ">=4.30" },
     { name = "pyyaml", specifier = ">=6" },
