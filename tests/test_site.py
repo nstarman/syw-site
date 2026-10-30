@@ -88,7 +88,9 @@ def test_figures_gallery(docs):
 
 def test_figure_page_links_back(docs):
     for slug in ("a", "b", "fig_c"):
-        assert 'class="syw-back" href="/demo/figures/"' in page(docs, f"figures/{slug}")
+        html = page(docs, f"figures/{slug}")
+        assert 'class="syw-back" href="/demo/figures/"' in html
+        assert html.index("syw-back") < html.index('class="syw-heading"')  # above the title
 
 
 def links(html):

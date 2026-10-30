@@ -15,7 +15,7 @@ const apps = Object.entries(facts.webapps ?? {}).filter(([, w]) => w.figure && w
 const replacing = apps.find(([, w]) => w.replaces)?.[0];
 ---
 <Page title={`Paper Figure ${number}`} tab="figures">
-  <a class="syw-back" href={url('figures/')}>← All figures</a>
+  <a slot="above" class="syw-back" href={url('figures/')}>← All figures</a>
   {apps.map(([name]) => <Webapp name={name} links={name !== replacing} />)}
   <Fig label={fig.slug} link={false} image={!replacing} app={replacing} />
 </Page>
