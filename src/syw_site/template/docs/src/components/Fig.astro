@@ -1,10 +1,11 @@
 ---
 // A figure of the paper with its caption: <Fig label="fig:quadrupole" />. `link` adds a link to
-// its own page, and to its interactive version where a webapp in syw-site.yml names it.
+// its own page, and to its interactive version where a webapp in syw-site.yml names it. `image={false}`
+// leaves out the image (its page, where a webapp replaces it).
 import { facts, figure, url } from '../lib/facts.js';
 import { tex } from '../lib/tex.js';
 
-const { label, link = true } = Astro.props;
+const { label, link = true, image = true } = Astro.props;
 const fig = figure(label);
 const number = facts.figures.indexOf(fig) + 1;
 const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
@@ -13,7 +14,7 @@ const interactive = link && Object.values(facts.webapps ?? {}).some((w) => w.fig
 const alt = `Paper Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
 ---
 <figure id={fig.slug}>
-  {fig.images.map((im) => (
+  {image && fig.images.map((im) => (
     <img src={url(`generated/figures/${im.webp ?? im.png ?? im.file}`)} alt={alt} loading="lazy" />
   ))}
   <figcaption>

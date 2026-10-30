@@ -24,7 +24,7 @@ def cmd_facts(args) -> int:
     data = facts.extract(Path("."), repo=cfg.repo, paper=cfg.paper)
     data["website_id"] = cfg.website_id
     data["webapps"] = {
-        w.name: {"figure": w.figure, "explore": w.explore, "title": w.title, "text": w.text} for w in cfg.webapps
+        w.name: {"figure": w.figure, "explore": w.explore, "title": w.title, "text": w.text, "replaces": w.replaces} for w in cfg.webapps
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")

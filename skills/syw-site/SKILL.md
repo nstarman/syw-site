@@ -67,7 +67,8 @@ webapps:
   globe: { inputs: [src/data/directional.npz], figure: "fig:quadrupole" }
 ```
 
-It is embedded on that figure's page; elsewhere use `<Webapp name="globe">Caption.</Webapp>` (the
+It is embedded on that figure's page, above the paper's image (`replaces: true`: instead of it, as
+for a figpress-plotly figure that matches the print); elsewhere use `<Webapp name="globe">Caption.</Webapp>` (the
 caption is optional; the frame takes the app's height). In the overview, set a figure or an app apart
 from the prose in a card:
 

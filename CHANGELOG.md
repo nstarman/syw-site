@@ -5,6 +5,9 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+- A webapp may replace its figure's image on the figure's page: `replaces: true` (needs `figure`).
+  The caption and downloads stay; elsewhere the figure is the image as before.
+
 ## 2026.10.29.1 — 2026-10-29
 
 - A webapp may be a figpress-plotly figure: `webapps/<name>/figure.py` defining `figure` is written

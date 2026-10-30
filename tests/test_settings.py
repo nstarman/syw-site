@@ -36,6 +36,14 @@ def test_rejects(tmp_path, raw, match):
         parse(raw, tmp_path)
 
 
+def test_replaces(tmp_path):
+    (tmp_path / "webapps" / "globe").mkdir(parents=True)
+    s = parse({"repo": "a/b", "webapps": {"globe": {"figure": "fig:a", "replaces": True}}}, tmp_path)
+    assert s.webapps[0].replaces
+    with pytest.raises(SettingsError, match="replaces"):
+        parse({"repo": "a/b", "webapps": {"globe": {"replaces": True}}}, tmp_path)
+
+
 def test_inputs_may_not_exist_yet(tmp_path):
     (tmp_path / "webapps" / "globe").mkdir(parents=True)
     s = parse({"repo": "a/b", "webapps": {"globe": {"inputs": ["src/data/made_by_a_rule.npz"]}}}, tmp_path)
