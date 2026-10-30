@@ -10,7 +10,7 @@
 | `<PaperLinks />` | — | arXiv, journal, ADS (when known), code and data | — |
 | `<Card />` | — | the paper's card from nstarkman.space, when `website_id` is set | — |
 
-Pages: `index.mdx` (overview), `figures/` (gallery), `figures/<slug>/` (one figure, with its webapp),
+Pages: `index.mdx` (overview), `figures/` (gallery: a card per figure with its short title), `figures/<slug>/` (one figure, with its webapp),
 `cite/` (BibTeX once the arXiv id or DOI is known). MDX pages start with
 `layout: ../components/Page.astro` (and an optional `title:`); `.astro` pages wrap themselves in
 `<Page title="…">`. `Page` puts every page in the website's `<SiteLayout section="/research/">`.

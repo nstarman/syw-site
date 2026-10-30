@@ -71,11 +71,24 @@ def test_the_card_header_and_tabs(docs):
     assert 'aria-current="page"' in re.search(r'<a[^>]*>Figures</a>', re.search(r'<div class="syw-tabs"[^>]*>(.*?)</div>', page(docs, "figures/a"), re.S).group(1)).group(0)
 
 
-def test_figures_one_column_with_web_images(docs):
-    html = page(docs, "figures")
-    assert 'class="syw-figures"' in html and "syw-gallery" not in html
-    assert "/demo/generated/figures/figures/fig_a.webp" in html  # shown: lossless WebP, stamped
-    assert 'href="/demo/generated/figures/figures/fig_a.png" download' in html  # offered: PNG
+def test_figures_gallery(docs):
+    """The Figures tab: a card per figure (image, number, the caption's short title) opening its page;
+    Interactive only where a webapp names the figure; no full captions or downloads."""
+    html = re.search(r'<div class="syw-gallery">(.*?)</div>', page(docs, "figures"), re.S).group(1)
+    cards = re.findall(r'<a class="syw-gallery-item"[^>]*href="([^"]+)"(.*?)</a>', html, re.S)
+    assert [href for href, _ in cards] == ["/demo/figures/a/", "/demo/figures/b/", "/demo/figures/fig_c/"]
+    a, b, c = (body for _, body in cards)
+    assert "/demo/generated/figures/figures/fig_a.webp" in a  # the web image, as on its page
+    assert "A caption with" in a and "Paper Figure 1" in a
+    assert "Two panels" in b and "side by side" not in b and "More text" not in b  # an emph title, cut
+    assert "Mock view of" in c and "katex" in c and "the rest" not in c  # math kept whole, cut at the colon
+    assert "Interactive" in b and "Interactive" not in a + c  # rate replaces Figure 2
+    assert "fig_b2.webp" not in html and "<figcaption" not in html and "download" not in html
+
+
+def test_figure_page_links_back(docs):
+    for slug in ("a", "b", "fig_c"):
+        assert 'class="syw-back" href="/demo/figures/"' in page(docs, f"figures/{slug}")
 
 
 def links(html):
@@ -99,7 +112,7 @@ def test_a_webapp_that_replaces_its_figure(docs):
     assert "fig_b1.webp" not in html and "fig_b2.webp" not in html
     assert "<strong>Paper Figure 2.</strong>" in html
     assert "fig_a.webp" in page(docs, "figures/a")
-    assert "fig_b1.webp" in page(docs, "figures")
+    assert "fig_b1.webp" in page(docs, "figures")  # its card in the gallery
 
 
 def test_captioned_webapp_in_a_card(docs):

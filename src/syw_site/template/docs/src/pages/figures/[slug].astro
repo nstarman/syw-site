@@ -2,7 +2,7 @@
 import Page from '../../components/Page.astro';
 import Fig from '../../components/Fig.astro';
 import Webapp from '../../components/Webapp.astro';
-import { facts } from '../../lib/facts.js';
+import { facts, url } from '../../lib/facts.js';
 
 export function getStaticPaths() {
   return facts.figures.map((f) => ({ params: { slug: f.slug }, props: { fig: f } }));
@@ -14,6 +14,7 @@ const apps = Object.entries(facts.webapps ?? {}).filter(([, w]) => w.figure && w
 const replaced = apps.some(([, w]) => w.replaces);
 ---
 <Page title={`Paper Figure ${number}`} tab="figures">
+  <a class="syw-back" href={url('figures/')}>← All figures</a>
   {apps.map(([name]) => <Webapp name={name} />)}
   <Fig label={fig.slug} link={false} image={!replaced} />
 </Page>

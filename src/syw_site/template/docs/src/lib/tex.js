@@ -95,5 +95,28 @@ export function tex(s, refs = {}) {
     : chunk.split(/(?<!\\)\$/).map((part, i) => (i % 2 ? math(part) : prose(part))).join(''))).join('');
 }
 
+/** A caption's short title, for a gallery: its leading \emph{…} title if it has one, else its first
+ * sentence, either cut at the first colon, comma, semicolon or parenthesis outside math and braces
+ * ("Mock observation of the GD-1 stream: the stream's…" → "Mock observation of the GD-1 stream"). */
+export function short(caption) {
+  let s = caption.trim();
+  const lead = s.match(/^\\(?:emph|textit|textbf)\{/);
+  if (lead) {
+    let depth = 1, i = lead[0].length;
+    for (; i < s.length && depth; i++) depth += s[i] === '{' ? 1 : s[i] === '}' ? -1 : 0;
+    s = s.slice(lead[0].length, i - 1);
+  }
+  let depth = 0, inMath = false;
+  for (let i = 0; i < s.length; i++) {
+    const c = s[i];
+    if (c === '\\') { i++; continue; } // a command or an escaped character (\, \$ …)
+    if (c === '$') inMath = !inMath;
+    else if (c === '{') depth++;
+    else if (c === '}') depth--;
+    else if (!inMath && depth === 0 && (':;,('.includes(c) || (c === '.' && /\s/.test(s[i + 1] ?? ' ')))) return s.slice(0, i).trim();
+  }
+  return s;
+}
+
 /** A \variable value: math when it has TeX in it, text otherwise. */
 export const value = (s) => (s.includes('$') ? tex(s) : /[\\^_]/.test(s) ? math(s) : prose(s));
