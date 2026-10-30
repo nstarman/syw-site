@@ -91,6 +91,17 @@ def test_paper_figures_and_their_links(docs):
     assert links(page(docs, "numbers")) == [(["More"], ["PDF", "PNG"])]
 
 
+def test_a_webapp_that_replaces_its_figure(docs):
+    """`replaces: true`: the figure's page shows the webapp instead of the image, keeping the caption
+    and downloads; another figure's page, and the gallery, keep their images."""
+    html = page(docs, "figures/b")
+    assert "/demo/generated/webapps/rate/site/" in html
+    assert "fig_b1.webp" not in html and "fig_b2.webp" not in html
+    assert "<strong>Paper Figure 2.</strong>" in html
+    assert "fig_a.webp" in page(docs, "figures/a")
+    assert "fig_b1.webp" in page(docs, "figures")
+
+
 def test_captioned_webapp_in_a_card(docs):
     html = page(docs, "cards")
     assert html.count('class="syw-card"') == 2
