@@ -22,14 +22,23 @@ const site = url(`generated/webapps/${name}/site/`);
 
 <script>
   // Size each app's frame to its content, and again whenever its layout changes (a narrower page
-  // stacks the panels under the globe).
+  // stacks the panels under the globe). The frame follows the site's theme toggle: the page's
+  // `data-theme` (unset: the system's) is copied onto the app's document, as it changes.
+  const root = document.documentElement;
   for (const frame of document.querySelectorAll<HTMLIFrameElement>('iframe[data-fit]')) {
     frame.addEventListener('load', () => {
-      const body = frame.contentDocument?.body;
-      if (!body) return;
+      const doc = frame.contentDocument;
+      if (!doc?.body) return;
+      const body = doc.body;
       const fit = () => { frame.style.height = `${Math.ceil(body.getBoundingClientRect().height)}px`; };
       new ResizeObserver(fit).observe(body);
       fit();
+      const theme = () => {
+        if (root.dataset.theme) doc.documentElement.dataset.theme = root.dataset.theme;
+        else delete doc.documentElement.dataset.theme;
+      };
+      new MutationObserver(theme).observe(root, { attributes: true, attributeFilter: ['data-theme'] });
+      theme();
     });
   }
 </script>
