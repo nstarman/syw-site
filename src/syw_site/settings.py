@@ -101,8 +101,10 @@ def parse(raw: dict, root: Path) -> Settings:
         if not isinstance(explore, bool):
             raise SettingsError(f"syw-site.yml: webapp {name!r} explore must be true or false")
         replaces = spec.get("replaces", False)
-        if not isinstance(replaces, bool) or (replaces and not spec.get("figure")):
-            raise SettingsError(f"syw-site.yml: webapp {name!r} replaces must be true or false, and needs `figure`")
+        if not isinstance(replaces, bool):
+            raise SettingsError(f"syw-site.yml: webapp {name!r} replaces must be true or false")
+        if replaces and not spec.get("figure"):
+            raise SettingsError(f"syw-site.yml: webapp {name!r} replaces needs `figure` (the figure it replaces)")
         webapps.append(Webapp(name, inputs, spec.get("figure"), explore, spec.get("title"), spec.get("text"), replaces))
     figures = {}
     for label, spec in (raw.get("figures") or {}).items():

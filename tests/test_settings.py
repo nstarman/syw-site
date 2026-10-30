@@ -40,8 +40,10 @@ def test_replaces(tmp_path):
     (tmp_path / "webapps" / "globe").mkdir(parents=True)
     s = parse({"repo": "a/b", "webapps": {"globe": {"figure": "fig:a", "replaces": True}}}, tmp_path)
     assert s.webapps[0].replaces
-    with pytest.raises(SettingsError, match="replaces"):
+    with pytest.raises(SettingsError, match="replaces needs `figure`"):
         parse({"repo": "a/b", "webapps": {"globe": {"replaces": True}}}, tmp_path)
+    with pytest.raises(SettingsError, match="replaces must be true or false"):
+        parse({"repo": "a/b", "webapps": {"globe": {"figure": "fig:a", "replaces": "yes"}}}, tmp_path)
 
 
 def test_inputs_may_not_exist_yet(tmp_path):
