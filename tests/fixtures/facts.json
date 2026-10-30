@@ -107,7 +107,15 @@
       "figure": null,
       "explore": true,
       "title": "The helix",
-      "text": "Drag it around."
+      "text": "Drag it around.",
+      "replaces": false
+    },
+    "rate": {
+      "figure": "fig:b",
+      "explore": false,
+      "title": null,
+      "text": null,
+      "replaces": true
     }
   }
 }
