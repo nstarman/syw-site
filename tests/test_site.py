@@ -113,13 +113,18 @@ def test_a_webapp_that_replaces_its_figure(docs):
     assert "<strong>Paper Figure 2.</strong>" in html
     assert "fig_a.webp" in page(docs, "figures/a")
     assert "fig_b1.webp" in page(docs, "figures")  # its card in the gallery
+    # One row of links, under the caption: the app's page, and its HTML with the figure's downloads.
+    rows = links(html)
+    assert len(rows) == 1 and rows[0][0] == ["More"] and rows[0][1][0] == "HTML" and "PDF" in rows[0][1], rows
+    assert 'href="/demo/generated/webapps/rate/rate.html" download>HTML</a>' in html
 
 
 def test_captioned_webapp_in_a_card(docs):
     html = page(docs, "cards")
     assert html.count('class="syw-card"') == 2
     assert "A helix to turn." in html and "data-fit" in html
-    assert links(html) == [(["More"], ["Download HTML"]), (["More"], ["PDF", "PNG"])]
+    assert links(html) == [(["More"], ["HTML"]), (["More"], ["PDF", "PNG"])]
+    assert html.count(">Download <a") == 2  # the word once per row, each format its own link
 
 
 def test_cite_lists_the_software_and_how_to_cite_it(docs):

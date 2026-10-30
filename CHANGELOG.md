@@ -12,6 +12,10 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
   **What changed**: the tab no longer shows every figure with its caption. **Find**:
   `docs/src/pages/figures/index.astro`. **Edit**: copy it, `pages/figures/[slug].astro`,
   `components/Page.astro` and `lib/tex.js` from the scaffold (or `syw-site upgrade`).
+- Links under a caption read "Download HTML · PDF · PNG": the word once, each format its own link. A
+  figure page whose webapp replaces the image has one row under the caption (the app's More; its HTML
+  with the figure's PDF and PNG). **Find**: `components/Fig.astro`, `components/Webapp.astro`.
+  **Edit**: copy them and `pages/figures/[slug].astro` from the scaffold.
 
 ## 2026.10.29.2 — 2026-10-29
 

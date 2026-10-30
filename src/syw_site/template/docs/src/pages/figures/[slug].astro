@@ -10,11 +10,12 @@ export function getStaticPaths() {
 const { fig } = Astro.props;
 const number = facts.figures.indexOf(fig) + 1;
 const apps = Object.entries(facts.webapps ?? {}).filter(([, w]) => w.figure && w.figure === fig.label);
-// A webapp with `replaces: true` stands in for the static image here; the caption and downloads stay.
-const replaced = apps.some(([, w]) => w.replaces);
+// A webapp with `replaces: true` stands in for the static image here: its links join the figure's
+// one row under the caption (More · Download HTML · PDF · PNG).
+const replacing = apps.find(([, w]) => w.replaces)?.[0];
 ---
 <Page title={`Paper Figure ${number}`} tab="figures">
   <a class="syw-back" href={url('figures/')}>← All figures</a>
-  {apps.map(([name]) => <Webapp name={name} />)}
-  <Fig label={fig.slug} link={false} image={!replaced} />
+  {apps.map(([name]) => <Webapp name={name} links={name !== replacing} />)}
+  <Fig label={fig.slug} link={false} image={!replacing} app={replacing} />
 </Page>
