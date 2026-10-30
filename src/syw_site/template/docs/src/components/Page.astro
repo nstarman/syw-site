@@ -56,6 +56,7 @@ const item = root && resolve(root);
     border: 1px solid var(--rule); border-radius: 10px; background: var(--surface);
   }
   .syw .syw-gallery-item:hover { border-color: var(--accent); }
+  .syw .syw-gallery-item { scroll-margin-top: calc(var(--nav-h) + 3.5rem); } /* below the sticky tabs */
   .syw .syw-gallery-item img { width: 100%; aspect-ratio: 4 / 3; object-fit: contain; background: #fff; border-radius: 6px; }
   .syw .syw-gallery-head { display: flex; justify-content: space-between; align-items: center; gap: .5rem; font-size: .85em; }
   .syw .syw-gallery-title { font-size: .85em; line-height: 1.35; color: var(--ink-mute); }
