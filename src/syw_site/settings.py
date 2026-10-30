@@ -9,7 +9,7 @@ import yaml
 SETTINGS = Path("docs/syw-site.yml")
 _KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps", "figures"}
 _PAPER_KEYS = {"arxiv", "doi", "bibcode"}
-_WEBAPP_KEYS = {"inputs", "figure", "explore", "title", "text"}
+_WEBAPP_KEYS = {"inputs", "figure", "explore", "title", "text", "replaces"}
 _FIGURE_KEYS = {"icon", "image", "alpha"}
 ALPHA = 0.8  # the portrait is a quiet mark, not a feature of the figure
 CORNERS = ("top-right", "top-left", "bottom-right", "bottom-left")
@@ -27,6 +27,7 @@ class Webapp:
     explore: bool = False
     title: str | None = None
     text: str | None = None
+    replaces: bool = False  # on its figure's page, in place of the static image
 
 
 @dataclass(frozen=True)
@@ -99,7 +100,12 @@ def parse(raw: dict, root: Path) -> Settings:
         explore = spec.get("explore", False)
         if not isinstance(explore, bool):
             raise SettingsError(f"syw-site.yml: webapp {name!r} explore must be true or false")
-        webapps.append(Webapp(name, inputs, spec.get("figure"), explore, spec.get("title"), spec.get("text")))
+        replaces = spec.get("replaces", False)
+        if not isinstance(replaces, bool):
+            raise SettingsError(f"syw-site.yml: webapp {name!r} replaces must be true or false")
+        if replaces and not spec.get("figure"):
+            raise SettingsError(f"syw-site.yml: webapp {name!r} replaces needs `figure` (the figure it replaces)")
+        webapps.append(Webapp(name, inputs, spec.get("figure"), explore, spec.get("title"), spec.get("text"), replaces))
     figures = {}
     for label, spec in (raw.get("figures") or {}).items():
         spec = spec or {}

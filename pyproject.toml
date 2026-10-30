@@ -11,7 +11,7 @@ license = "MIT"
 authors = [{ name = "Nathaniel Starkman" }]
 requires-python = ">=3.11"
 dependencies = [
-    "figpress-apps==2026.10.28",
+    "figpress-apps==2026.10.29",
     "pyyaml>=6",
     "pypdfium2>=4.30",
     "pillow>=10",

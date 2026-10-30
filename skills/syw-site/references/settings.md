@@ -11,6 +11,7 @@ paper:                           # optional, filled in when known
 python: uv run --locked python   # optional; how the paper runs Python (default: python)
 webapps:                         # optional; figpress-apps apps, or figpress-plotly figure.py, in webapps/<name>/
   globe: { inputs: [src/data/directional.npz], figure: "fig:quadrupole" }   # a figure's counterpart
+  rate: { inputs: [...], figure: "fig:rate", replaces: true }  # its page shows only this, not the image
   explorer: { inputs: [...], explore: true, title: "…", text: "…" }          # on the Explore tab
 figures:                         # optional; where the portrait goes on each figure
   "fig:rate":   { icon: top-left }       # top-right (default) | top-left | bottom-right | bottom-left | none

@@ -5,10 +5,15 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.29.2 — 2026-10-29
+
 - `<Webapp>` frames follow the site's theme toggle: the page's `data-theme` is copied onto the app's
   document as it changes. Before, an app followed the system's setting, so with the system dark and
   the site toggled light, the figure stayed dark. Copy `docs/src/components/Webapp.astro` from the
   scaffold (or `syw-site upgrade`).
+- A webapp may replace its figure's image on the figure's page: `replaces: true` (needs `figure`).
+  The caption and downloads stay; elsewhere the figure is the image as before.
+- figpress-apps 2026.10.29: apps follow the site's theme toggle too (with the `<Webapp>` change above).
 
 ## 2026.10.29.1 — 2026-10-29
 
