@@ -47,7 +47,7 @@
     {
       "label": "fig:b",
       "slug": "b",
-      "caption": "Two panels.finish",
+      "caption": "\\emph{Two panels, side by side}. More text.",
       "images": [
         {
           "source": "src/tex/figures/fig_b1.pdf",
@@ -66,7 +66,7 @@
     {
       "label": null,
       "slug": "fig_c",
-      "caption": "No label.",
+      "caption": "Mock view of $f(a, b)$: the rest, and more.",
       "images": [
         {
           "source": "src/tex/figures/fig_c.png",

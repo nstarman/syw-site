@@ -1,11 +1,12 @@
 ---
 // A figure of the paper with its caption: <Fig label="fig:quadrupole" />. `link` adds a link to
 // its own page, and to its interactive version where a webapp in syw-site.yml names it. `image={false}`
-// leaves out the image (its page, where a webapp replaces it).
+// leaves out the image (its page, where a webapp replaces it); `app` (that webapp's name) then puts the
+// app's links in this row: More (its own page) on the left, its HTML with the downloads.
 import { facts, figure, url } from '../lib/facts.js';
 import { tex } from '../lib/tex.js';
 
-const { label, link = true, image = true } = Astro.props;
+const { label, link = true, image = true, app } = Astro.props;
 const fig = figure(label);
 const number = facts.figures.indexOf(fig) + 1;
 const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
@@ -25,13 +26,16 @@ const alt = `Paper Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]
         {[
           ...(interactive ? [<a href={url(`figures/${fig.slug}/`)}>Interactive</a>] : []),
           ...(link ? [<a href={url(`figures/${fig.slug}/`)}>More</a>] : []),
+          ...(app ? [<a href={url(`generated/webapps/${app}/site/`)}>More</a>] : []),
         ].map((a, i) => <>{i > 0 && ' · '}{a}</>)}
       </span>
       <span>
+        {/* "Download HTML · PDF · PNG": the word once, each format its own link. */}
         {[
+          ...(app ? [<a href={url(`generated/webapps/${app}/${app}.html`)} download>HTML</a>] : []),
           ...fig.images.filter((im) => im.file.endsWith('.pdf')).map((im) => <a href={url(`generated/figures/${im.file}`)}>PDF</a>),
           ...fig.images.filter((im) => im.png).map((im) => <a href={url(`generated/figures/${im.png}`)} download>PNG</a>),
-        ].map((a, i) => <>{i > 0 && ' · '}{a}</>)}
+        ].map((a, i) => <>{i > 0 ? ' · ' : 'Download '}{a}</>)}
       </span>
     </div>
   </figcaption>

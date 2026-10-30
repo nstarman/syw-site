@@ -5,6 +5,20 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.29.3 — 2026-10-29
+
+### Changed — migration
+
+- The Figures tab is a gallery: a card per figure (its image, "Paper Figure N", the caption's short
+  title, and "Interactive" where a webapp names it) opening the figure's page, which now links back.
+  **What changed**: the tab no longer shows every figure with its caption. **Find**:
+  `docs/src/pages/figures/index.astro`. **Edit**: copy it, `pages/figures/[slug].astro`,
+  `components/Page.astro` and `lib/tex.js` from the scaffold (or `syw-site upgrade`).
+- Links under a caption read "Download HTML · PDF · PNG": the word once, each format its own link. A
+  figure page whose webapp replaces the image has one row under the caption (the app's More; its HTML
+  with the figure's PDF and PNG). **Find**: `components/Fig.astro`, `components/Webapp.astro`.
+  **Edit**: copy them and `pages/figures/[slug].astro` from the scaffold.
+
 ## 2026.10.29.2 — 2026-10-29
 
 - `<Webapp>` frames follow the site's theme toggle: the page's `data-theme` is copied onto the app's

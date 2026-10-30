@@ -1,9 +1,10 @@
 ---
 // An interactive figure (a figpress-apps app listed in docs/syw-site.yml): <Webapp name="globe" />, with its
-// caption, if any, as the content: <Webapp name="globe">Caption.</Webapp>.
+// caption, if any, as the content: <Webapp name="globe">Caption.</Webapp>. `links={false}` leaves out
+// its row of links (a figure page whose webapp replaces the image puts them in the figure's row).
 import { url, webapp } from '../lib/facts.js';
 
-const { name, height = 640 } = Astro.props;
+const { name, height = 640, links = true } = Astro.props;
 webapp(name);
 const site = url(`generated/webapps/${name}/site/`);
 ---
@@ -13,10 +14,12 @@ const site = url(`generated/webapps/${name}/site/`);
   <figcaption>
     <slot />
     {/* As under a paper figure: the page on the left, the download on the right. */}
-    <div class="fig-links">
-      <span><a href={site}>More</a></span>
-      <span><a href={url(`generated/webapps/${name}/${name}.html`)} download>Download HTML</a></span>
-    </div>
+    {links && (
+      <div class="fig-links">
+        <span><a href={site}>More</a></span>
+        <span>Download <a href={url(`generated/webapps/${name}/${name}.html`)} download>HTML</a></span>
+      </div>
+    )}
   </figcaption>
 </figure>
 
