@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.29.3 — 2026-10-29
+
 ### Changed — migration
 
 - The Figures tab is a gallery: a card per figure (its image, "Paper Figure N", the caption's short
