@@ -5,6 +5,11 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+- `<Webapp>` frames follow the site's theme toggle: the page's `data-theme` is copied onto the app's
+  document as it changes. Before, an app followed the system's setting, so with the system dark and
+  the site toggled light, the figure stayed dark. Copy `docs/src/components/Webapp.astro` from the
+  scaffold (or `syw-site upgrade`).
+
 ## 2026.10.29.1 — 2026-10-29
 
 - A webapp may be a figpress-plotly figure: `webapps/<name>/figure.py` defining `figure` is written
