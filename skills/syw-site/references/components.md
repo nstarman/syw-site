@@ -3,8 +3,8 @@
 | component | props | renders | stops the build when |
 |---|---|---|---|
 | `<Var name="p" />` | `name`: the `\variable{output/p.tex}` path | the value as the PDF prints it (math via KaTeX; `\qty`, `\qtyrange`, `\num` understood) | `p` is not in `facts.variables` |
-| `<Fig label="fig:x" />` | `label` (or the slug, `x`); `link` (default true) | images, "Paper Figure N." and the caption, then a row of links: Interactive · More (its page) on the left, PDF · PNG on the right | the label is not in `facts.figures` |
-| `<Webapp name="n">Caption.</Webapp>` | `name`; `height` (px until the app loads, default 640); the caption as content (optional) | the built app in an iframe sized to the app, the caption, then More (the full page) on the left and Download HTML (one file) on the right | `n` is not under `webapps:` in `syw-site.yml` |
+| `<Fig label="fig:x" />` | `label` (or the slug, `x`); `link` (default true) | images, "Paper Figure N." and the caption, then a row of links: Open (its page, which also shows its interactive version) on the left, PDF · PNG on the right | the label is not in `facts.figures` |
+| `<Webapp name="n">Caption.</Webapp>` | `name`; `height` (px until the app loads, default 640); `full` (a site path, e.g. `"explore/"`, optional); the caption as content (optional) | the built app in an iframe sized to the app, the caption, then Open (the app's own page) and, with `full`, Full (that path) on the left, and Download HTML (one file) on the right | `n` is not under `webapps:` in `syw-site.yml` |
 | `<Abstract />` | — | the abstract | — |
 | `<Authors />` | — | authors (ORCID links) and numbered affiliations | — |
 | `<PaperLinks />` | — | arXiv, journal, ADS (when known), code and data | — |

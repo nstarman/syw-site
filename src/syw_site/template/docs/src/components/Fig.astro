@@ -1,8 +1,8 @@
 ---
-// A figure of the paper with its caption: <Fig label="fig:quadrupole" />. `link` adds a link to
-// its own page, and to its interactive version where a webapp in syw-site.yml names it. `image={false}`
+// A figure of the paper with its caption: <Fig label="fig:quadrupole" />. `link` adds Open, a link to
+// its own page (which also shows its interactive version, where a webapp names it). `image={false}`
 // leaves out the image (its page, where a webapp replaces it); `app` (that webapp's name) then puts the
-// app's links in this row: More (its own page) on the left, its HTML with the downloads.
+// app's links in this row: Open (the app's own page) on the left, its HTML with the downloads.
 import { facts, figure, url } from '../lib/facts.js';
 import { tex } from '../lib/tex.js';
 
@@ -10,8 +10,6 @@ const { label, link = true, image = true, app } = Astro.props;
 const fig = figure(label);
 const number = facts.figures.indexOf(fig) + 1;
 const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
-// It has an interactive counterpart: a webapp in syw-site.yml names it (its page shows it).
-const interactive = link && Object.values(facts.webapps ?? {}).some((w) => w.figure && (w.figure === fig.label || w.figure === fig.slug));
 const alt = `Paper Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
 ---
 <figure id={fig.slug}>
@@ -24,9 +22,8 @@ const alt = `Paper Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]
     <div class="fig-links">
       <span>
         {[
-          ...(interactive ? [<a href={url(`figures/${fig.slug}/`)}>Interactive</a>] : []),
-          ...(link ? [<a href={url(`figures/${fig.slug}/`)}>More</a>] : []),
-          ...(app ? [<a href={url(`generated/webapps/${app}/site/`)}>More</a>] : []),
+          ...(link ? [<a href={url(`figures/${fig.slug}/`)}>Open</a>] : []),
+          ...(app ? [<a href={url(`generated/webapps/${app}/site/`)}>Open</a>] : []),
         ].map((a, i) => <>{i > 0 && ' · '}{a}</>)}
       </span>
       <span>

@@ -5,6 +5,17 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31 — 2026-10-31
+
+### Changed — migration
+
+- A figure's or app's link to its own page reads **Open**, not "More", and a paper figure with an
+  interactive version has that one link instead of "Interactive · More" (both went to the same page).
+  `<Webapp full="explore/">` adds **Full**, a link to a fuller version elsewhere on the site.
+  **What changed**: the labels under captions. **Find**: `docs/src/components/Fig.astro`,
+  `docs/src/components/Webapp.astro`. **Edit**: copy both from the scaffold (or `syw-site upgrade`);
+  optionally pass `full` to a `<Webapp>` that has a fuller version.
+
 ## 2026.10.29.3 — 2026-10-29
 
 ### Changed — migration

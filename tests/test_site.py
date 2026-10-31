@@ -104,7 +104,7 @@ def test_paper_figures_and_their_links(docs):
     html = page(docs, "figures/a")
     assert "<title>Paper Figure 1" in html and "<strong>Paper Figure 1.</strong>" in html
     assert 'alt="Paper Figure 1:' in html
-    assert links(page(docs, "numbers")) == [(["More"], ["PDF", "PNG"])]
+    assert links(page(docs, "numbers")) == [(["Open"], ["PDF", "PNG"])]
 
 
 def test_a_webapp_that_replaces_its_figure(docs):
@@ -118,16 +118,19 @@ def test_a_webapp_that_replaces_its_figure(docs):
     assert "fig_b1.webp" in page(docs, "figures")  # its card in the gallery
     # One row of links, under the caption: the app's page, and its HTML with the figure's downloads.
     rows = links(html)
-    assert len(rows) == 1 and rows[0][0] == ["More"] and rows[0][1][0] == "HTML" and "PDF" in rows[0][1], rows
+    assert len(rows) == 1 and rows[0][0] == ["Open"] and rows[0][1][0] == "HTML" and "PDF" in rows[0][1], rows
     assert 'href="/demo/generated/webapps/rate/rate.html" download>HTML</a>' in html
 
 
 def test_captioned_webapp_in_a_card(docs):
     html = page(docs, "cards")
-    assert html.count('class="syw-card"') == 2
+    assert html.count('class="syw-card"') == 3
     assert "A helix to turn." in html and "data-fit" in html
-    assert links(html) == [(["More"], ["HTML"]), (["More"], ["PDF", "PNG"])]
-    assert html.count(">Download <a") == 2  # the word once per row, each format its own link
+    # Open: the item's own page, once, even for Figure 2, whose page shows its interactive version.
+    # Full: `full="explore/"` on the Webapp.
+    assert links(html) == [(["Open", "Full"], ["HTML"]), (["Open"], ["PDF", "PNG"]), (["Open"], ["PDF", "PDF", "PNG", "PNG"])]  # Figure 2: two panels
+    assert 'href="/demo/explore/">Full</a>' in html
+    assert html.count(">Download <a") == 3  # the word once per row, each format its own link
 
 
 def test_cite_lists_the_software_and_how_to_cite_it(docs):
