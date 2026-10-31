@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31.1 — 2026-10-31
+
 ### Changed — migration
 
 - The Cite tab: the paper's links are buttons with their marks (arXiv, the journal, ADS, and the
