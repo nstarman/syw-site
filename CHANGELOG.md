@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31 — 2026-10-31
+
 ### Changed — migration
 
 - A figure's or app's link to its own page reads **Open**, not "More", and a paper figure with an
