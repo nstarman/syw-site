@@ -139,6 +139,22 @@ def test_cite_lists_the_software_and_how_to_cite_it(docs):
     assert "https://doi.org/10.21105/joss.00001" in html
 
 
+def test_cite_links_and_bibtex(docs):
+    """The paper's links as buttons, each its mark and its name; the BibTeX on a panel with Copy."""
+    html = page(docs, "cite")
+    row = re.search(r'<p class="syw-links"[^>]*>(.*?)</p>', html, re.S).group(1)
+    buttons = re.findall(r'<a class="syw-linkbtn"[^>]*href="([^"]+)"[^>]*>.*?<use href="#i-(\w+)".*?</svg>([^<]+)</a>', row, re.S)
+    assert buttons == [("https://arxiv.org/abs/2610.00001", "arxiv", "arXiv"), ("https://github.com/nstarman/demo", "syw", "Code and data")]
+    assert re.search(r'<div class="bibtex syw-bibtex"[^>]*><button type="button" class="bibcopy"[^>]*>Copy</button><pre[^>]*>@article\{', html)
+
+
+def test_the_card_drops_the_link_to_this_site(docs):
+    """The paper's entry keeps its showyourwork button but not its link to this very site."""
+    html = page(docs, "")
+    assert 'href="https://github.com/nstarman/demo"' in html and 'href="#i-syw"' in html
+    assert not re.search(r'<a [^>]*href="https://nstarkman.space/demo/"', html)  # (the page's canonical <link> keeps it)
+
+
 def test_info_has_the_map_and_the_funding(docs):
     html = page(docs, "info")
     assert "Example Fellowship" in html and "Example Foundation" in html

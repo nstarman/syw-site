@@ -7,6 +7,10 @@
       "id": "demo-paper", "type": "publication", "status": "submitted", "entryType": "article",
       "date": { "start": "2026-10" },
       "title": "Curved Things II: Angles Distinguish Models",
+      "links": [
+        { "rel": "syw", "url": "https://github.com/nstarman/demo" },
+        { "rel": "homepage", "url": "https://nstarkman.space/demo/", "label": "The paper's site" }
+      ],
       "authors": [
         { "family": "Starkman", "given": "Nathaniel", "me": true },
         { "family": "Doe", "given": "Jane", "orcid": "0000-0001-2345-6789" }

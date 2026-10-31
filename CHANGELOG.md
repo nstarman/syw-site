@@ -5,6 +5,21 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31.1 — 2026-10-31
+
+### Changed — migration
+
+- The Cite tab: the paper's links are buttons with their marks (arXiv, the journal, ADS, and the
+  showyourwork "s" for the code), and the BibTeX sits on a panel with **Copy** in its corner, as
+  on nstarkman.space's Publications. The paper's entry at the top no longer links to the site
+  itself (its `homepage`, which nstarkman.space now uses for a paper's own site), and shows its
+  showyourwork button. The scaffold now pins `@nstarkman/site-layout` 20261022.0.2 (the "s") and
+  `@nstarkman/research-kit` 20261028.0.1 (the `syw` link). **What changed**: the Cite tab's look
+  and the header's buttons. **Find**: `docs/src/pages/cite.astro`, `docs/src/components/PaperLinks.astro`,
+  `docs/src/components/Page.astro`, `docs/src/lib/store.js`, `docs/package.json`. **Edit**: copy them
+  from the scaffold (or `syw-site upgrade`), `npm install` in `docs/`, then refresh the snapshot
+  (`syw-site card`).
+
 ## 2026.10.31 — 2026-10-31
 
 ### Changed — migration

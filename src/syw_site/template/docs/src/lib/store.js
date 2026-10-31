@@ -23,9 +23,13 @@ if (settings.website_id) {
 // site's own copies (public/card/), so they show locally and published alike.
 const base = import.meta.env.BASE_URL.replace(/^\/|\/$/g, '');
 const own = (p) => (p ? `${base}/card/${path.basename(p)}` : p);
+// A link to this site itself (the paper's `homepage`, nstarkman.space/<repo>/) is dropped: here
+// it would only reload the page.
+const self = (l) => l.rel === 'homepage' && new URL(l.url).pathname.replace(/\/$/, '') === `/${base}`;
 for (const item of snapshot.items) {
   if (item.highlight?.image) item.highlight = { ...item.highlight, image: own(item.highlight.image) };
   if (item.photo) item.photo = own(item.photo);
+  if (item.links?.some(self)) item.links = item.links.filter((l) => !self(l));
 }
 
 /** The paper's id on nstarkman.space, or null before it has a record there. */
