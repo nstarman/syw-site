@@ -72,4 +72,15 @@ const item = root && resolve(root);
   .syw .syw-card > p:last-child { margin-bottom: 0; }
   .syw .fig-links { margin-top: .35rem; display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
   .syw pre { overflow-x: auto; }
+  /* The paper's links (PaperLinks): mark and name, bordered and inverting on hover like the card's icon buttons. */
+  .syw .syw-links { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .syw .syw-linkbtn {
+    display: inline-flex; align-items: center; gap: .45rem; padding: .3rem .75rem; text-decoration: none;
+    color: var(--ink-mute); border: 1px solid var(--rule-strong); border-radius: .45rem; background: var(--surface); transition: .15s;
+  }
+  .syw .syw-linkbtn .ico { width: .9375rem; height: .9375rem; fill: currentColor; flex: none; }
+  .syw .syw-linkbtn:hover, .syw .syw-linkbtn:focus-visible { color: var(--ground); background: var(--ink); border-color: var(--ink); }
+  /* The Cite page's BibTeX: the Publications block (.bibtex), on a light panel. */
+  .syw .syw-bibtex { margin: 1rem 0 1.5rem; padding: .8rem 1rem; border: 1px solid var(--rule); border-radius: 10px; background: var(--surface); }
+  .syw .syw-bibtex pre { font-size: .8rem; }
 </style>

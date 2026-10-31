@@ -27,7 +27,10 @@ const software = root ? softwareUsed([resolve(root)]).map((s) => ({
 ---
 <Page title="Cite" tab="cite">
   <PaperLinks />
-  {arxiv || doi ? <pre><code>{bibtex}</code></pre> : <p>The citation appears here once the paper is on arXiv.</p>}
+  {/* The BibTeX as on nstarkman.space's Publications (site-layout's .bibtex), Copy in its corner. */}
+  {arxiv || doi
+    ? <div class="bibtex syw-bibtex"><button type="button" class="bibcopy">Copy</button><pre>{bibtex}</pre></div>
+    : <p>The citation appears here once the paper is on arXiv.</p>}
   {software.length > 0 && (
     <section class="syw-software">
       <h3>Software</h3>
@@ -45,3 +48,21 @@ const software = root ? softwareUsed([resolve(root)]).map((s) => ({
     </section>
   )}
 </Page>
+
+<script>
+  // Copy copies the BibTeX; if the clipboard is refused, it selects it to copy by hand. The paper
+  // card's own BibTeX has a Copy too, with a page-wide listener: this one stops here.
+  const btn = document.querySelector('.syw-bibtex .bibcopy');
+  btn?.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    const pre = btn.nextElementSibling;
+    try {
+      await navigator.clipboard.writeText(pre.textContent);
+      btn.textContent = 'Copied';
+    } catch {
+      getSelection().selectAllChildren(pre);
+      btn.textContent = 'Selected';
+    }
+    setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
+  });
+</script>

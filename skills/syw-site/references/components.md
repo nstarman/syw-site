@@ -7,7 +7,7 @@
 | `<Webapp name="n">Caption.</Webapp>` | `name`; `height` (px until the app loads, default 640); `full` (a site path, e.g. `"explore/"`, optional); the caption as content (optional) | the built app in an iframe sized to the app, the caption, then Open (the app's own page) and, with `full`, Full (that path) on the left, and Download HTML (one file) on the right | `n` is not under `webapps:` in `syw-site.yml` |
 | `<Abstract />` | — | the abstract | — |
 | `<Authors />` | — | authors (ORCID links) and numbered affiliations | — |
-| `<PaperLinks />` | — | arXiv, journal, ADS (when known), code and data | — |
+| `<PaperLinks />` | — | arXiv, journal, ADS (when known), code and data, as buttons with each one's mark (the code is the showyourwork "s") | — |
 | `<Card />` | — | the paper's card from nstarkman.space, when `website_id` is set | — |
 
 Pages: `index.mdx` (overview), `figures/` (gallery: a card per figure with its short title), `figures/<slug>/` (one figure, with its webapp),
