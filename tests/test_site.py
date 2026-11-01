@@ -116,9 +116,10 @@ def test_a_webapp_that_replaces_its_figure(docs):
     assert "<strong>Paper Figure 2.</strong>" in html
     assert "fig_a.webp" in page(docs, "figures/a")
     assert "fig_b1.webp" in page(docs, "figures")  # its card in the gallery
-    # One row of links, under the caption: the app's page, and its HTML with the figure's downloads.
+    # One row of links, under the caption: the app's HTML with the figure's downloads, and no Open
+    # (the page already shows the app).
     rows = links(html)
-    assert len(rows) == 1 and rows[0][0] == ["Open"] and rows[0][1][0] == "HTML" and "PDF" in rows[0][1], rows
+    assert len(rows) == 1 and rows[0][0] == [] and rows[0][1][0] == "HTML" and "PDF" in rows[0][1], rows
     assert 'href="/demo/generated/webapps/rate/rate.html" download>HTML</a>' in html
 
 

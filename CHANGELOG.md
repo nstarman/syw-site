@@ -5,6 +5,15 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31.2 — 2026-10-31
+
+### Fixed
+
+- A figure's page where a webapp replaces the image no longer has an Open link to that app's own
+  page under the caption: the page already shows the app. The row keeps Download HTML · PDF · PNG.
+  To update a site: copy `docs/src/components/Fig.astro` and `docs/src/pages/figures/[slug].astro`
+  from the scaffold (or `syw-site upgrade`).
+
 ## 2026.10.31.1 — 2026-10-31
 
 ### Changed — migration
