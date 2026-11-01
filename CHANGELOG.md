@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.01 — 2026-11-01
+
 ### Fixed
 
 - `<Fig>` shows the webapp that replaces a figure (`replaces: true`) wherever it is used, such as
