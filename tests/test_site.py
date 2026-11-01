@@ -127,9 +127,10 @@ def test_captioned_webapp_in_a_card(docs):
     html = page(docs, "cards")
     assert html.count('class="syw-card"') == 3
     assert "A helix to turn." in html and "data-fit" in html
-    # Open: the item's own page, once, even for Figure 2, whose page shows its interactive version.
-    # Full: `full="explore/"` on the Webapp.
-    assert links(html) == [(["Open", "Full"], ["HTML"]), (["Open"], ["PDF", "PNG"]), (["Open"], ["PDF", "PDF", "PNG", "PNG"])]  # Figure 2: two panels
+    # Open: the item's own page, once. Full: `full="explore/"` on the Webapp. Figure 2 (two panels)
+    # shows rate, the webapp that replaces it, in place of its images, with its HTML in the downloads.
+    assert links(html) == [(["Open", "Full"], ["HTML"]), (["Open"], ["PDF", "PNG"]), (["Open"], ["HTML", "PDF", "PDF", "PNG", "PNG"])]
+    assert "/demo/generated/webapps/rate/site/" in html and "fig_b1.webp" not in html
     assert 'href="/demo/explore/">Full</a>' in html
     assert html.count(">Download <a") == 3  # the word once per row, each format its own link
 

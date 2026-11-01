@@ -1,19 +1,22 @@
 ---
 // A figure of the paper with its caption: <Fig label="fig:quadrupole" />. `link` adds Open, a link to
-// its own page (which also shows its interactive version, where a webapp names it). `image={false}`
-// leaves out the image (its page, where a webapp replaces it); `app` (that webapp's name) then adds the
-// app's HTML to the downloads.
+// its own page (which also shows its interactive version, where a webapp names it). A webapp with
+// `replaces: true` stands in for the image wherever the figure is shown, and its HTML joins the
+// downloads.
+import Webapp from './Webapp.astro';
 import { facts, figure, url } from '../lib/facts.js';
 import { tex } from '../lib/tex.js';
 
-const { label, link = true, image = true, app } = Astro.props;
+const { label, link = true } = Astro.props;
 const fig = figure(label);
+const app = Object.entries(facts.webapps ?? {}).find(([, w]) => w.replaces && w.figure === fig.label)?.[0];
 const number = facts.figures.indexOf(fig) + 1;
 const refs = Object.fromEntries(facts.figures.map((f, i) => [f.label, String(i + 1)]));
 const alt = `Paper Figure ${number}: ${fig.caption.replace(/\$[^$]*\$|\\[A-Za-z]+|[{}]/g, '').slice(0, 200)}`;
 ---
+{app && <Webapp name={app} links={false} />}
 <figure id={fig.slug}>
-  {image && fig.images.map((im) => (
+  {!app && fig.images.map((im) => (
     <img src={url(`generated/figures/${im.webp ?? im.png ?? im.file}`)} alt={alt} loading="lazy" />
   ))}
   <figcaption>
