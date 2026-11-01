@@ -68,7 +68,7 @@ webapps:
 ```
 
 It is embedded on that figure's page, above the paper's image (`replaces: true`: instead of it, as
-for a figpress-plotly figure that matches the print); elsewhere use `<Webapp name="globe">Caption.</Webapp>` (the
+for a figpress-plotly figure that matches the print, and wherever `<Fig>` shows that figure); elsewhere use `<Webapp name="globe">Caption.</Webapp>` (the
 caption is optional; the frame takes the app's height). In the overview, set a figure or an app apart
 from the prose in a card:
 

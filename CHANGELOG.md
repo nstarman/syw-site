@@ -5,6 +5,14 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Fixed
+
+- `<Fig>` shows the webapp that replaces a figure (`replaces: true`) wherever it is used, such as
+  the overview, not only on the figure's own page; its HTML joins the figure's downloads. Fig's
+  `image` and `app` props are gone: Fig finds the webapp itself. To update a site: copy
+  `docs/src/components/Fig.astro` and `docs/src/pages/figures/[slug].astro` from the scaffold (or
+  `syw-site upgrade`).
+
 ## 2026.10.31.3 — 2026-10-31
 
 ### Changed — migration
