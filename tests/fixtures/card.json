@@ -18,7 +18,11 @@
       "venue": { "journal": "The Astrophysical Journal" },
       "abstract": "We find many curved things.",
       "highlight": { "image": "highlights/demo.png", "topic": "galactic", "alt": "A curve", "description": "Curves tell models apart. A second sentence." },
-      "refs": ["demo-package", "demo-grant"]
+      "refs": ["demo-package"],
+      "funding": [
+        { "funder": "Example Foundation", "award": "Example Fellowship", "number": "EX-1", "recipients": ["Starkman"], "grant": "demo-grant" },
+        { "funder": "Other Council", "award": "Big Grant" }
+      ]
     },
     {
       "id": "demo-package", "type": "software", "tier": "minor", "group": "utilities",

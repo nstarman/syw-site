@@ -5,6 +5,22 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31.3 — 2026-10-31
+
+### Changed — migration
+
+- **Info** starts with *Reproduce this paper*: a line on showyourwork and the **Code and data**
+  button (gone from Cite's buttons, which now run ADS, arXiv, the journal). It is always a tab now. Its Funding lists the paper's
+  `funding` on nstarkman.space (one card per award: funder, award, number, recipients), not the
+  grants among its `refs`. **Cite**'s Software reads "This paper used these software packages."
+  and has a Copy BibTeX at the end of each package's Cite line. The scaffold now
+  depends on `@nstarkman/data-resolver` (its BibTeX writer) directly, at research-kit's version.
+  **What changed**: the Info and Cite tabs. **Find**: `docs/src/pages/info/index.astro`,
+  `docs/src/pages/cite.astro`, `docs/src/components/PaperLinks.astro`, `docs/src/components/Page.astro`,
+  `docs/src/lib/tabs.js`, `docs/package.json`, `docs/package-lock.json`. **Edit**: copy them from the
+  scaffold (or `syw-site upgrade`), `npm install` in `docs/`, then `syw-site card` once the paper's
+  record has `funding`.
+
 ## 2026.10.31.2 — 2026-10-31
 
 ### Fixed

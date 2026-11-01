@@ -7,8 +7,16 @@ const infoPages = import.meta.glob('../pages/info/*.{md,mdx,astro}');
 /** The webapps on the Explore tab, in syw-site.yml's order. */
 export const exploreApps = () => Object.entries(facts.webapps ?? {}).filter(([, w]) => w.explore).map(([name, w]) => ({ name, ...w }));
 
-/** The grants that funded the paper: `grant` items among its refs on nstarkman.space. */
-export const grants = () => (root ? (resolve(root).refs ?? []).map(resolve).filter((i) => i?.type === 'grant') : []);
+/** What funded the paper (its `funding` on nstarkman.space), each award with its recipients' names. */
+export function funding() {
+  if (!root) return [];
+  const paper = resolve(root);
+  const name = (family) => {
+    const a = paper.authors.find((x) => x.family === family);
+    return a ? `${a.given[0]}. ${a.family}` : family;
+  };
+  return (paper.funding ?? []).map((f) => ({ ...f, who: (f.recipients ?? []).map(name).join(', ') }));
+}
 
 /** Co-authors on the collaborator map: those the snapshot places. */
 export const hasMap = () => config.collaborators.people.length > 0;
@@ -21,7 +29,7 @@ export function tabs() {
     { key: 'overview', label: 'Overview', href: '' },
     exploreApps().length && { key: 'explore', label: 'Explore', href: 'explore/' },
     { key: 'figures', label: 'Figures', href: 'figures/' },
-    (hasMap() || grants().length || infoLinks().length) && { key: 'info', label: 'Info', href: 'info/' },
+    { key: 'info', label: 'Info', href: 'info/' }, // always: it has the showyourwork button
     { key: 'cite', label: 'Cite', href: 'cite/' },
   ].filter(Boolean);
 }
