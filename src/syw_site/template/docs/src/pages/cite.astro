@@ -27,7 +27,6 @@ const software = root ? softwareUsed([resolve(root)]).map((s) => ({
 })) : [];
 // Each package's BibTeX: its papers' entries, without the abstract (what a reader pastes).
 const bib = (papers) => papers.filter((p) => p.item).map((p) => toBibtex(p.item).replace(/,\n\s*abstract\s*=\s*\{.*\}(?=,?\n)/, '')).join('\n\n');
-const allBib = software.map(({ papers }) => bib(papers)).filter(Boolean).join('\n\n');
 ---
 <Page title="Cite" tab="cite">
   <PaperLinks />
@@ -37,10 +36,7 @@ const allBib = software.map(({ papers }) => bib(papers)).filter(Boolean).join('\
     : <p>The citation appears here once the paper is on arXiv.</p>}
   {software.length > 0 && (
     <section class="syw-software">
-      <div class="syw-swhead">
-        <h3>Software</h3>
-        {allBib && <button type="button" class="syw-copybib" data-bib={allBib}><svg class="ico" aria-hidden="true"><use href="#i-copy" /></svg>Copy all BibTeX</button>}
-      </div>
+      <h3>Software</h3>
       <p>This paper used these software packages.</p>
       <ul>
         {software.map(({ s, papers, repo }) => (

@@ -150,14 +150,13 @@ def test_cite_links_and_bibtex(docs):
 
 
 def test_cite_copies_each_packages_bibtex(docs):
-    """Software: a Copy BibTeX per package with a paper, and one for them all; the entries are
-    kept in data-bib, without their abstracts, not shown."""
+    """Software: a Copy BibTeX on each package's Cite line; the entries are kept in data-bib,
+    without their abstracts, not shown."""
     html = page(docs, "cite")
     assert "This paper used these software packages." in html
     bibs = re.findall(r'<button type="button" class="syw-copybib[^"]*" data-bib="([^"]*)"', html)
     assert re.search(r"Cite: .*?joss\.00001</a>\)\s*<button[^>]*syw-copybib--sm", html, re.S)  # on the Cite line
-    assert len(bibs) == 2 and all(b.startswith("@article{") and "joss.00001" in b and "abstract" not in b for b in bibs)
-    assert "Copy all BibTeX" in html
+    assert len(bibs) == 1 and bibs[0].startswith("@article{") and "joss.00001" in bibs[0] and "abstract" not in bibs[0]
 
 
 def test_the_card_drops_the_link_to_this_site(docs):
