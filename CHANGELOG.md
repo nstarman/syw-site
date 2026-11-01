@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.10.31.3 — 2026-10-31
+
 ### Changed — migration
 
 - **Info** starts with *Reproduce this paper*: a line on showyourwork and the **Code and data**
