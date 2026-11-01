@@ -4,6 +4,7 @@ import PaperLinks from '../components/PaperLinks.astro';
 import { facts } from '../lib/facts.js';
 import { tex } from '../lib/tex.js';
 import { resolve, root, softwarePapers, softwareUsed, links } from '../lib/store.js';
+import { toBibtex } from '@nstarkman/data-resolver/bibtex.js';
 
 const { arxiv, doi } = facts.paper;
 const first = facts.authors[0];
@@ -24,6 +25,9 @@ const software = root ? softwareUsed([resolve(root)]).map((s) => ({
   papers: softwarePapers(s).map((p) => ({ ...p, item: resolve(p.id) })),
   repo: links(s).find((l) => l.rel === 'code' || l.rel === 'repo'),
 })) : [];
+// Each package's BibTeX: its papers' entries, without the abstract (what a reader pastes).
+const bib = (papers) => papers.filter((p) => p.item).map((p) => toBibtex(p.item).replace(/,\n\s*abstract\s*=\s*\{.*\}(?=,?\n)/, '')).join('\n\n');
+const allBib = software.map(({ papers }) => bib(papers)).filter(Boolean).join('\n\n');
 ---
 <Page title="Cite" tab="cite">
   <PaperLinks />
@@ -33,12 +37,17 @@ const software = root ? softwareUsed([resolve(root)]).map((s) => ({
     : <p>The citation appears here once the paper is on arXiv.</p>}
   {software.length > 0 && (
     <section class="syw-software">
-      <h3>Software</h3>
-      <p>This paper used these packages. Please cite them too.</p>
+      <div class="syw-swhead">
+        <h3>Software</h3>
+        {allBib && <button type="button" class="syw-copybib" data-bib={allBib}><svg class="ico" aria-hidden="true"><use href="#i-copy" /></svg>Copy all BibTeX</button>}
+      </div>
+      <p>This paper used these software packages.</p>
       <ul>
         {software.map(({ s, papers, repo }) => (
           <li>
-            <strong><a href={`https://nstarkman.space/software/#sw-${s.id}`}>{s.title}</a></strong>{s.summary && <> — <span set:html={tex(s.summary)} /></>}
+            <strong><a href={`https://nstarkman.space/software/#sw-${s.id}`}>{s.title}</a></strong>
+            {bib(papers) && <button type="button" class="syw-copybib syw-copybib--sm" data-bib={bib(papers)}><svg class="ico" aria-hidden="true"><use href="#i-copy" /></svg>BibTeX</button>}
+            {s.summary && <> — <span set:html={tex(s.summary)} /></>}
             <br />Cite: {papers.length
               ? papers.map((p, i) => <>{i > 0 && '; '}<a href={p.url}>{p.item?.title ?? p.label}</a>{p.item?.doi && <> (doi:<a href={`https://doi.org/${p.item.doi}`}>{p.item.doi}</a>)</>}</>)
               : repo ? <a href={repo.url}>its repository</a> : 'its website'}
@@ -65,4 +74,14 @@ const software = root ? softwareUsed([resolve(root)]).map((s) => ({
     }
     setTimeout(() => { btn.textContent = 'Copy'; }, 1500);
   });
+  // The Software list's buttons copy their package's BibTeX (kept in data-bib, not shown).
+  for (const b of document.querySelectorAll<HTMLButtonElement>('.syw-copybib')) {
+    b.addEventListener('click', async () => {
+      const label = b.lastChild.textContent;
+      await navigator.clipboard.writeText(b.dataset.bib).catch(() => {});
+      b.lastChild.textContent = 'Copied';
+      b.classList.add('done');
+      setTimeout(() => { b.lastChild.textContent = label; b.classList.remove('done'); }, 1500);
+    });
+  }
 </script>

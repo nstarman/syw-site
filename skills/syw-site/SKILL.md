@@ -35,9 +35,9 @@ into a page.** A name that does not exist stops the build.
 The site's tabs: **Overview** (`index.mdx`, your prose), **Explore** (webapps with `explore: true`),
 **Figures** (every figure, one column, the author's portrait stamped top-right — place it per figure
 with `figures:` in `syw-site.yml`; each is "Paper Figure N", to tell it from the site's interactive
-figures), **Info** (the co-authors' map, the grants that funded it — the paper's `refs` on the website —
-and your own pages in `src/pages/info/`), **Cite** (BibTeX, and the software the paper used with how to
-cite it). A tab with nothing in it is hidden.
+figures), **Info** (the showyourwork button to reproduce the paper, the co-authors' map, what funded
+it — the paper's `funding` on the website — and your own pages in `src/pages/info/`), **Cite** (BibTeX,
+and the software the paper used, each with a Copy BibTeX). Explore is hidden when it has no webapps.
 
 ## 2. Write pages
 

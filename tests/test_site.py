@@ -145,8 +145,18 @@ def test_cite_links_and_bibtex(docs):
     html = page(docs, "cite")
     row = re.search(r'<p class="syw-links"[^>]*>(.*?)</p>', html, re.S).group(1)
     buttons = re.findall(r'<a class="syw-linkbtn"[^>]*href="([^"]+)"[^>]*>.*?<use href="#i-(\w+)".*?</svg>([^<]+)</a>', row, re.S)
-    assert buttons == [("https://arxiv.org/abs/2610.00001", "arxiv", "arXiv"), ("https://github.com/nstarman/demo", "syw", "Code and data")]
+    assert buttons == [("https://arxiv.org/abs/2610.00001", "arxiv", "arXiv")]  # showyourwork's is on Info
     assert re.search(r'<div class="bibtex syw-bibtex"[^>]*><button type="button" class="bibcopy"[^>]*>Copy</button><pre[^>]*>@article\{', html)
+
+
+def test_cite_copies_each_packages_bibtex(docs):
+    """Software: a Copy BibTeX per package with a paper, and one for them all; the entries are
+    kept in data-bib, without their abstracts, not shown."""
+    html = page(docs, "cite")
+    assert "This paper used these software packages." in html
+    bibs = re.findall(r'<button type="button" class="syw-copybib[^"]*" data-bib="([^"]*)"', html)
+    assert len(bibs) == 2 and all(b.startswith("@article{") and "joss.00001" in b and "abstract" not in b for b in bibs)
+    assert "Copy all BibTeX" in html
 
 
 def test_the_card_drops_the_link_to_this_site(docs):
@@ -156,10 +166,15 @@ def test_the_card_drops_the_link_to_this_site(docs):
     assert not re.search(r'<a [^>]*href="https://nstarkman.space/demo/"', html)  # (the page's canonical <link> keeps it)
 
 
-def test_info_has_the_map_and_the_funding(docs):
+def test_info_has_reproduce_the_map_and_the_funding(docs):
+    """Info: the showyourwork button, then the collaborator map, then the paper's funding."""
     html = page(docs, "info")
-    assert "Example Fellowship" in html and "Example Foundation" in html
+    assert 'href="https://github.com/nstarman/demo"' in html and 'href="#i-syw"' in html
     assert "Jane Doe" in html  # on the collaborator map
+    funders = re.findall(r'<li class="syw-funder"[^>]*>(.*?)</li>', html, re.S)
+    text = [re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", f)).strip() for f in funders]
+    assert text == ["Example Foundation Example Fellowship EX-1 N. Starkman", "Other Council Big Grant"], text
+    assert html.index("Reproduce this paper") < html.index("Collaborators") < html.index("Funding")
 
 
 def test_explore_shows_its_webapps(docs):
@@ -168,7 +183,7 @@ def test_explore_shows_its_webapps(docs):
 
 
 def test_without_a_website_record(docs):
-    """No website_id yet: the paper's title as the header, no card, no empty Info tab."""
+    """No website_id yet: the paper's title as the header, no card; Info has only the showyourwork button."""
     facts = json.loads((HERE / "fixtures/facts.json").read_text())
     facts["website_id"] = None
     (docs / "public/generated/facts.json").write_text(json.dumps(facts))
@@ -179,7 +194,8 @@ def test_without_a_website_record(docs):
         assert r.returncode == 0, r.stdout + r.stderr
         html = page(docs, "")
         assert 'class="syw-title"' in html and "pub-demo-paper" not in html
-        assert ">Info</a>" not in html and not (docs / "dist/info/index.html").exists() or ">Info</a>" not in html
+        info = page(docs, "info")
+        assert "Reproduce this paper" in info and "Funding" not in info and "Collaborators" not in info
     finally:
         (docs / "card.json.off").rename(card)
         shutil.copy(HERE / "fixtures/facts.json", docs / "public/generated/facts.json")
