@@ -46,11 +46,11 @@ const allBib = software.map(({ papers }) => bib(papers)).filter(Boolean).join('\
         {software.map(({ s, papers, repo }) => (
           <li>
             <strong><a href={`https://nstarkman.space/software/#sw-${s.id}`}>{s.title}</a></strong>
-            {bib(papers) && <button type="button" class="syw-copybib syw-copybib--sm" data-bib={bib(papers)}><svg class="ico" aria-hidden="true"><use href="#i-copy" /></svg>BibTeX</button>}
             {s.summary && <> — <span set:html={tex(s.summary)} /></>}
             <br />Cite: {papers.length
               ? papers.map((p, i) => <>{i > 0 && '; '}<a href={p.url}>{p.item?.title ?? p.label}</a>{p.item?.doi && <> (doi:<a href={`https://doi.org/${p.item.doi}`}>{p.item.doi}</a>)</>}</>)
               : repo ? <a href={repo.url}>its repository</a> : 'its website'}
+            {bib(papers) && <button type="button" class="syw-copybib syw-copybib--sm" data-bib={bib(papers)}><svg class="ico" aria-hidden="true"><use href="#i-copy" /></svg>BibTeX</button>}
           </li>
         ))}
       </ul>

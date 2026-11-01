@@ -4,9 +4,9 @@ import { facts } from '../lib/facts.js';
 
 const { arxiv, doi, bibcode } = facts.paper;
 const links = [
+  bibcode && ['ADS', `https://ui.adsabs.harvard.edu/abs/${bibcode}`, 'ads'],
   arxiv && ['arXiv', `https://arxiv.org/abs/${arxiv}`, 'arxiv'],
   doi && ['Journal', `https://doi.org/${doi}`, 'paper'],
-  bibcode && ['ADS', `https://ui.adsabs.harvard.edu/abs/${bibcode}`, 'ads'],
 ].filter(Boolean);
 ---
 <p class="syw-links">

@@ -155,6 +155,7 @@ def test_cite_copies_each_packages_bibtex(docs):
     html = page(docs, "cite")
     assert "This paper used these software packages." in html
     bibs = re.findall(r'<button type="button" class="syw-copybib[^"]*" data-bib="([^"]*)"', html)
+    assert re.search(r"Cite: .*?joss\.00001</a>\)\s*<button[^>]*syw-copybib--sm", html, re.S)  # on the Cite line
     assert len(bibs) == 2 and all(b.startswith("@article{") and "joss.00001" in b and "abstract" not in b for b in bibs)
     assert "Copy all BibTeX" in html
 

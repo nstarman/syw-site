@@ -8,10 +8,10 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 ### Changed — migration
 
 - **Info** starts with *Reproduce this paper*: a line on showyourwork and the **Code and data**
-  button (gone from Cite's buttons). It is always a tab now. Its Funding lists the paper's
+  button (gone from Cite's buttons, which now run ADS, arXiv, the journal). It is always a tab now. Its Funding lists the paper's
   `funding` on nstarkman.space (one card per award: funder, award, number, recipients), not the
   grants among its `refs`. **Cite**'s Software reads "This paper used these software packages."
-  and has a Copy BibTeX for each package with a paper, and one for them all. The scaffold now
+  and has a Copy BibTeX at the end of each package's Cite line, and one for them all. The scaffold now
   depends on `@nstarkman/data-resolver` (its BibTeX writer) directly, at research-kit's version.
   **What changed**: the Info and Cite tabs. **Find**: `docs/src/pages/info/index.astro`,
   `docs/src/pages/cite.astro`, `docs/src/components/PaperLinks.astro`, `docs/src/components/Page.astro`,
