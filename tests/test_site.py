@@ -78,7 +78,7 @@ def test_figures_gallery(docs):
     cards = re.findall(r'<a class="syw-gallery-item"[^>]*href="([^"]+)"(.*?)</a>', html, re.S)
     assert [href for href, _ in cards] == ["/demo/figures/a/", "/demo/figures/b/", "/demo/figures/fig_c/"]
     a, b, c = (body for _, body in cards)
-    assert "/demo/generated/figures/figures/fig_a.webp" in a  # the web image, as on its page
+    assert "/demo/generated/figures/figures/fig_a.thumb.webp" in a  # the small web image
     assert "A caption with" in a and "Paper Figure 1" in a
     assert "Two panels" in b and "side by side" not in b and "More text" not in b  # an emph title, cut
     assert "Mock view of" in c and "katex" in c and "the rest" not in c  # math kept whole, cut at the colon
@@ -115,7 +115,7 @@ def test_a_webapp_that_replaces_its_figure(docs):
     assert "fig_b1.webp" not in html and "fig_b2.webp" not in html
     assert "<strong>Paper Figure 2.</strong>" in html
     assert "fig_a.webp" in page(docs, "figures/a")
-    assert "fig_b1.webp" in page(docs, "figures")  # its card in the gallery
+    assert "fig_b1.thumb.webp" in page(docs, "figures")  # its card in the gallery
     # One row of links, under the caption: the app's HTML with the figure's downloads, and no Open
     # (the page already shows the app).
     rows = links(html)

@@ -2,7 +2,7 @@ import pypdfium2
 import pytest
 from PIL import Image
 
-from syw_site.figures import DPI, MIN_ICON, place, web_image
+from syw_site.figures import DPI, MIN_ICON, THUMB, place, web_image
 
 
 @pytest.fixture
@@ -34,6 +34,15 @@ def test_pdf_becomes_stamped_webp_and_png_and_is_kept(tmp_path, portrait):
             cx, cy = w - m - d // 2, m + d // 2  # top-right by default
             assert im.convert("RGB").getpixel((cx, cy)) == (200, 30, 30)  # the portrait
             assert im.convert("RGB").getpixel((m + d // 2, m + d // 2)) != (200, 30, 30)  # not top-left
+
+
+def test_thumb_is_small_and_never_upscaled(tmp_path):
+    for w, expect in ((3000, (THUMB, 400)), (600, (600, 300))):
+        src = tmp_path / f"{w}.png"
+        Image.new("RGB", (w, w // 2), "white").save(src)
+        web_image(src, tmp_path / "out", {"file": f"{w}.png", "png": f"{w}.png", "webp": f"{w}.webp", "thumb": f"{w}.thumb.webp"})
+        with Image.open(tmp_path / f"out/{w}.thumb.webp") as im:
+            assert im.size == expect
 
 
 @pytest.mark.parametrize(

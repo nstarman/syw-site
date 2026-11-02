@@ -40,7 +40,8 @@
           "source": "src/tex/figures/fig_a.pdf",
           "file": "figures/fig_a.pdf",
           "webp": "figures/fig_a.webp",
-          "png": "figures/fig_a.png"
+          "png": "figures/fig_a.png",
+          "thumb": "figures/fig_a.thumb.webp"
         }
       ]
     },
@@ -53,13 +54,15 @@
           "source": "src/tex/figures/fig_b1.pdf",
           "file": "figures/fig_b1.pdf",
           "webp": "figures/fig_b1.webp",
-          "png": "figures/fig_b1.png"
+          "png": "figures/fig_b1.png",
+          "thumb": "figures/fig_b1.thumb.webp"
         },
         {
           "source": "src/tex/figures/fig_b2.pdf",
           "file": "figures/fig_b2.pdf",
           "webp": "figures/fig_b2.webp",
-          "png": "figures/fig_b2.png"
+          "png": "figures/fig_b2.png",
+          "thumb": "figures/fig_b2.thumb.webp"
         }
       ]
     },
@@ -72,7 +75,8 @@
           "source": "src/tex/figures/fig_c.png",
           "file": "figures/fig_c.png",
           "webp": "figures/fig_c.webp",
-          "png": "figures/fig_c.png"
+          "png": "figures/fig_c.png",
+          "thumb": "figures/fig_c.thumb.webp"
         }
       ]
     }
