@@ -20,7 +20,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
 - **What changed**: `template/workflows/docs.yml` gains the step `Upload a private preview`.
 - **Find**: `.github/workflows/docs.yml` has no `Upload a private preview` step.
 - **Edit**: copy that step from the scaffold into the `build` job, after `Upload the site for Pages`
-  (or `syw-site upgrade`). Then `syw-site preview <PR>` (needs `gh`, logged in).
+  (or run the syw-site-upgrade skill). Then `syw-site preview <PR>` (needs `gh`, logged in).
 
 ## 2026.11.01.1 — 2026-11-01
 
@@ -55,7 +55,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
   **What changed**: the Info and Cite tabs. **Find**: `docs/src/pages/info/index.astro`,
   `docs/src/pages/cite.astro`, `docs/src/components/PaperLinks.astro`, `docs/src/components/Page.astro`,
   `docs/src/lib/tabs.js`, `docs/package.json`, `docs/package-lock.json`. **Edit**: copy them from the
-  scaffold (or `syw-site upgrade`), `npm install` in `docs/`, then `syw-site card` once the paper's
+  scaffold (or run the syw-site-upgrade skill), `npm install` in `docs/`, then `syw-site card` once the paper's
   record has `funding`.
 
 ## 2026.10.31.2 — 2026-10-31
@@ -65,7 +65,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
 - A figure's page where a webapp replaces the image no longer has an Open link to that app's own
   page under the caption: the page already shows the app. The row keeps Download HTML · PDF · PNG.
   To update a site: copy `docs/src/components/Fig.astro` and `docs/src/pages/figures/[slug].astro`
-  from the scaffold (or `syw-site upgrade`).
+  from the scaffold (or run the syw-site-upgrade skill).
 
 ## 2026.10.31.1 — 2026-10-31
 
@@ -79,7 +79,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
   `@nstarkman/research-kit` 20261028.0.1 (the `syw` link). **What changed**: the Cite tab's look
   and the header's buttons. **Find**: `docs/src/pages/cite.astro`, `docs/src/components/PaperLinks.astro`,
   `docs/src/components/Page.astro`, `docs/src/lib/store.js`, `docs/package.json`. **Edit**: copy them
-  from the scaffold (or `syw-site upgrade`), `npm install` in `docs/`, then refresh the snapshot
+  from the scaffold (or run the syw-site-upgrade skill), `npm install` in `docs/`, then refresh the snapshot
   (`syw-site card`).
 
 ## 2026.10.31 — 2026-10-31
@@ -90,7 +90,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
   interactive version has that one link instead of "Interactive · More" (both went to the same page).
   `<Webapp full="explore/">` adds **Full**, a link to a fuller version elsewhere on the site.
   **What changed**: the labels under captions. **Find**: `docs/src/components/Fig.astro`,
-  `docs/src/components/Webapp.astro`. **Edit**: copy both from the scaffold (or `syw-site upgrade`);
+  `docs/src/components/Webapp.astro`. **Edit**: copy both from the scaffold (or run the syw-site-upgrade skill);
   optionally pass `full` to a `<Webapp>` that has a fuller version.
 
 ## 2026.10.29.3 — 2026-10-29
@@ -101,7 +101,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
   title, and "Interactive" where a webapp names it) opening the figure's page, which now links back.
   **What changed**: the tab no longer shows every figure with its caption. **Find**:
   `docs/src/pages/figures/index.astro`. **Edit**: copy it, `pages/figures/[slug].astro`,
-  `components/Page.astro` and `lib/tex.js` from the scaffold (or `syw-site upgrade`).
+  `components/Page.astro` and `lib/tex.js` from the scaffold (or run the syw-site-upgrade skill).
 - Links under a caption read "Download HTML · PDF · PNG": the word once, each format its own link. A
   figure page whose webapp replaces the image has one row under the caption (the app's More; its HTML
   with the figure's PDF and PNG). **Find**: `components/Fig.astro`, `components/Webapp.astro`.
@@ -112,7 +112,7 @@ To get previews in a paper already using syw-site, copy the new step into its wo
 - `<Webapp>` frames follow the site's theme toggle: the page's `data-theme` is copied onto the app's
   document as it changes. Before, an app followed the system's setting, so with the system dark and
   the site toggled light, the figure stayed dark. Copy `docs/src/components/Webapp.astro` from the
-  scaffold (or `syw-site upgrade`).
+  scaffold (or run the syw-site-upgrade skill).
 - A webapp may replace its figure's image on the figure's page: `replaces: true` (needs `figure`).
   The caption and downloads stay; elsewhere the figure is the image as before.
 - figpress-apps 2026.10.29: apps follow the site's theme toggle too (with the `<Webapp>` change above).
