@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.02 — 2026-11-02
+
 ### Added
 
 - A private preview of the docs site. In a private repository the workflow uploads `docs/dist` as the
