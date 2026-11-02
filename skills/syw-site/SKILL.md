@@ -91,6 +91,9 @@ answers only under `/<repo>/`, so a link that forgets the base path fails here a
 Open the overview, the figure gallery, each figure page and the cite page, and compare numbers
 with the PDF.
 
+In a private repository CI uploads the built site as the `docs-site` artifact; `syw-site preview <PR>`
+downloads the newest one for a pull request and serves it under `/<repo>/`.
+
 ## 5. Go public — at arXiv submission only
 
 Until then, nothing leaves the machine or CI: never set `publish: true`, never make the repository

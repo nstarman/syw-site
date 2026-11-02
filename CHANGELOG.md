@@ -5,6 +5,23 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Added
+
+- A private preview of the docs site. In a private repository the workflow uploads `docs/dist` as the
+  `docs-site` artifact (14 days) on every run that does not publish; artifacts of a private
+  repository are visible only to its collaborators. `syw-site preview PR` downloads the newest
+  successful `Docs site` run of the pull request's branch with `gh` and serves it under `/<repo>/`.
+  The step never runs in a public repository, where an artifact would be public.
+
+### Changed — migration
+
+To get previews in a paper already using syw-site, copy the new step into its workflow.
+
+- **What changed**: `template/workflows/docs.yml` gains the step `Upload a private preview`.
+- **Find**: `.github/workflows/docs.yml` has no `Upload a private preview` step.
+- **Edit**: copy that step from the scaffold into the `build` job, after `Upload the site for Pages`
+  (or `syw-site upgrade`). Then `syw-site preview <PR>` (needs `gh`, logged in).
+
 ## 2026.11.01.1 — 2026-11-01
 
 ### Fixed

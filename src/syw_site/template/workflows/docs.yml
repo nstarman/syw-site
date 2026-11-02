@@ -64,6 +64,16 @@ jobs:
         with:
           path: docs/dist
 
+      - name: Upload a private preview
+        # A private repository's artifacts are visible only to its collaborators: fetch one with
+        # `syw-site preview <PR>`. In a public repository this would be public, so it never runs.
+        if: github.event.repository.private && steps.settings.outputs.publish != 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: docs-site
+          path: docs/dist
+          retention-days: 14
+
   deploy:
     needs: build
     if: needs.build.outputs.publish == 'true' && !github.event.repository.private && github.event_name == 'push' && github.ref == 'refs/heads/main'
