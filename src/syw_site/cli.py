@@ -67,17 +67,19 @@ def cmd_webapp(args) -> int:
                         str(out / "site"), str(out / f"{app.name}.html")], check=True)
         return 0
 
-    from figpress_apps.cli import main as figpress_apps
-
     data = Path("docs/.syw-site/webapps") / app.name / "data"
     subprocess.run(
         [*shlex.split(cfg.python), f"webapps/{app.name}/export.py", "--out", str(data)], check=True
     )
     datasets = [a for d in sorted(p for p in data.iterdir() if p.is_dir()) for a in ("--data", str(d))]
-    return figpress_apps(
-        ["build", f"webapps/{app.name}", *datasets, "--out", str(out / "site"),
-         "--single-file", str(out / f"{app.name}.html")]
+    # Built by the paper's own python where it names one, so the figpress-apps it pins
+    # (`--with "figpress-apps==…"`) is the one whose JavaScript the app ships; left unset, by syw-site's.
+    build = [sys.executable] if cfg.python == "python" else shlex.split(cfg.python)
+    subprocess.run(
+        [*build, "-m", "figpress_apps.cli", "build", f"webapps/{app.name}", *datasets,
+         "--out", str(out / "site"), "--single-file", str(out / f"{app.name}.html")], check=True
     )
+    return 0
 
 
 def cmd_build(args) -> int:

@@ -5,6 +5,16 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.01.1 — 2026-11-01
+
+### Fixed
+
+- A figpress-apps webapp is built (`figpress-apps build`) by the paper's `python:`, as its `export.py`
+  is, so the figpress-apps it pins (`--with "figpress-apps==…"`) is the one whose JavaScript the site
+  ships. It was built by syw-site's own figpress-apps (pinned at 2026.10.29), so an option of a newer
+  figpress-apps, such as the globe's `mollweide`, was silently ignored. With `python:` unset, nothing
+  changes.
+
 ## 2026.11.01 — 2026-11-01
 
 ### Fixed

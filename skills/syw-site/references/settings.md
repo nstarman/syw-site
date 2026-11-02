@@ -8,7 +8,7 @@ paper:                           # optional, filled in when known
   arxiv: 2610.12345
   doi: 10.3847/...
   bibcode: 2026ApJ...
-python: uv run --locked python   # optional; how the paper runs Python (default: python)
+python: uv run --locked python   # optional; how the paper runs Python (default: python) — export.py, figpress-apps build, figure.py
 webapps:                         # optional; figpress-apps apps, or figpress-plotly figure.py, in webapps/<name>/
   globe: { inputs: [src/data/directional.npz], figure: "fig:quadrupole" }   # a figure's counterpart
   rate: { inputs: [...], figure: "fig:rate", replaces: true }  # its page shows only this, not the image
