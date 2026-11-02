@@ -30,6 +30,7 @@ for figure in facts["figures"]:
         assert (dist / "generated/figures" / image["file"]).exists(), image
         assert (dist / "generated/figures" / image["png"]).exists(), image
         assert (dist / "generated/figures" / image["webp"]).exists(), image
+        assert (dist / "generated/figures" / image["thumb"]).exists(), image
 
 helix = (dist / "figures/helix/index.html").read_text()
 assert 'src="/syw-site-example/generated/webapps/helix/site/"' in helix

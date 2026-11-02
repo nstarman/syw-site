@@ -9,6 +9,7 @@ from PIL import Image, ImageDraw
 
 DPI = 200  # about 2x a column's CSS width for a 3.5 in figure
 MIN_ICON = 48  # px: the portrait never smaller than this
+THUMB = 800  # px wide: about 2x a gallery card's CSS width
 
 
 def raster(source: Path) -> Image.Image:
@@ -73,7 +74,8 @@ def stamp(im: Image.Image, portrait: Path, places, alpha: float = 1.0) -> Image.
 
 def web_image(source: Path, out_dir: Path, image: dict, portrait: Path | None = None, places=("top-right",), alpha: float = 1.0) -> None:
     """Copy the figure file into out_dir, and write its web images — lossless WebP for the
-    page, PNG to download — with the portrait stamped at each place (none without a portrait)."""
+    page, PNG to download, a small lossy WebP for the gallery's card — with the portrait
+    stamped at each place (none without a portrait)."""
     target = out_dir / image["file"]
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
@@ -82,3 +84,6 @@ def web_image(source: Path, out_dir: Path, image: dict, portrait: Path | None = 
         im = stamp(im, portrait, places, alpha)
     im.save(out_dir / image["png"], optimize=True)
     im.save(out_dir / image["webp"], lossless=True, method=6)
+    if "thumb" in image:
+        w = min(THUMB, im.width)
+        im.resize((w, round(im.height * w / im.width)), Image.LANCZOS).save(out_dir / image["thumb"], quality=85, method=6)

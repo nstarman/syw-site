@@ -5,7 +5,7 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
-## 2026.11.02 — 2026-11-02
+## 2026.11.02.1 — 2026-11-02
 
 ### Added
 
@@ -23,6 +23,16 @@ To get previews in a paper already using syw-site, copy the new step into its wo
 - **Find**: `.github/workflows/docs.yml` has no `Upload a private preview` step.
 - **Edit**: copy that step from the scaffold into the `build` job, after `Upload the site for Pages`
   (or run the syw-site-upgrade skill). Then `syw-site preview <PR>` (needs `gh`, logged in).
+
+## 2026.11.02 — 2026-11-02
+
+### Fixed
+
+- The Figures gallery loads a small preview of each figure: a lossy WebP 800 px wide
+  (`<name>.thumb.webp`, the `thumb` of each image in `facts.json`), about 25 times smaller than the
+  full lossless WebP (about 3000 px wide) it loaded before. Figure pages still show the full image.
+  To update a site: copy `docs/src/pages/figures/index.astro` from the scaffold (or
+  `syw-site upgrade`), then rebuild.
 
 ## 2026.11.01.1 — 2026-11-01
 

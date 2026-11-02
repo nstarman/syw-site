@@ -11,7 +11,7 @@ Written by `syw-site facts` (Snakemake rule `syw_site_facts`) from `src/tex/ms.t
   "affiliations": ["…"],
   "abstract": "LaTeX, with \\variable values filled in",
   "figures": [{ "label": "fig:x", "slug": "x", "caption": "LaTeX",
-                "images": [{ "source": "src/tex/figures/x.pdf", "file": "figures/x.pdf", "png": "figures/x.png" }] }],
+                "images": [{ "source": "src/tex/figures/x.pdf", "file": "figures/x.pdf", "webp": "figures/x.webp", "png": "figures/x.png", "thumb": "figures/x.thumb.webp" }] }],
   "macros": { "\\survey": "\\textsl{Survey}" },
   "variables": { "forecast/angular_gain": "14" },
   "paper": { "arxiv": null, "doi": null, "bibcode": null },
