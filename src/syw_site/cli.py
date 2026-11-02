@@ -113,17 +113,21 @@ def preview_server(dist: Path, name: str, port: int) -> ThreadingHTTPServer:
         def translate_path(self, path):
             return super().translate_path(path[len(prefix):] or "/")
 
-        def do_GET(self):
+        def route(self, serve):
             if self.path == "/":
                 self.send_response(302)
                 self.send_header("Location", prefix + "/")
                 self.end_headers()
             elif self.path == prefix or self.path.startswith(prefix + "/"):
-                super().do_GET()
+                serve()
             else:
                 self.send_error(404)
 
-        do_HEAD = do_GET
+        def do_GET(self):
+            self.route(super().do_GET)
+
+        def do_HEAD(self):
+            self.route(super().do_HEAD)
 
     return ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, directory=str(dist)))
 
