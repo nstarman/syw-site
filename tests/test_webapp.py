@@ -34,3 +34,33 @@ def test_a_figure_py_is_written_as_page_and_single_file(tmp_path, monkeypatch):
     out = tmp_path / "docs" / "public" / "generated" / "webapps" / "rate"
     assert (out / "site" / "index.html").read_text() == "webapps/rate/figure.py:figure"
     assert (out / "rate.html").exists()
+
+
+# A stand-in for figpress-apps: `python -m figpress_apps.cli build …` records its arguments and which python ran it.
+FAKE_APPS = '''
+import json, sys
+from pathlib import Path
+args = sys.argv[1:]
+out = Path(args[args.index("--out") + 1]); out.mkdir(parents=True)
+(out / "index.html").write_text(json.dumps({"args": args, "python": sys.executable}))
+'''
+
+
+def test_an_app_is_built_by_the_papers_python(tmp_path, monkeypatch):
+    """The paper's python, which pins its figpress-apps, builds the app — not syw-site's own install."""
+    (tmp_path / "fake" / "figpress_apps").mkdir(parents=True)
+    (tmp_path / "fake" / "figpress_apps" / "__init__.py").write_text("")
+    (tmp_path / "fake" / "figpress_apps" / "cli.py").write_text(FAKE_APPS)
+    (tmp_path / "webapps" / "globe").mkdir(parents=True)
+    (tmp_path / "webapps" / "globe" / "export.py").write_text(
+        "import sys; from pathlib import Path; Path(sys.argv[2], 'globe').mkdir(parents=True)\n")
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "docs" / "syw-site.yml").write_text(
+        f"repo: a/b\npython: {json.dumps(shlex.quote(sys.executable))}\nwebapps:\n  globe: {{ explore: true, title: G, text: g }}\n")
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("PYTHONPATH", str(tmp_path / "fake"))
+    assert cli.cmd_webapp(argparse.Namespace(name="globe")) == 0
+    got = json.loads((tmp_path / "docs" / "public" / "generated" / "webapps" / "globe" / "site" / "index.html").read_text())
+    assert got["python"] == sys.executable
+    assert got["args"][:2] == ["build", "webapps/globe"]
+    assert got["args"][2:4] == ["--data", "docs/.syw-site/webapps/globe/data/globe"]
