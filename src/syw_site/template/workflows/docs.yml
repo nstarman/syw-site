@@ -3,7 +3,8 @@ name: Docs site
 # Builds the paper's docs site (syw-site {{VERSION}}) on every push and pull request, and publishes
 # it to nstarkman.space/{{NAME}}/ only when docs/syw-site.yml says `publish: true` — set that at
 # arXiv submission, with the repository public and Pages set to "GitHub Actions". Until then
-# nothing leaves this workflow: no Pages artifact is uploaded.
+# nothing is published: a private repository uploads a collaborator-only `docs-site` workflow
+# artifact (14 days) for `syw-site preview <PR>`, and no Pages artifact is uploaded.
 #
 # The environment below installs showyourwork and syw-site with pip; adapt it to how this paper
 # runs showyourwork (extra flags after `--`). A paper whose rules use the Zenodo cache needs its
@@ -63,6 +64,16 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/dist
+
+      - name: Upload a private preview
+        # A private repository's artifacts are visible only to its collaborators: fetch one with
+        # `syw-site preview <PR>`. In a public repository this would be public, so it never runs.
+        if: github.event.repository.private && steps.settings.outputs.publish != 'true'
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: docs-site
+          path: docs/dist
+          retention-days: 14
 
   deploy:
     needs: build

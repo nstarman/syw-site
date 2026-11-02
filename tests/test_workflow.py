@@ -13,7 +13,7 @@ def steps():
 
 
 def test_only_the_publish_path_uploads_and_deploys():
-    uploads = [s for s in steps() if "upload" in s.get("uses", "")]
+    uploads = [s for s in steps() if "upload-pages-artifact" in s.get("uses", "")]
     assert len(uploads) == 1
     assert "steps.settings.outputs.publish == 'true'" in uploads[0]["if"] and MAIN_PUSH in uploads[0]["if"]
     assert "!github.event.repository.private" in uploads[0]["if"]
@@ -24,6 +24,14 @@ def test_only_the_publish_path_uploads_and_deploys():
         for s in job.get("steps", []):
             if s.get("uses", "").startswith(("actions/upload", "actions/deploy")):
                 assert s.get("if") or job.get("if"), f"{name}: an unguarded upload or deploy"
+
+
+def test_preview_upload_is_private_only():
+    s = next(s for s in steps() if s.get("name") == "Upload a private preview")
+    assert s["uses"].startswith("actions/upload-artifact@")
+    assert "github.event.repository.private" in s["if"] and "publish != 'true'" in s["if"]
+    assert s["with"]["name"] == "docs-site" and s["with"]["path"] == "docs/dist"
+    assert s["with"]["retention-days"] == 14
 
 
 def test_private_repo_guard_runs_before_upload():

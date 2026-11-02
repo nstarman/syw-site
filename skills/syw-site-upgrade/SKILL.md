@@ -44,6 +44,10 @@ Files `syw-site init` wrote and the author has not changed (compare with the old
 pinned version in `.github/workflows/docs.yml` becomes the target. A file the author changed is
 merged by hand.
 
+`.github/workflows/docs.yml` is usually the author's own (their install step): copy into it the steps
+the target's template has and it lacks, such as `Upload a private preview` (private repositories'
+CI previews, fetched with `syw-site preview <PR>`), keeping its `if:` and pinned action SHA.
+
 ## 5. Rebuild and compare
 
 `syw-site build && syw-site serve`; compare with the baseline. Report what changed, the notes

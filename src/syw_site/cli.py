@@ -5,6 +5,8 @@ import json
 import shlex
 import subprocess
 import sys
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 from syw_site import __version__, facts, figures, init, settings, showyourwork
@@ -103,6 +105,60 @@ def cmd_serve(args) -> int:
         return 0
 
 
+def preview_server(dist: Path, name: str, port: int) -> ThreadingHTTPServer:
+    """`dist` served under `/<name>/`, as nstarkman.space will; `/` redirects there."""
+    prefix = f"/{name}"
+
+    class Handler(SimpleHTTPRequestHandler):
+        def translate_path(self, path):
+            return super().translate_path(path[len(prefix):] or "/")
+
+        def route(self, serve):
+            if self.path == "/":
+                self.send_response(302)
+                self.send_header("Location", prefix + "/")
+                self.end_headers()
+            elif self.path == prefix or self.path.startswith(prefix + "/"):
+                serve()
+            else:
+                self.send_error(404)
+
+        def do_GET(self):
+            self.route(super().do_GET)
+
+        def do_HEAD(self):
+            self.route(super().do_HEAD)
+
+    return ThreadingHTTPServer(("127.0.0.1", port), partial(Handler, directory=str(dist)))
+
+
+def _gh(*argv: str) -> str:
+    return subprocess.run(["gh", *argv], check=True, stdout=subprocess.PIPE, text=True).stdout
+
+
+def cmd_preview(args) -> int:
+    """Serve the site CI built for a pull request (a private repository's `docs-site` artifact)."""
+    name = settings.load().repo.split("/", 1)[1]
+    branch = json.loads(_gh("pr", "view", args.pr, "--json", "headRefName"))["headRefName"]
+    runs = json.loads(_gh("run", "list", "--branch", branch, "--workflow", "docs.yml",
+                          "--status", "success", "--limit", "1", "--json", "databaseId"))
+    if not runs:
+        print(f"syw-site: no successful `Docs site` run for PR {args.pr} (branch {branch}); "
+              "the upload happens only in a private repository", file=sys.stderr)
+        return 1
+    run_id = runs[0]["databaseId"]
+    dist = Path("docs/.syw-site/preview") / str(run_id) / "dist"
+    if not dist.is_dir():
+        _gh("run", "download", str(run_id), "-n", "docs-site", "-D", str(dist))
+    server = preview_server(dist, name, args.port)
+    print(f"run {run_id}: http://127.0.0.1:{server.server_address[1]}/{name}/")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="syw-site", description=__doc__)
     p.add_argument("--version", action="version", version=f"syw-site {__version__}")
@@ -129,6 +185,10 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("serve", help="serve docs/dist/ under its base path")
     s.add_argument("--port", type=int, default=8000)
     s.set_defaults(func=cmd_serve)
+    s = sub.add_parser("preview", help="serve the site CI built for a pull request (private repositories)")
+    s.add_argument("pr", help="pull request number, URL or branch")
+    s.add_argument("--port", type=int, default=8000)
+    s.set_defaults(func=cmd_preview)
     args = p.parse_args(argv)
     try:
         return args.func(args)
