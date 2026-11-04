@@ -151,7 +151,7 @@ def cmd_preview(args) -> int:
     if not dist.is_dir():
         _gh("run", "download", str(run_id), "-n", "docs-site", "-D", str(dist))
     server = preview_server(dist, name, args.port)
-    print(f"run {run_id}: http://127.0.0.1:{server.server_address[1]}/{name}/")
+    print(f"run {run_id}: http://127.0.0.1:{server.server_address[1]}/{name}/", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:

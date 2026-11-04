@@ -17,7 +17,8 @@ function units(spec) {
   const parts = [];
   let per = false, prefix = '', power = 1;
   for (const [, name] of spec.matchAll(/\\([A-Za-z]+)/g)) {
-    if (name === 'per') per = true;
+    if (name === 'unit') continue;  // a paper macro such as \kpc → \unit{\kilo\parsec}, inside \qty
+    else if (name === 'per') per = true;
     else if (name === 'square' || name === 'cubic') power = name === 'square' ? 2 : 3;
     else if (name === 'squared' || name === 'cubed') parts.at(-1).exp *= name === 'squared' ? 2 : 3;
     else if (name in PREFIXES) prefix += PREFIXES[name];
@@ -85,11 +86,13 @@ function prose(s) {
 
 /** Text with inline $math$; with refs (a figure's label → its number), \ref{label} becomes the
  * number and \autoref/\cref "Figure N". Other references go: \ref with the ~ before it
- * ("(Appendix~\ref{app:x})" reads "(Appendix)"), \autoref/\cref to "the paper". */
+ * ("(Appendix~\ref{app:x})" reads "(Appendix)"), \autoref/\cref to "the paper" ("(\cref{app:x})"
+ * reads "(see the paper)"). */
 export function tex(s, refs = {}) {
   s = s.replace(/(~?)\\(auto|c|C)?ref\{([^}]*)\}/g, (_, tie, kind, l) => (
     l in refs ? tie + (kind ? 'Figure~' : '') + refs[l] : kind ? `${tie}the paper` : ''));
   s = s.replace(/(^\s*|[.!?]\s+)the paper/g, '$1The paper');
+  s = s.replace(/\(the paper\)/g, '(see the paper)');
   return s.split(/(\$\$[^$]*\$\$)/).map((chunk) => (chunk.startsWith('$$') && chunk.endsWith('$$') && chunk.length > 3
     ? katex.renderToString(siunitx(chunk.slice(2, -2)), { throwOnError: true, displayMode: true, macros })
     : chunk.split(/(?<!\\)\$/).map((part, i) => (i % 2 ? math(part) : prose(part))).join(''))).join('');
