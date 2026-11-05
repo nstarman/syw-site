@@ -58,7 +58,8 @@ def test_preview_serves_under_base_path(tmp_path):
     srv = cli.preview_server(tmp_path, "paper-x", 0)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{srv.server_address[1]}"
-    assert urllib.request.urlopen(f"{base}/paper-x/").read() == b"hello"
+    page = urllib.request.urlopen(f"{base}/paper-x/")
+    assert page.read() == b"hello" and page.headers["Cache-Control"] == "no-store"  # no stale build
     assert urllib.request.urlopen(base + "/").url.endswith("/paper-x/")  # / redirects
     head = urllib.request.urlopen(urllib.request.Request(f"{base}/paper-x/", method="HEAD"))
     assert head.headers["Content-Length"] == "5" and head.read() == b""  # headers only

@@ -123,6 +123,10 @@ def preview_server(dist: Path, name: str, port: int) -> ThreadingHTTPServer:
             else:
                 self.send_error(404)
 
+        def end_headers(self):  # a reload after a rebuild shows the new build, not the browser's cache
+            self.send_header("Cache-Control", "no-store")
+            super().end_headers()
+
         def do_GET(self):
             self.route(super().do_GET)
 
