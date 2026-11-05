@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.05.1 — 2026-11-05
+
 ### Changed — migration
 
 - The portrait stamped on figures is opaque by default (`alpha` 1, was 0.8).
