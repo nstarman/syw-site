@@ -106,7 +106,7 @@ export function tex(s, refs = {}) {
  * $math$ as TeX source ("$x^{2}$" → "x^{2}", which KaTeX's glyphs would flatten to "x2"). */
 export function plain(s, refs = {}) {
   const src = [];
-  s = s.replace(/(?<!\\)\$\$?([^$]*)\$\$?/g, (_, m) => `\u0001${src.push(m.trim()) - 1}\u0001`);
+  s = s.replace(/(?<!\\)(\$\$?)([^$]*)\1/g, (_, d, m) => `\u0001${src.push(m.trim()) - 1}\u0001`);
   return tex(s, refs).replace(/<span class="mspace"[^>]*><\/span>/g, ' ').replace(/<[^>]*>/g, '').replace(/\u200b/g, '')
     .replace(/&nbsp;/g, ' ').replace(/&#(\d+);/g, (_, n) => String.fromCodePoint(n))
     .replace(/&#x([0-9a-f]+);/gi, (_, n) => String.fromCodePoint(parseInt(n, 16)))
