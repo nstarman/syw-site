@@ -5,6 +5,13 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Changed — migration
+
+- The portrait stamped on figures is opaque by default (`alpha` 1, was 0.8).
+  **What changed**: the default of `alpha` under `figures:` in `docs/syw-site.yml`. **Find**: a site
+  that relied on the faint default. **Edit**: to keep it, give each figure `alpha: 0.8` there, then
+  `syw-site figures`.
+
 ### Changed
 
 - The syw-site skill says that a `\variable` output added to `ms.tex` must be listed as a dependency of

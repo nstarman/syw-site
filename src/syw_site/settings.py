@@ -11,7 +11,7 @@ _KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps", "figures
 _PAPER_KEYS = {"arxiv", "doi", "bibcode"}
 _WEBAPP_KEYS = {"inputs", "figure", "explore", "title", "text", "replaces"}
 _FIGURE_KEYS = {"icon", "image", "alpha"}
-ALPHA = 0.8  # the portrait is a quiet mark, not a feature of the figure
+ALPHA = 1.0  # opaque; `alpha` per figure for a quieter mark
 CORNERS = ("top-right", "top-left", "bottom-right", "bottom-left")
 
 
