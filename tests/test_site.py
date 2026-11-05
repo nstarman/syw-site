@@ -234,6 +234,11 @@ TEXT = [  # (tex, refs) → HTML
     (r"As in \cref{sec:x}. \Cref{app:y} too; (Appendix~\ref{app:y})", {}, "As in the paper. The paper too; (Appendix)"),
     (r"\autoref{sec:x} shows it.", {}, "The paper shows it."),
     (r"Not the amplitude (\cref{app:y}).", {}, "Not the amplitude (see the paper)."),
+    (r"Macros satisfy \eqref{eq:x}.", {}, "Macros satisfy an equation in the paper."),
+    (r"A bound (\eqref{eq:x}).", {}, "A bound (see the paper)."),
+    (r"From Eq.~\eqref{eq:x} and Eqs.~\eqref{eq:x}", {}, "From an equation in the paper and an equation in the paper"),
+    (r"Equation \eqref{eq:x}. Then", {}, "An equation in the paper. Then"),
+    (r"Bounded by~\eqref{eq:x}.", {}, "Bounded by an equation in the paper."),
     (r"As \citet{Doe+:2023} and \citetalias{Roe:2020a,2019ApJ...1R} show.", {}, "As Doe et al. (2023) and Roe (2020) show."),
     (r"Known \citep[e.g.][]{Doe+:2023}, and~\citep{Roe:2020}.", {}, "Known, and."),
     (r"With \survey{} and \survey, in \kpcunit.", {}, None),  # checked below

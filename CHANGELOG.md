@@ -5,6 +5,17 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Fixed
+
+- Captions and running text: `\eqref{eq:x}` printed its label ("macros satisfy eq:x"). The site
+  shows no equations, so it now reads "an equation in the paper", absorbing a leading "Eq.",
+  "Eqs.", "Equation" or "Equations" and its `~`; alone in parentheses, `(\eqref{eq:x})` reads
+  "(see the paper)".
+- A figure image narrower than its column sat at the left; it is now centred.
+
+No migration: upgrading refreshes the scaffold files `docs/src/lib/tex.js` and
+`docs/src/components/Page.astro`.
+
 ## 2026.11.04 — 2026-11-04
 
 ### Fixed
