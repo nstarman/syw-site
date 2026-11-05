@@ -5,6 +5,19 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.04 — 2026-11-04
+
+### Fixed
+
+- Captions and running text: a unit given by one of the paper's own macros inside `\qty` (e.g.
+  `\qty{50}{\kpc}` with `\newcommand{\kpc}{\unit{\kilo\parsec}}`) rendered as "50 unit kpc"; it now
+  renders as 50 kpc.
+- A reference to a section, appendix or equation alone in parentheses, `(\cref{app:x})`, read
+  "(the paper)"; it now reads "(see the paper)".
+- `syw-site preview` printed its address only on exit when its output was not a terminal.
+
+No migration: upgrading refreshes the scaffold file `docs/src/lib/tex.js`.
+
 ## 2026.11.02.1 — 2026-11-02
 
 ### Added

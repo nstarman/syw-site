@@ -226,12 +226,14 @@ SIUNITX = {  # siunitx → the LaTeX KaTeX renders
     r"\num{3e5}": r"3\times10^{5}",
     r"\numrange{1}{2e3}": r"1\text{--}2\times10^{3}",
     r"\qtyrange{25}{35}{\kpc}": r"25\text{--}35\,\mathrm{kpc}",
+    r"\qty{50}{\unit{\kilo\parsec}}": r"50\,\mathrm{kpc}",  # a unit macro, expanded in running text
 }
 
 TEXT = [  # (tex, refs) → HTML
     (r"In \autoref{fig:a} and~\cref{fig:a}, \ref{fig:a}.", {"fig:a": "1"}, "In Figure&nbsp;1 and&nbsp;Figure&nbsp;1, 1."),
     (r"As in \cref{sec:x}. \Cref{app:y} too; (Appendix~\ref{app:y})", {}, "As in the paper. The paper too; (Appendix)"),
     (r"\autoref{sec:x} shows it.", {}, "The paper shows it."),
+    (r"Not the amplitude (\cref{app:y}).", {}, "Not the amplitude (see the paper)."),
     (r"As \citet{Doe+:2023} and \citetalias{Roe:2020a,2019ApJ...1R} show.", {}, "As Doe et al. (2023) and Roe (2020) show."),
     (r"Known \citep[e.g.][]{Doe+:2023}, and~\citep{Roe:2020}.", {}, "Known, and."),
     (r"With \survey{} and \survey, in \kpcunit.", {}, None),  # checked below
@@ -243,6 +245,8 @@ def test_tex_conversion(docs):
     *out, macro = js(docs, [["tex", s, refs] for s, refs, _ in TEXT])
     assert out == [html for _, _, html in TEXT[:-1]]
     assert macro.startswith("With <em>Survey</em> and <em>Survey</em>, in <span class=\"katex\">") and "kpc" in macro
+    (q,) = js(docs, [["tex", r"At \qty{50}{\kpcunit}."]])  # \kpcunit is \unit{\kilo\parsec}
+    assert "kpc" in q and "unit" not in q
     # In math: \ensuremath, paper macros with siunitx, an argument or \textsl in them, and siunitx.
     (html,) = js(docs, [["math", r"\ensuremath{x} + 1\,\kpcunit + \upr{d} + \qty{2}{\micro\meter} + \survey"]])
     assert 'class="katex"' in html and "kpc" in html and "Survey" in html
