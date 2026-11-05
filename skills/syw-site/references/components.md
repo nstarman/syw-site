@@ -17,7 +17,10 @@ Pages: `index.mdx` (overview), `figures/` (gallery: a card per figure with its s
 
 LaTeX outside math is converted by `src/lib/tex.js`: `\emph`, `\textit`, `\textsl`, `\textbf`,
 `\url`, dashes, `~`; `\ref` to a figure is its number and `\autoref`/`\cref` "Figure N" (to anything
-else: `\ref` goes, `\autoref`/`\cref` read "the paper"); `\citet{Surname+:2023}` reads "Surname et
-al. (2023)", other citations are dropped; siunitx (`\qty`, `\unit`, `\num`, their ranges) and
+else: `\ref` goes, `\autoref`/`\cref` read "the paper"; `\eqref` reads "an equation in the paper");
+citations read from the paper's `.bib` (`facts.citations`): `\citet` "Doe et al. (2023)", `\citep`
+"(see Doe et al. 2023, p. 3)", `\cite`/`\citealp` without the parentheses, `\citeauthor` "Doe et al.";
+a key the `.bib` lacks reads from a `Surname:2023`/`Surname+:2023` key, or is dropped with no empty
+parentheses; `{\color{c} text}` and `\textcolor{c}{text}` keep the text, `\\` reads as a space; siunitx (`\qty`, `\unit`, `\num`, their ranges) and
 `\ensuremath` render as math; the paper's macros without arguments are expanded; other commands keep
 their argument. Extend it there when a paper needs more.

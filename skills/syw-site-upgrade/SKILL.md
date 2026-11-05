@@ -50,5 +50,7 @@ CI previews, fetched with `syw-site preview <PR>`), keeping its `if:` and pinned
 
 ## 5. Rebuild and compare
 
-`syw-site build && syw-site serve`; compare with the baseline. Report what changed, the notes
-applied, and anything left for the author.
+`syw-site build && syw-site serve`; compare with the baseline. A refreshed `docs/src/lib/tex.js` can
+change how captions and alt text read (a citation that now names its authors, say): read the figure
+pages' captions too, not only the numbers. Report what changed, the notes applied, and anything left
+for the author.

@@ -7,6 +7,7 @@ site renders its math.
 """
 
 import re
+import unicodedata
 import warnings
 from pathlib import Path
 
@@ -195,6 +196,93 @@ def variable_key(path: str) -> str:
     return path.removeprefix("output/").removesuffix(".tex")
 
 
+# natbib's citation commands: \cite, \citet, \citep, \citealp, \citeauthor, … with optional [notes].
+CITE = re.compile(r"\\cite[a-zA-Z]*\*?\s*(?:\[[^\]]*\]\s*)*\{([^}]*)\}")
+# A TeX accent on one letter, braced or not: \"u, \"{u}, {\"u}, \'{E}.
+ACCENTS = {"`": "\u0300", "'": "\u0301", "^": "\u0302", '"': "\u0308", "~": "\u0303", "=": "\u0304",
+           ".": "\u0307", "u": "\u0306", "v": "\u030c", "H": "\u030b", "c": "\u0327", "k": "\u0328"}
+
+
+def _detex(name: str) -> str:
+    """A BibTeX name as printed: accents applied, braces and other commands dropped."""
+    name = re.sub(r"\{?\\([`'^\"~=.]|[uvHck](?![A-Za-z]))\s*\{?([A-Za-z])\}?\}?",
+                  lambda m: unicodedata.normalize("NFC", m.group(2) + ACCENTS[m.group(1)]), name)
+    return re.sub(r"\s+", " ", re.sub(r"\\[A-Za-z]+\s*|[{}]", "", name)).strip()
+
+
+def _split_top(text: str, sep: str) -> list[str]:
+    """text split on `sep` (a regex) where it is outside braces."""
+    parts, depth, start, i = [], 0, 0, 0
+    while i < len(text):
+        c = text[i]
+        if c in "{}":
+            depth += 1 if c == "{" else -1
+        elif depth == 0 and (m := re.match(sep, text[i:])):
+            parts.append(text[start:i])
+            i = start = i + m.end()
+            continue
+        i += 1
+    return [*parts, text[start:]]
+
+
+def _family(author: str) -> str:
+    """The family name: before the comma ("Family, Given"), a braced group whole, else the last word."""
+    author = author.strip()
+    if author.startswith("{") and _group(author, 0, "{", "}")[1] == len(author):  # one group: {Astropy Collaboration}
+        return _detex(author)
+    if len(parts := _split_top(author, ",")) > 1:
+        return _detex(parts[0])
+    return _detex(_split_top(author, r"\s+")[-1])
+
+
+def _bib_entries(text: str) -> dict[str, dict[str, str]]:
+    """The author and year fields of each entry in a .bib text, by key."""
+    entries = {}
+    for m in re.finditer(r"@(\w+)\s*\{\s*([^,\s]+)\s*,", text):
+        if m.group(1).lower() in ("comment", "preamble", "string"):
+            continue
+        body, _ = _group(text, text.index("{", m.start()), "{", "}")
+        fields = {}
+        for f in re.finditer(r"(\w+)\s*=\s*", body):
+            i = f.end()
+            if i < len(body) and body[i] == "{":
+                value, _ = _group(body, i, "{", "}")
+            elif i < len(body) and body[i] == '"':
+                value = body[i + 1 : body.index('"', i + 1)]
+            else:
+                value = re.match(r"[^,}\s]*", body[i:]).group(0)
+            fields.setdefault(f.group(1).lower(), value)
+        entries.setdefault(m.group(2), fields)
+    return entries
+
+
+def citations(text: str, root: Path) -> dict[str, dict]:
+    """Each key the paper cites that its \\bibliography files define: {label, year} as the site prints
+    them ("Doe", "Doe and Roe", "Doe et al."; the year, or None). A missing .bib gives none."""
+    cited = dict.fromkeys(k.strip() for m in CITE.finditer(text) for k in m.group(1).split(",") if k.strip())
+    entries: dict[str, dict] = {}
+    for _, names in commands(text, "bibliography"):
+        for name in (n.strip() for n in names.split(",")):
+            path = root / TEX / (name if name.endswith(".bib") else f"{name}.bib")
+            if path.is_file():
+                for key, fields in _bib_entries(path.read_text(encoding="utf-8", errors="replace")).items():
+                    entries.setdefault(key, fields)
+    result = {}
+    for key in cited:
+        if key not in entries:
+            continue
+        authors = [a for a in _split_top(entries[key].get("author", ""), r"\s+and\s+") if a.strip()]
+        families = [_family(a) for a in authors]
+        # BibTeX's "and others", or an "et al" written into the field ({Hare}, B.~M., {et al}), is "et al."
+        if (families[1:] and families[-1] == "others") or re.search(r"\bet\.?\s*al\b", entries[key].get("author", "")):
+            families = [families[0], "", ""]
+        label = (families[0] if len(families) == 1 else " and ".join(families) if len(families) == 2
+                 else f"{families[0]} et al." if families else "")
+        year = re.search(r"\d{4}", entries[key].get("year") or entries[key].get("date") or "")
+        result[key] = {"label": label, "year": year.group(0) if year else None}
+    return result
+
+
 def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> dict:
     ms = root / TEX / "ms.tex"
     if not ms.exists():
@@ -215,6 +303,7 @@ def extract(root: Path = Path("."), *, repo: str, paper: dict | None = None) -> 
         "figures": figures(text, root),
         # Its own packages' first, so ms.tex's definitions win.
         "macros": macros(packages(text, root) + "\n" + text),
+        "citations": citations(text, root),
         "variables": {variable_key(p): value for p, value in variables.items()},
         "paper": {k: (paper or {}).get(k) for k in ("arxiv", "doi", "bibcode")},
         "repo": repo,

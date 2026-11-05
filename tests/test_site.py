@@ -240,7 +240,17 @@ TEXT = [  # (tex, refs) → HTML
     (r"Equation \eqref{eq:x}. Then", {}, "An equation in the paper. Then"),
     (r"Bounded by~\eqref{eq:x}.", {}, "Bounded by an equation in the paper."),
     (r"As \citet{Doe+:2023} and \citetalias{Roe:2020a,2019ApJ...1R} show.", {}, "As Doe et al. (2023) and Roe (2020) show."),
-    (r"Known \citep[e.g.][]{Doe+:2023}, and~\citep{Roe:2020}.", {}, "Known, and."),
+    (r"Known \citep[e.g.][]{Doe+:2023}, and~\citep{Roe:2020}.", {}, "Known (e.g. Doe et al. 2023), and&nbsp;(Roe 2020)."),
+    # Keys from the paper's .bib (facts.citations), in natbib's forms.
+    (r"Figure 1 of \citet{smith2020} with", {}, "Figure 1 of Smith et al. (2020) with"),
+    (r"(\citet{lee2018} as revised in \citet{smith2020})", {}, "(Lee et al. (2018) as revised in Smith et al. (2020))"),
+    (r"Known \citep{solo2019}. Two \citep{solo2019,pair2017}.", {}, "Known (Solo 2019). Two (Solo 2019; Doe and Roe 2017)."),
+    (r"Notes \citep[see][p.~3]{solo2019}; post \citep[ch.~2]{solo2019}.", {}, "Notes (see Solo 2019, p.&nbsp;3); post (Solo 2019, ch.&nbsp;2)."),
+    (r"Bare \cite{solo2019} and \citealp{pair2017}; by \citeauthor{pair2017}.", {}, "Bare Solo 2019 and Doe and Roe 2017; by Doe and Roe."),
+    (r"No year \citet{noyear}. Gone \citep{nowhere}, kept.", {}, "No year Nobody. Gone, kept."),
+    # Colour names and line breaks read as text.
+    (r"The {\color{gray} solid gray} region and \textcolor{cyan}{light blue}.", {}, "The solid gray region and light blue."),
+    (r"Regions.\\ Objects", {}, "Regions. Objects"),
     (r"With \survey{} and \survey, in \kpcunit.", {}, None),  # checked below
 ]
 
