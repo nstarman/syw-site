@@ -12,6 +12,12 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
   that relied on the faint default. **Edit**: to keep it, give each figure `alpha: 0.8` there, then
   `syw-site figures`.
 
+### Changed
+
+- The syw-site skill says that a `\variable` output added to `ms.tex` must be listed as a dependency of
+  `ms.tex` in `showyourwork.yml` (it builds locally and fails on CI otherwise), and that a green PR check
+  does not show a changed figure script ran.
+
 ## 2026.11.05 — 2026-11-05
 
 ### Fixed

@@ -55,6 +55,19 @@ The forecast gains a factor of <Var name="forecast/angular_gain" /> (<Fig label=
 Inline math is `$…$`. Check names against `docs/public/generated/facts.json`
 ([references/facts-schema.md](references/facts-schema.md)).
 
+When you add a `\variable{output/x.tex}` to `ms.tex`, also list it as a dependency of `ms.tex` in
+`showyourwork.yml`. Without that the paper builds locally, where the file is already there, and
+fails on CI:
+
+```yaml
+dependencies:
+  src/tex/ms.tex:
+    - src/tex/output/x.tex
+```
+
+A green check on a pull request does not show that a changed figure script ran: PR CI can reuse cached
+outputs. Build locally, or look for the script's rule in the CI log.
+
 ## 3. Interactive figures
 
 Build the app with the figpress-apps skill in `webapps/<name>/` (its `export.py` takes `--out DIR`;
