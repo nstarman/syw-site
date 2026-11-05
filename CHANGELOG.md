@@ -20,6 +20,11 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ### Fixed
 
+- A figure image's alt text stripped the caption crudely: references printed their labels
+  ("as in fig:a", "eq:x"), citations their keys and math vanished. It is now the caption as the page
+  reads it ("as in Figure 1", "an equation in the paper", "Doe et al. (2023)", "50 kpc"), with its
+  `$math$` as TeX source ("x^{2}"). Upgrading refreshes `docs/src/lib/tex.js` and
+  `docs/src/components/Fig.astro`.
 - `syw-site preview` let the browser cache pages, figures and webapp bundles, so a reload after a
   rebuild showed the old build. It now sends `Cache-Control: no-store`.
 
