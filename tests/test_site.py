@@ -97,7 +97,7 @@ def test_figure_page_links_back(docs):
 def links(html):
     """Each `fig-links` row: (left links, right links), by their text."""
     rows = re.findall(r'<div class="fig-links"[^>]*>\s*<span[^>]*>(.*?)</span>\s*<span[^>]*>(.*?)</span>', html, re.S)
-    return [tuple(re.findall(r">([\w ]+)</a>", side) for side in row) for row in rows]
+    return [tuple(re.findall(r">([\w .]+)</a>", side) for side in row) for row in rows]
 
 
 def test_paper_figures_and_their_links(docs):
@@ -119,7 +119,7 @@ def test_a_webapp_that_replaces_its_figure(docs):
     # One row of links, under the caption: the app's HTML with the figure's downloads, and no Open
     # (the page already shows the app).
     rows = links(html)
-    assert len(rows) == 1 and rows[0][0] == [] and rows[0][1][0] == "HTML" and "PDF" in rows[0][1], rows
+    assert len(rows) == 1 and rows[0][0] == [] and rows[0][1][0] == "HTML" and "fig_b1.pdf" in rows[0][1], rows
     assert 'href="/demo/generated/webapps/rate/rate.html" download>HTML</a>' in html
 
 
@@ -129,7 +129,7 @@ def test_captioned_webapp_in_a_card(docs):
     assert "A helix to turn." in html and "data-fit" in html
     # Open: the item's own page, once. Full: `full="explore/"` on the Webapp. Figure 2 (two panels)
     # shows rate, the webapp that replaces it, in place of its images, with its HTML in the downloads.
-    assert links(html) == [(["Open", "Full"], ["HTML"]), (["Open"], ["PDF", "PNG"]), (["Open"], ["HTML", "PDF", "PDF", "PNG", "PNG"])]
+    assert links(html) == [(["Open", "Full"], ["HTML"]), (["Open"], ["PDF", "PNG"]), (["Open"], ["HTML", "fig_b1.pdf", "fig_b2.pdf", "fig_b1.png", "fig_b2.png"])]
     assert "/demo/generated/webapps/rate/site/" in html and "fig_b1.webp" not in html
     assert 'href="/demo/explore/">Full</a>' in html
     assert html.count(">Download <a") == 3  # the word once per row, each format its own link

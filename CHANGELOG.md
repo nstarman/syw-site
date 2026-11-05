@@ -12,9 +12,11 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
   "Eqs.", "Equation" or "Equations" and its `~`; alone in parentheses, `(\eqref{eq:x})` reads
   "(see the paper)".
 - A figure image narrower than its column sat at the left; it is now centred.
+- A figure of several panels offered "Download PDF · PDF · PNG · PNG"; each link is now named by its
+  file ("fig_b1.pdf · fig_b2.pdf · fig_b1.png · fig_b2.png").
 
-No migration: upgrading refreshes the scaffold files `docs/src/lib/tex.js` and
-`docs/src/components/Page.astro`.
+No migration: upgrading refreshes the scaffold files `docs/src/lib/tex.js`,
+`docs/src/components/Page.astro` and `docs/src/components/Fig.astro`.
 
 ## 2026.11.04 — 2026-11-04
 
