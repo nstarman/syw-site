@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.05 — 2026-11-05
+
 ### Fixed
 
 - Captions and running text: `\eqref{eq:x}` printed its label ("macros satisfy eq:x"). The site
