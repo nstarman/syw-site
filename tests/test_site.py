@@ -103,7 +103,7 @@ def links(html):
 def test_paper_figures_and_their_links(docs):
     html = page(docs, "figures/a")
     assert "<title>Paper Figure 1" in html and "<strong>Paper Figure 1.</strong>" in html
-    assert 'alt="Paper Figure 1:' in html
+    assert 'alt="Paper Figure 1: A caption with nested braces and x^{2}."' in html  # the caption as text
     assert links(page(docs, "numbers")) == [(["Open"], ["PDF", "PNG"])]
 
 
@@ -252,6 +252,9 @@ def test_tex_conversion(docs):
     assert macro.startswith("With <em>Survey</em> and <em>Survey</em>, in <span class=\"katex\">") and "kpc" in macro
     (q,) = js(docs, [["tex", r"At \qty{50}{\kpcunit}."]])  # \kpcunit is \unit{\kilo\parsec}
     assert "kpc" in q and "unit" not in q
+    # An image's alt: the caption as the page reads it, as plain text.
+    (alt,) = js(docs, [["plain", r"Seen from above, $r = 1$, \$5, \qty{50}{\kpcunit} \& more, as in Figure~\ref{fig:a} and \eqref{eq:x} (\citet{Doe+:2023}).", {"fig:a": "1"}]])
+    assert alt == "Seen from above, r = 1, $5, 50 kpc & more, as in Figure 1 and an equation in the paper (Doe et al. (2023)).", alt
     # In math: \ensuremath, paper macros with siunitx, an argument or \textsl in them, and siunitx.
     (html,) = js(docs, [["math", r"\ensuremath{x} + 1\,\kpcunit + \upr{d} + \qty{2}{\micro\meter} + \survey"]])
     assert 'class="katex"' in html and "kpc" in html and "Survey" in html
