@@ -18,6 +18,11 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
   `ms.tex` in `showyourwork.yml` (it builds locally and fails on CI otherwise), and that a green PR check
   does not show a changed figure script ran.
 
+### Fixed
+
+- `syw-site preview` let the browser cache pages, figures and webapp bundles, so a reload after a
+  rebuild showed the old build. It now sends `Cache-Control: no-store`.
+
 ## 2026.11.05 — 2026-11-05
 
 ### Fixed
