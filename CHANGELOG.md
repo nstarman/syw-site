@@ -5,6 +5,11 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Fixed
+
+- `syw-site preview` let the browser cache pages, figures and webapp bundles, so a reload after a
+  rebuild showed the old build. It now sends `Cache-Control: no-store`.
+
 ## 2026.11.05 — 2026-11-05
 
 ### Fixed
