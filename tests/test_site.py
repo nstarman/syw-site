@@ -256,6 +256,7 @@ def test_tex_conversion(docs):
     (alt,) = js(docs, [["plain", r"Seen from above, $r = 1$, \$5, \qty{50}{\kpcunit} \& more, as in Figure~\ref{fig:a} and \eqref{eq:x} (\citet{Doe+:2023}).", {"fig:a": "1"}]])
     assert alt == "Seen from above, r = 1, $5, 50 kpc & more, as in Figure 1 and an equation in the paper (Doe et al. (2023)).", alt
     assert js(docs, [["plain", r"$a$$b$ and $$c$$."]]) == ["ab and c."]  # each $ or $$ closes its own
+    assert js(docs, [["plain", r"Costs $x = \$5$."]]) == [r"Costs x = \$5."]  # \$ inside math
     # In math: \ensuremath, paper macros with siunitx, an argument or \textsl in them, and siunitx.
     (html,) = js(docs, [["math", r"\ensuremath{x} + 1\,\kpcunit + \upr{d} + \qty{2}{\micro\meter} + \survey"]])
     assert 'class="katex"' in html and "kpc" in html and "Survey" in html
