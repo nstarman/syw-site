@@ -5,6 +5,12 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Changed
+
+- The syw-site skill says that a `\variable` output added to `ms.tex` must be listed as a dependency of
+  `ms.tex` in `showyourwork.yml` (it builds locally and fails on CI otherwise), and that a green PR check
+  does not show a changed figure script ran.
+
 ## 2026.11.05 — 2026-11-05
 
 ### Fixed
