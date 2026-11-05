@@ -17,7 +17,7 @@ figures:                         # optional; where the portrait goes on each fig
   "fig:rate":   { icon: top-left }       # top-right (default) | top-left | bottom-right | bottom-left | none
   "fig:shapes": { icon: [0.82, 0.12] }   # or its centre, as fractions of width and height
   "fig:grid":   { image: 2 }             # on the figure's second image
-  "fig:rate":   { icon: [top-right, [0.509, 0.134]], alpha: 0.8 }   # one per panel; opacity (default 0.8)
+  "fig:rate":   { icon: [top-right, [0.509, 0.134]], alpha: 0.8 }   # one per panel; opacity (default 1)
 ```
 
 Unknown keys are errors. Webapp names are `[a-z0-9-]+` and `webapps/<name>/` must exist; inputs may
