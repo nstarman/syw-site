@@ -121,5 +121,31 @@
       "text": null,
       "replaces": true
     }
+  },
+  "citations": {
+    "smith2020": {
+      "label": "Smith et al.",
+      "year": "2020"
+    },
+    "lee2018": {
+      "label": "Lee et al.",
+      "year": "2018"
+    },
+    "solo2019": {
+      "label": "Solo",
+      "year": "2019"
+    },
+    "pair2017": {
+      "label": "Doe and Roe",
+      "year": "2017"
+    },
+    "noyear": {
+      "label": "Nobody",
+      "year": null
+    },
+    "amp2021": {
+      "label": "Smith & <Co>",
+      "year": "2021"
+    }
   }
 }

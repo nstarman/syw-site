@@ -38,6 +38,11 @@ def _syw_site_packages(wildcards):
     return [str(p) for p in _SywSitePath("src/tex").rglob("*.sty")]
 
 
+def _syw_site_bibliographies(wildcards):
+    # The paper's .bib files, whose cited entries facts.json carries (facts.citations).
+    return [str(p) for p in _SywSitePath("src/tex").rglob("*.bib")]
+
+
 def _syw_site_webapp_inputs(wildcards):
     from syw_site import settings
 
@@ -59,6 +64,7 @@ rule syw_site_facts:
         "docs/syw-site.yml",
         _syw_site_variable_files,
         _syw_site_packages,
+        _syw_site_bibliographies,
     output:
         f"{_SYW_SITE_OUT}/facts.json",
     shell:

@@ -132,3 +132,29 @@ def test_slug_is_a_path_segment(tmp_path):
     text = r"\begin{figure}\includegraphics{figures/z.pdf}\caption{Z.}\label{fig:cosmology:zlr}\end{figure}"
     (f,) = facts.figures(text, tmp_path)
     assert (f["label"], f["slug"]) == ("fig:cosmology:zlr", "cosmology-zlr")
+
+
+def test_citations(f):
+    # Every key the paper cites that its .bib defines, with the label and year the site prints;
+    # an uncited entry is left out, a cited key the .bib lacks (missing2000) too.
+    assert f["citations"] == {
+        "doe2020": {"label": "Doe", "year": "2020"},
+        "roe2019": {"label": "Roe and Poe", "year": "2019"},
+        "many2018": {"label": "Many et al.", "year": "2018"},
+        "group2021": {"label": "Astropy Collaboration and Price-Whelan", "year": "2021"},
+        "accent2016": {"label": "Müller et al.", "year": "2016"},
+        "given2017": {"label": "Einstein", "year": "2017"},
+        "noyear": {"label": "Nobody", "year": None},
+        "others2018": {"label": "Tan et al.", "year": "2018"},
+        "etal2020": {"label": "Hale et al.", "year": "2020"},
+    }
+
+
+def test_citations_without_a_bibliography(tmp_path):
+    tex = tmp_path / "src" / "tex"
+    tex.mkdir(parents=True)
+    (tex / "ms.tex").write_text(r"\title{T} As \citet{a2020}.")
+    assert facts.extract(tmp_path, repo="a/b")["citations"] == {}
+    # A \bibliography whose file is missing: no citations, and the build goes on.
+    (tex / "ms.tex").write_text(r"\title{T} As \citet{a2020}. \bibliography{nowhere}")
+    assert facts.extract(tmp_path, repo="a/b")["citations"] == {}

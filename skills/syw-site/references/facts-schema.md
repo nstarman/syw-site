@@ -13,6 +13,7 @@ Written by `syw-site facts` (Snakemake rule `syw_site_facts`) from `src/tex/ms.t
   "figures": [{ "label": "fig:x", "slug": "x", "caption": "LaTeX",
                 "images": [{ "source": "src/tex/figures/x.pdf", "file": "figures/x.pdf", "webp": "figures/x.webp", "png": "figures/x.png", "thumb": "figures/x.thumb.webp" }] }],
   "macros": { "\\survey": "\\textsl{Survey}" },
+  "citations": { "doe2023": { "label": "Doe et al.", "year": "2023" } },
   "variables": { "forecast/angular_gain": "14" },
   "paper": { "arxiv": null, "doi": null, "bibcode": null },
   "repo": "owner/name",
@@ -30,4 +31,8 @@ Written by `syw-site facts` (Snakemake rule `syw_site_facts`) from `src/tex/ms.t
 - Macros: `\newcommand`/`\renewcommand`/`\DeclareMathOperator` in `ms.tex` and in each `.sty` under
   `src/tex/` that it loads (`\usepackage{preamble/x}`, and what that loads by bare name); `ms.tex`'s win.
 - Variables: key = the `\variable{output/<key>.tex}` path; value = the file without `%` comments.
+- Citations: each key `ms.tex` cites (`\cite…{}`) that a `.bib` named by `\bibliography{}` (under
+  `src/tex/`) defines: `label` from its authors' family names ("Doe", "Doe and Roe", "Doe et al.";
+  a braced group whole, accents applied) and `year` (or `null`). No `\bibliography`, or a missing
+  `.bib`: `{}`.
 - Adding an optional field keeps `schema: 1`.

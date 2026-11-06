@@ -5,6 +5,26 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Added
+
+- Captions and prose name the papers they cite. `facts.json` gains `citations`: for each key the
+  paper cites that its `\bibliography` `.bib` defines, an author label ("Doe", "Doe and Roe",
+  "Doe et al.") and year. `\citet{k}` reads "Doe et al. (2023)", `\citep[see][p.~3]{k}`
+  "(see Doe et al. 2023, p. 3)", `\cite`/`\citealp` the same without parentheses, `\citeauthor`
+  the label. Before, `\citep` vanished ("Figure 1 of with the updated…") and `\citet` read only
+  `Surname:2023` keys; those keys now read in every form. The `.bib` files are inputs of the facts
+  rule. BibTeX's `and others`, or an "et al" written into the author field, reads "et al.".
+
+### Fixed
+
+- `{\color{gray} solid gray}` read "gray solid gray", and `\textcolor{c}{text}` "c text"; both
+  keep only the text. A `\\` line break in a caption printed literally; it reads as a space.
+- The scaffold's `rehype-katex` and `remark-math` brought their own KaTeX 0.16 (Dependabot: prototype
+  pollution, fixed in 0.18.2); `docs/package.json` now overrides every KaTeX to the site's 0.19.0.
+
+No migration: upgrading refreshes `docs/src/lib/tex.js`, `docs/package.json` and
+`docs/package-lock.json` (then `npm ci`); the next build rewrites `facts.json`.
+
 ## 2026.11.05.1 — 2026-11-05
 
 ### Changed — migration
