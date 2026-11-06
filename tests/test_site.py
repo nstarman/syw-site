@@ -248,6 +248,7 @@ TEXT = [  # (tex, refs) → HTML
     (r"Notes \citep[see][p.~3]{solo2019}; post \citep[ch.~2]{solo2019}.", {}, "Notes (see Solo 2019, p.&nbsp;3); post (Solo 2019, ch.&nbsp;2)."),
     (r"Bare \cite{solo2019} and \citealp{pair2017}; by \citeauthor{pair2017}.", {}, "Bare Solo 2019 and Doe and Roe 2017; by Doe and Roe."),
     (r"No year \citet{noyear}. Gone \citep{nowhere}, kept.", {}, "No year Nobody. Gone, kept."),
+    (r"By \citet{amp2021}.", {}, "By Smith &amp; &lt;Co&gt; (2021)."),  # a .bib label is escaped
     # Colour names and line breaks read as text.
     (r"The {\color{gray} solid gray} region and \textcolor{cyan}{light blue}.", {}, "The solid gray region and light blue."),
     (r"Regions.\\ Objects", {}, "Regions. Objects"),

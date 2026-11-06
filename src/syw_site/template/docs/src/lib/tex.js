@@ -67,7 +67,8 @@ function work(key) {
 // the same without parentheses, \citeauthor the label. Unknown keys go; with none known, the whole
 // citation goes, and the space before it, so no "()" or "of  with" is left.
 function cite(space, cmd, notes, keys) {
-  const works = keys.split(',').map((k) => work(k.trim())).filter(Boolean);
+  // A label is the .bib's text, inserted into text that is already HTML-escaped: escape it too.
+  const works = keys.split(',').map((k) => work(k.trim())).filter(Boolean).map((w) => ({ ...w, label: esc(w.label) }));
   if (works.length === 0) return '';
   const [pre, post] = notes.length > 1 ? notes : ['', notes[0] ?? ''];
   if (cmd === 'citeauthor') return space + works.map((w) => w.label).join('; ');

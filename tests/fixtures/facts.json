@@ -142,6 +142,10 @@
     "noyear": {
       "label": "Nobody",
       "year": null
+    },
+    "amp2021": {
+      "label": "Smith & <Co>",
+      "year": "2021"
     }
   }
 }
