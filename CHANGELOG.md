@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.06 — 2026-11-06
+
 ### Added
 
 - Captions and prose name the papers they cite. `facts.json` gains `citations`: for each key the
