@@ -5,6 +5,8 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.11 — 2026-11-11
+
 ### Fixed — migration
 
 - The site deployed only from a branch named `main`; a paper whose default branch is `master` (or
