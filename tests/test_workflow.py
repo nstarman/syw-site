@@ -5,7 +5,7 @@ from importlib import resources
 import yaml
 
 WORKFLOW = yaml.safe_load((resources.files("syw_site") / "template" / "workflows" / "docs.yml").read_text())
-MAIN_PUSH = "github.event_name == 'push' && github.ref == 'refs/heads/main'"
+MAIN_PUSH = "github.event_name == 'push' && github.ref_name == github.event.repository.default_branch"
 
 
 def steps():
@@ -62,5 +62,20 @@ def test_card_refresh_is_weekly_and_by_hand_and_never_deploys():
     on = CARD.get("on") or CARD.get(True)
     assert "schedule" in on and "workflow_dispatch" in on
     text = (resources.files("syw_site") / "template" / "workflows" / "card.yml").read_text()
-    assert "deploy" not in text.replace("never builds or deploys", "")
+    assert "deploy" not in text.replace("never deploys", "")
     assert "scripts/card.mjs" in text
+
+
+def test_card_pull_request_is_signed_and_built():
+    # A protected default branch needs a verified commit and a `build` check; a pull request opened
+    # with the workflow's token gets neither by itself.
+    steps = CARD["jobs"]["card"]["steps"]
+    pr = next(s for s in steps if str(s.get("uses", "")).startswith("peter-evans/create-pull-request"))
+    assert pr["with"]["sign-commits"] is True
+    build = next(s for s in steps if s.get("name") == "Build the pull request")
+    assert "gh workflow run docs.yml" in build["run"] and "--ref syw-site/card" in build["run"]
+    assert pr["id"] in build["if"] and "created" in build["if"] and "updated" in build["if"]
+    assert CARD["permissions"]["actions"] == "write"
+    docs = yaml.safe_load((resources.files("syw_site") / "template" / "workflows" / "docs.yml").read_text())
+    on = docs.get("on") or docs.get(True)
+    assert "workflow_dispatch" in on and "build" in docs["jobs"]
