@@ -29,7 +29,8 @@ into a page.** A name that does not exist stops the build.
 4. `syw-site card` (needs the network): fetches the paper's entry as nstarkman.space has it —
    `docs/card.json`, the card's images, the author's portrait — and commit them. Every page then
    opens with the website's own entry for the paper (the research card, without "Context"), and the
-   `Card` workflow refreshes it weekly or by hand. Without a `website_id`, pages open with the
+   `Card` workflow refreshes it weekly or by hand, as a pull request with a signed commit and its own
+   `build` run, so a protected default branch can take it. Without a `website_id`, pages open with the
    paper's title and authors instead.
 
 The site's tabs: **Overview** (`index.mdx`, your prose), **Explore** (webapps with `explore: true`),
@@ -115,7 +116,7 @@ public, never paste the paper's content anywhere public. At submission, with the
 1. Make the repository public.
 2. In `docs/syw-site.yml`: `publish: true`, and `paper: { arxiv: … }` (later `doi`, `bibcode`).
 3. Repository → Settings → Pages → Source: GitHub Actions.
-4. Push to `main`; `docs.yml` deploys to `nstarkman.space/<repo>/`.
+4. Push to the default branch (`main`, `master`, …); `docs.yml` deploys to `nstarkman.space/<repo>/`.
 5. Link the paper's card on nstarkman.space to the site (the website's own skill).
 
 The workflow refuses to deploy while the repository is private.

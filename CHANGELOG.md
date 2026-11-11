@@ -5,6 +5,21 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+### Fixed — migration
+
+- The site deployed only from a branch named `main`; a paper whose default branch is `master` (or
+  anything else) built but never published. `docs.yml` now deploys from the repository's default
+  branch. **What changed**: the two `if:` conditions of `Upload the site for Pages` and `deploy` in
+  `.github/workflows/docs.yml`. **Find**: `github.ref == 'refs/heads/main'` there. **Edit**: replace
+  it with `github.ref_name == github.event.repository.default_branch`.
+- The weekly card pull request could not merge into a protected default branch: its commit was
+  unsigned, and a pull request opened with the workflow's token starts no `build` run. `card.yml`
+  now has `create-pull-request` sign the commit and starts the docs build on the card branch.
+  **What changed**: `.github/workflows/card.yml`. **Find**: no `sign-commits` in it. **Edit**: add
+  `actions: write` to its `permissions:`; give the `peter-evans/create-pull-request` step `id: pr`
+  and `sign-commits: true`; add the step `Build the pull request` from the template's `card.yml`
+  after it.
+
 ## 2026.11.06 — 2026-11-06
 
 ### Added
