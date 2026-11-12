@@ -7,17 +7,18 @@ from pathlib import Path
 import pypdfium2
 from PIL import Image, ImageDraw
 
-DPI = 200  # about 2x a column's CSS width for a 3.5 in figure
+from syw_site.settings import DPI
+
 MIN_ICON = 48  # px: the portrait never smaller than this
 THUMB = 800  # px wide: about 2x a gallery card's CSS width
 
 
-def raster(source: Path) -> Image.Image:
-    """The figure as an RGBA image: a PDF's first page at DPI, or the image file itself."""
+def raster(source: Path, dpi: int = DPI) -> Image.Image:
+    """The figure as an RGBA image: a PDF's first page at `dpi`, or the image file itself."""
     if source.suffix == ".pdf":
         pdf = pypdfium2.PdfDocument(source)
         try:
-            return pdf[0].render(scale=DPI / 72).to_pil().convert("RGBA")
+            return pdf[0].render(scale=dpi / 72).to_pil().convert("RGBA")
         finally:
             pdf.close()
     with Image.open(source) as im:
@@ -72,14 +73,14 @@ def stamp(im: Image.Image, portrait: Path, places, alpha: float = 1.0) -> Image.
     return out
 
 
-def web_image(source: Path, out_dir: Path, image: dict, portrait: Path | None = None, places=("top-right",), alpha: float = 1.0) -> None:
+def web_image(source: Path, out_dir: Path, image: dict, portrait: Path | None = None, places=("top-right",), alpha: float = 1.0, dpi: int = DPI) -> None:
     """Copy the figure file into out_dir, and write its web images — lossless WebP for the
     page, PNG to download, a small lossy WebP for the gallery's card — with the portrait
-    stamped at each place (none without a portrait)."""
+    stamped at each place (none without a portrait); a PDF is rendered at `dpi`."""
     target = out_dir / image["file"]
     target.parent.mkdir(parents=True, exist_ok=True)
     shutil.copyfile(source, target)
-    im = raster(source)
+    im = raster(source, dpi)
     if portrait is not None and portrait.exists():
         im = stamp(im, portrait, places, alpha)
     im.save(out_dir / image["png"], optimize=True)

@@ -67,7 +67,13 @@ def test_one_portrait_per_panel(tmp_path):
     assert s.icon("fig:rate", "rate").alpha == 0.4
 
 
-@pytest.mark.parametrize("spec", [{"icon": "middle"}, {"icon": [1.2, 0]}, {"icon": [0.5]}, {"image": 0}, {"where": "x"}, {"icon": ["top-right", "middle"]}, {"alpha": 0}, {"alpha": 2}])
+def test_raster_dpi(tmp_path):
+    s = parse({"repo": "a/b", "figures": {"fig:a": {"alpha": 1, "raster_dpi": 400}}}, tmp_path)
+    assert s.icon("fig:a", "a").dpi == 400
+    assert s.icon("fig:zz", "zz").dpi == 200  # the default
+
+
+@pytest.mark.parametrize("spec", [{"icon": "middle"}, {"icon": [1.2, 0]}, {"icon": [0.5]}, {"image": 0}, {"where": "x"}, {"icon": ["top-right", "middle"]}, {"alpha": 0}, {"alpha": 2}, {"raster_dpi": 50}, {"raster_dpi": 400.5}, {"raster_dpi": True}, {"raster_dpi": "400"}])
 def test_figure_icons_rejected(tmp_path, spec):
     with pytest.raises(SettingsError):
         parse({"repo": "a/b", "figures": {"fig:a": spec}}, tmp_path)

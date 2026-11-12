@@ -10,8 +10,9 @@ SETTINGS = Path("docs/syw-site.yml")
 _KEYS = {"repo", "website_id", "publish", "paper", "python", "webapps", "figures"}
 _PAPER_KEYS = {"arxiv", "doi", "bibcode"}
 _WEBAPP_KEYS = {"inputs", "figure", "explore", "title", "text", "replaces"}
-_FIGURE_KEYS = {"icon", "image", "alpha"}
+_FIGURE_KEYS = {"icon", "image", "alpha", "raster_dpi"}
 ALPHA = 1.0  # opaque; `alpha` per figure for a quieter mark
+DPI = 200  # a PDF figure's web image: about 2x a column's CSS width for a 3.5 in figure
 CORNERS = ("top-right", "top-left", "bottom-right", "bottom-left")
 
 
@@ -34,11 +35,13 @@ class Webapp:
 class FigureIcon:
     """Where the author's portrait goes on a figure — one place per panel: each a corner, or a
     centre as fractions of the image's width and height; none for no portrait — on its
-    `image`-th image (1-based), at opacity `alpha`."""
+    `image`-th image (1-based), at opacity `alpha`. A PDF figure's web images are rendered at
+    `dpi` (raster_dpi in syw-site.yml), for a figure with fine detail."""
 
     places: tuple = ("top-right",)
     image: int = 1
     alpha: float = ALPHA
+    dpi: int = DPI
 
 
 @dataclass(frozen=True)
@@ -124,7 +127,10 @@ def parse(raw: dict, root: Path) -> Settings:
         alpha = spec.get("alpha", ALPHA)
         if not isinstance(alpha, (int, float)) or not 0 < alpha <= 1:
             raise SettingsError(f"syw-site.yml: figure {label!r} alpha must be in (0, 1]")
-        figures[str(label)] = FigureIcon(places, image, float(alpha))
+        dpi = spec.get("raster_dpi", DPI)
+        if isinstance(dpi, bool) or not isinstance(dpi, int) or not 72 <= dpi <= 1200:
+            raise SettingsError(f"syw-site.yml: figure {label!r} raster_dpi must be a whole number from 72 to 1200")
+        figures[str(label)] = FigureIcon(places, image, float(alpha), dpi)
     python = raw.get("python", "python")
     if not isinstance(python, str) or not python.strip():
         raise SettingsError("syw-site.yml: `python` must be a command, e.g. `uv run --locked python`")

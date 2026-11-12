@@ -5,6 +5,14 @@ announced here with a migration note: **What changed**, **Find**, **Edit**.
 
 ## Unreleased
 
+## 2026.11.12 — 2026-11-12
+
+### Added
+
+- `raster_dpi` per figure in `docs/syw-site.yml` (`figures:`): the resolution a PDF figure's web
+  images are rendered at, for a figure whose fine detail blurs at the default 200 dpi. A whole
+  number from 72 to 1200.
+
 ## 2026.11.11 — 2026-11-11
 
 ### Fixed — migration

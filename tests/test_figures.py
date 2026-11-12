@@ -87,3 +87,13 @@ def test_one_portrait_per_panel_at_lower_opacity(tmp_path, portrait):
         right, centre = rgb.getpixel((1000 - 20 - 35, 20 + 35)), rgb.getpixel((250, 200))
         for px in (right, centre):  # half portrait red (200, 30, 30), half white
             assert abs(px[0] - 228) <= 2 and abs(px[1] - 142) <= 2, px
+
+
+def test_raster_dpi_sets_a_pdf_figures_resolution(tmp_path):
+    src = tmp_path / "fig.pdf"
+    make_pdf(src)
+    out = tmp_path / "out"
+    image = {"file": "figures/fig.pdf", "png": "figures/fig.png", "webp": "figures/fig.webp"}
+    web_image(src, out, image, None, dpi=400)
+    with Image.open(out / "figures/fig.png") as im:
+        assert im.size == (round(3.5 * 400), round(2.5 * 400))
